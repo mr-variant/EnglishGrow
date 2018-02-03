@@ -1,3 +1,9 @@
 <resources>
     <string name="app_name">English Grow</string>
+    <string name="logInButton">Войти</string>
+    <string name="singUpButton">Регистрация</string>
+    <string name="fieldPassword">Пароль</string>
+    <string name="fieldEmail">Email</string>
+    <string name="forgetPasswordTextView">Забыли ваш пароль?</string>
+    <string name="orLogInTextView">Или войти с помощью</string>
 </resources>

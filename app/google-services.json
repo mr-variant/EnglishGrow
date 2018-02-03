@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "588350138604",
+    "firebase_url": "https://englishgrow-36226.firebaseio.com",
+    "project_id": "englishgrow-36226",
+    "storage_bucket": "englishgrow-36226.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:588350138604:android:e87f76e7aecc153c",
+        "android_client_info": {
+          "package_name": "aksenchyk.englishgrow"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "588350138604-beq1c6sbab70kiadumtmc1bh81psh7et.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "aksenchyk.englishgrow",
+            "certificate_hash": "6a4a2dde4df9838d2b38612627e21f0b29ce6d4a"
+          }
+        },
+        {
+          "client_id": "588350138604-ohu2iqi3r4dkl6cvpetuou5ppbvqql3r.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAKoI5bDY92oA-RpKckhxAFCaAt_XiDtEM"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "588350138604-ohu2iqi3r4dkl6cvpetuou5ppbvqql3r.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
