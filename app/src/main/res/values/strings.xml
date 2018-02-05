@@ -6,4 +6,14 @@
     <string name="fieldEmail">Email</string>
     <string name="forgetPasswordTextView">Забыли ваш пароль?</string>
     <string name="orLogInTextView">Или войти с помощью</string>
+
+    <string name="loginIsNull">Введите ваш логин!</string>
+    <string name="passwordIsNull">Введите ваш пароль!</string>
+    <string name="passwordLessSix">Длина меньше 6 символов!</string>
+    <string name="loginIsNotValid">Не верный E-mail!</string>
+    <string name="loading">Загрузка... Пожалуйста подождите.</string>
+    <string name="close">Закрыть</string>
+    <string name="loginPassIncorrect">Упс, неверный пароль или почта. Попробуйте еще раз.</string>
+    <string name="loginPassIncorrectTitle">Ошибка</string>
+
 </resources>

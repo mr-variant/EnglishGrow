@@ -10,7 +10,7 @@
     </style>
 
     <style name="AuthorizationTheme" parent="Theme.AppCompat.Light.NoActionBar">
-        <item name="android:textColorPrimary">@android:color/white</item>
+        <item name="android:textColorPrimary">@color/colorLoginElements</item>
         <item name="colorPrimary">@android:color/transparent</item>
 
         <item name="android:windowTranslucentStatus">true</item>
