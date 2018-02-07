@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <TextView
+        android:id="@+id/titleRegTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/colorSingInButton"
+        android:paddingBottom="9dp"
+        android:paddingTop="9dp"
+        android:text="@string/singUpButton"
+        android:textAlignment="center"
+        android:textColor="@android:color/white"
+        android:textSize="24sp"
+        android:textStyle="bold" />
+
+    <EditText
+        android:id="@+id/newEmailEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="16dp"
+        android:drawableLeft="@drawable/ic_mail"
+        android:drawablePadding="4dp"
+        android:hint="@string/fieldEmail"
+        android:inputType="textEmailAddress" />
+
+    <TextView
+        android:id="@+id/newEmailErrorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:text="@string/loginIsNull"
+        android:textColor="@color/colorScarlet"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/newPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:drawableLeft="@drawable/ic_door_key"
+        android:drawablePadding="4dp"
+        android:hint="@string/fieldPassword"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/newPassErrorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:text="1234"
+        android:textColor="@color/colorScarlet"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+    <EditText
+        android:id="@+id/newConfirmPasswordEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginBottom="4dp"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:layout_marginTop="4dp"
+        android:drawableLeft="@drawable/ic_door_key"
+        android:drawablePadding="4dp"
+        android:hint="@string/fieldConfPassword"
+        android:inputType="textPassword" />
+
+    <TextView
+        android:id="@+id/newPassConfErrorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:text="1234"
+        android:textColor="@color/colorScarlet"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+    <CheckBox
+        android:id="@+id/rulesCheckBox"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="6dp"
+        android:layout_marginRight="6dp"
+        android:text="@string/switchRules" />
+
+    <TextView
+        android:id="@+id/rulesErrorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:text="1234"
+        android:textColor="@color/colorScarlet"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
+</LinearLayout>
+
+
+
+
+

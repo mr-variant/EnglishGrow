@@ -6,8 +6,13 @@ import android.content.DialogInterface;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.util.Patterns;
+import android.view.Gravity;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.widget.Button;
+import android.widget.CheckBox;
 import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -25,13 +30,14 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     private FirebaseAuth mAuth;
 
     private ProgressDialog mProgressDialog;
+    private AlertDialog mRegAlertDialog;
 
     private EditText mLoginEditText;
     private EditText mPasswordEditText;
 
-
     private TextView mLoginErrorTextView;
     private TextView mPasswordErrorTextView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +84,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
     private void createAccount(String email, String password) {
 
-        //showProgressDialog();
+        showProgressDialog();
 
         mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
@@ -86,20 +92,21 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-
                             FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            hideProgressDialog();
+                            mRegAlertDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
-
-                            Toast.makeText(EmailPasswordActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
-                            updateUI(null);
+                            Toast toast =Toast.makeText(EmailPasswordActivity.this, "Authentication failed. " +  task.getException().getMessage() ,
+                                    Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            hideProgressDialog();
                         }
 
-                        // ...
                     }
                 });
+
     }
 
     private void signIn(String email, String password) {
@@ -160,44 +167,116 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         updateUI(null);
 
         switch (view.getId()) {
+
             case R.id.logInButton:
                 String login = mLoginEditText.getText().toString();
                 String password = mPasswordEditText.getText().toString();
 
-                if(login.isEmpty() && password.isEmpty()) {
-                    mLoginErrorTextView.setText(getString(R.string.loginIsNull));
-                    mPasswordErrorTextView.setText(getString(R.string.passwordIsNull));
-
-                    mLoginErrorTextView.setVisibility(View.VISIBLE);
-                    mPasswordErrorTextView.setVisibility(View.VISIBLE);
-
-                } else if(login.isEmpty()) {
-                    mLoginErrorTextView.setText(getString(R.string.loginIsNull));
-                    mLoginErrorTextView.setVisibility(View.VISIBLE);
-
+                if(login.isEmpty() || password.isEmpty()) {
+                    if(login.isEmpty()) {
+                        mLoginErrorTextView.setText(getString(R.string.loginIsNull));
+                        mLoginErrorTextView.setVisibility(View.VISIBLE);
+                    }
+                    if(password.isEmpty()) {
+                        mPasswordErrorTextView.setText(getString(R.string.passwordIsNull));
+                        mPasswordErrorTextView.setVisibility(View.VISIBLE);
+                    }
                 } else if(!isValidEmail(login)) {
                     mLoginErrorTextView.setText(getString(R.string.loginIsNotValid));
                     mLoginErrorTextView.setVisibility(View.VISIBLE);
-
-                } else if(password.isEmpty()) {
-                    mPasswordErrorTextView.setText(getString(R.string.passwordIsNull));
-                    mPasswordErrorTextView.setVisibility(View.VISIBLE);
-
-                }  else if(password.length() < 6) {
+                } else if(password.length() < 6) {
                     mPasswordErrorTextView.setText(getString(R.string.passwordLessSix));
                     mPasswordErrorTextView.setVisibility(View.VISIBLE);
-
                 } else {
                     signIn(login,password);
-
                 }
 
                 break;
 
 
             case R.id.singUpButton:
-                Toast.makeText(EmailPasswordActivity.this, "singUpButton .",
-                        Toast.LENGTH_SHORT).show();
+                AlertDialog.Builder regWindows = new AlertDialog.Builder(
+                        EmailPasswordActivity.this);
+
+                regWindows.setPositiveButton(getString(R.string.alertRegOk), null);
+                regWindows.setNegativeButton(getString(R.string.cancel), null);
+
+                LayoutInflater inflater = EmailPasswordActivity.this.getLayoutInflater();
+                regWindows.setView(inflater.inflate(R.layout.alert_dialog_sign_up, null));
+
+                mRegAlertDialog = regWindows.create();
+                mRegAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button b = mRegAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+                                // TODO Do something
+                                final EditText newEmailEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailEditText);
+                                final EditText newPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPasswordEditText);
+                                final EditText newConfirmPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newConfirmPasswordEditText);
+                                final CheckBox rulesCheckBox = (CheckBox) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesCheckBox);
+
+                                String newEmail = newEmailEditText.getText().toString();
+                                String newPass = newPasswordEditText.getText().toString();
+                                String newConfPass = newConfirmPasswordEditText.getText().toString();
+
+
+                                final TextView emailError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailErrorTextView);
+                                final TextView passError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassErrorTextView);
+                                final TextView confPassError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassConfErrorTextView);
+                                final TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
+
+
+                                emailError.setVisibility(View.GONE);
+                                passError.setVisibility(View.GONE);
+                                confPassError.setVisibility(View.GONE);
+                                rulesErrorTextView.setVisibility(View.GONE);
+
+
+                                if(newEmail.isEmpty() || newPass.isEmpty() || newConfPass.isEmpty()) {
+                                    if(newEmail.isEmpty()) {
+                                        emailError.setText(getString(R.string.loginIsNull));
+                                        emailError.setVisibility(View.VISIBLE);
+                                    }
+
+                                    if(newPass.isEmpty()) {
+                                        passError.setText(getString(R.string.passwordIsNull));
+                                        passError.setVisibility(View.VISIBLE);
+                                    }
+
+                                    if(newConfPass.isEmpty()) {
+                                        confPassError.setText(getString(R.string.passwordIsNull));
+                                        confPassError.setVisibility(View.VISIBLE);
+                                    }
+
+                                } else if(!isValidEmail(newEmail)) {
+                                    emailError.setText(getString(R.string.loginIsNotValid));
+                                    emailError.setVisibility(View.VISIBLE);
+                                } else if(newPass.length() < 6) {
+                                    passError.setText(getString(R.string.passwordLessSix));
+                                    passError.setVisibility(View.VISIBLE);
+                                } else if(!newPass.equals(newConfPass)){
+                                    passError.setText(getString(R.string.passDontEquals));
+                                    passError.setVisibility(View.VISIBLE);
+                                } else if(!rulesCheckBox.isChecked()){
+                                    rulesErrorTextView.setText(getString(R.string.rulesErr));
+                                    rulesErrorTextView.setVisibility(View.VISIBLE);
+                                } else {
+                                    createAccount(newEmail,newPass);
+                                }
+
+                            }
+                        });
+                    }
+                });
+
+                mRegAlertDialog.show();
+
                 break;
 
 
