@@ -24,5 +24,9 @@
     <string name="switchRules">С правилами согласен</string>
     <string name="passDontEquals">Пароль не совпадает</string>
     <string name="rulesErr">Согласитесь с правилами</string>
+    <string name="forgotPassTitle">Восстановление пароля</string>
+    <string name="forgotPassButt">Восстановить</string>
+    <string name="forgotPassMessage">На вашу почту отправлено письмо для восстановления</string>
+
 
 </resources>

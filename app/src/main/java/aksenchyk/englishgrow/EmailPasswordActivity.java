@@ -18,6 +18,8 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
@@ -31,6 +33,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
     private ProgressDialog mProgressDialog;
     private AlertDialog mRegAlertDialog;
+    private AlertDialog mRestoreAlertDialog;
 
     private EditText mLoginEditText;
     private EditText mPasswordEditText;
@@ -45,7 +48,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         setContentView(R.layout.activity_email_password);
 
         // Views
-
 
         // Buttons
         findViewById(R.id.logInButton).setOnClickListener(this);
@@ -70,7 +72,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
 
         mAuth = FirebaseAuth.getInstance();
-
     }
 
     @Override
@@ -80,7 +81,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
     }
-
 
     private void createAccount(String email, String password) {
 
@@ -93,11 +93,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
+
                             hideProgressDialog();
                             mRegAlertDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast toast =Toast.makeText(EmailPasswordActivity.this, "Authentication failed. " +  task.getException().getMessage() ,
+                            Toast toast = Toast.makeText(EmailPasswordActivity.this, "Authentication failed. " +  task.getException().getMessage() ,
                                     Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
@@ -106,7 +107,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
                     }
                 });
-
     }
 
     private void signIn(String email, String password) {
@@ -147,7 +147,30 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
     }
 
 
+    private void sendPasswordResetEmail(String email) {
+        // Отправляем email с паролем
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener( new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    mRestoreAlertDialog.dismiss();
+                    Toast toast = Toast.makeText(EmailPasswordActivity.this, getString(R.string.forgotPassMessage) ,
+                            Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+                else {
+                    Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
+                            Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
 
+
+
+    }
 
     private void signOut() {
         mAuth.signOut();
@@ -159,7 +182,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         mPasswordErrorTextView.setVisibility(View.GONE);
         hideProgressDialog();
     }
-
 
     @Override
     public void onClick(View view) {
@@ -281,8 +303,51 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
 
             case R.id.forgetPasswordTextView:
-                Toast.makeText(EmailPasswordActivity.this, "forgetPasswordTextView .",
-                        Toast.LENGTH_SHORT).show();
+
+                AlertDialog.Builder restoreWindows = new AlertDialog.Builder(
+                        EmailPasswordActivity.this);
+
+                restoreWindows.setPositiveButton(getString(R.string.forgotPassButt), null);
+                restoreWindows.setNegativeButton(getString(R.string.cancel), null);
+
+                LayoutInflater inflaterRestore = EmailPasswordActivity.this.getLayoutInflater();
+                restoreWindows.setView(inflaterRestore.inflate(R.layout.alert_dialog_forgot_password, null));
+
+                mRestoreAlertDialog = restoreWindows.create();
+                mRestoreAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
+
+                    @Override
+                    public void onShow(DialogInterface dialog) {
+
+                        Button b = mRestoreAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        b.setOnClickListener(new View.OnClickListener() {
+
+                            @Override
+                            public void onClick(View view) {
+                                // TODO Do something
+                                final EditText restoreEmailEditText = (EditText) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailEditText);
+                                String email = restoreEmailEditText.getText().toString();
+                                final TextView emailError = (TextView) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailErrorTextView);
+
+                                emailError.setVisibility(View.GONE);
+
+                                if(email.isEmpty()) {
+                                    emailError.setText(getString(R.string.loginIsNull));
+                                    emailError.setVisibility(View.VISIBLE);
+                                } else if(!isValidEmail(email)){
+                                    emailError.setText(getString(R.string.loginIsNotValid));
+                                    emailError.setVisibility(View.VISIBLE);
+                                } else {
+                                    sendPasswordResetEmail(email);
+                                }
+
+                            }
+                        });
+                    }
+                });
+
+                mRestoreAlertDialog.show();
+
                 break;
 
 
