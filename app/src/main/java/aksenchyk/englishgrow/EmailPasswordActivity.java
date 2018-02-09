@@ -3,6 +3,7 @@ package aksenchyk.englishgrow;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -17,20 +18,39 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
+
+import com.google.android.gms.auth.api.Auth;
+import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
+import com.google.android.gms.auth.api.signin.GoogleSignInOptions;
+import com.google.android.gms.auth.api.signin.GoogleSignInResult;
+import com.google.android.gms.common.ConnectionResult;
+import com.google.android.gms.common.SignInButton;
+import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 
 import java.util.regex.Pattern;
 
-public class EmailPasswordActivity extends AppCompatActivity implements View.OnClickListener {
+public class EmailPasswordActivity extends AppCompatActivity implements
+        GoogleApiClient.OnConnectionFailedListener,
+        View.OnClickListener {
+
 
     private FirebaseAuth mAuth;
 
+    //GOOGLE
+    private GoogleApiClient mGoogleApiClient;
+    private SignInButton mGooglesignInButton;
+    private static final int RC_SIGN_IN = 9001;
+
+    //UI
     private ProgressDialog mProgressDialog;
     private AlertDialog mRegAlertDialog;
     private AlertDialog mRestoreAlertDialog;
@@ -49,13 +69,18 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
         // Views
 
+
         // Buttons
+        mGooglesignInButton = (SignInButton) findViewById (R.id. sign_in_google_button);
+        mGooglesignInButton.setOnClickListener (new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                signInGoogle();
+            }
+        });
+
         findViewById(R.id.logInButton).setOnClickListener(this);
         findViewById(R.id.singUpButton).setOnClickListener(this);
-
-        findViewById(R.id.googleImageButton).setOnClickListener(this);
-        findViewById(R.id.facebookImageButton).setOnClickListener(this);
-        findViewById(R.id.twitterImageButton).setOnClickListener(this);
 
         //TextViews
         mLoginErrorTextView = (TextView) findViewById(R.id.loginErrorTextView);
@@ -71,6 +96,16 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
 
 
+        // Google login config
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
         mAuth = FirebaseAuth.getInstance();
     }
 
@@ -80,107 +115,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
         // Check if user is signed in (non-null) and update UI accordingly.
         FirebaseUser currentUser = mAuth.getCurrentUser();
         updateUI(currentUser);
-    }
-
-    private void createAccount(String email, String password) {
-
-        showProgressDialog();
-
-        mAuth.createUserWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            FirebaseUser user = mAuth.getCurrentUser();
-
-                            hideProgressDialog();
-                            mRegAlertDialog.dismiss();
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Toast toast = Toast.makeText(EmailPasswordActivity.this, "Authentication failed. " +  task.getException().getMessage() ,
-                                    Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            hideProgressDialog();
-                        }
-
-                    }
-                });
-    }
-
-    private void signIn(String email, String password) {
-        showProgressDialog();
-        mAuth.signInWithEmailAndPassword(email, password)
-                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                            Toast.makeText(EmailPasswordActivity.this, "Успешная авторизация!",
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            // If sign in fails, display a message to the user.
-
-                            updateUI(null);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(EmailPasswordActivity.this);
-                            builder.setTitle(getString(R.string.loginPassIncorrectTitle))
-                                    .setMessage(getString(R.string.loginPassIncorrect))
-                                    .setCancelable(false)
-                                    .setNegativeButton(getString(R.string.close),
-                                            new DialogInterface.OnClickListener() {
-                                                public void onClick(DialogInterface dialog, int id) {
-                                                    dialog.cancel();
-                                                }
-                                            });
-                            AlertDialog alert = builder.create();
-                            alert.show();
-
-                        }
-
-                        // ...
-                    }
-                });
-    }
-
-
-    private void sendPasswordResetEmail(String email) {
-        // Отправляем email с паролем
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener( new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    mRestoreAlertDialog.dismiss();
-                    Toast toast = Toast.makeText(EmailPasswordActivity.this, getString(R.string.forgotPassMessage) ,
-                            Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-                else {
-                    Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
-                            Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-            }
-        });
-
-
-
-    }
-
-    private void signOut() {
-        mAuth.signOut();
-        updateUI(null);
-    }
-
-    private void updateUI(FirebaseUser user) {
-        mLoginErrorTextView.setVisibility(View.GONE);
-        mPasswordErrorTextView.setVisibility(View.GONE);
-        hideProgressDialog();
     }
 
     @Override
@@ -210,7 +144,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                     mPasswordErrorTextView.setText(getString(R.string.passwordLessSix));
                     mPasswordErrorTextView.setVisibility(View.VISIBLE);
                 } else {
-                    signIn(login,password);
+                    signInEmailPassword(login,password);
                 }
 
                 break;
@@ -237,7 +171,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
                             @Override
                             public void onClick(View view) {
-                                // TODO Do something
+
                                 final EditText newEmailEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailEditText);
                                 final EditText newPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPasswordEditText);
                                 final EditText newConfirmPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newConfirmPasswordEditText);
@@ -324,7 +258,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
 
                             @Override
                             public void onClick(View view) {
-                                // TODO Do something
+
                                 final EditText restoreEmailEditText = (EditText) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailEditText);
                                 String email = restoreEmailEditText.getText().toString();
                                 final TextView emailError = (TextView) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailErrorTextView);
@@ -349,25 +283,155 @@ public class EmailPasswordActivity extends AppCompatActivity implements View.OnC
                 mRestoreAlertDialog.show();
 
                 break;
-
-
-            case R.id.googleImageButton:
-                Toast.makeText(EmailPasswordActivity.this, "googleImageButton .",
-                        Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.facebookImageButton:
-                Toast.makeText(EmailPasswordActivity.this, "facebookImageButton .",
-                        Toast.LENGTH_SHORT).show();
-                break;
-
-            case R.id.twitterImageButton:
-                Toast.makeText(EmailPasswordActivity.this, "twitterImageButton .",
-                        Toast.LENGTH_SHORT).show();
-                break;
-
         }
 
+    }
+
+    //GOOGLE
+    private void signInGoogle() {
+        Intent signInIntent = Auth.GoogleSignInApi.getSignInIntent(mGoogleApiClient);
+        startActivityForResult(signInIntent, RC_SIGN_IN);
+    }
+
+    // Define actions after data validation (successful or not)
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        if (requestCode == RC_SIGN_IN) {
+            // See Result
+            GoogleSignInResult result = Auth.GoogleSignInApi.getSignInResultFromIntent(data);
+            if (result.isSuccess()) {
+                // LogIn with Firebase
+                GoogleSignInAccount account = result.getSignInAccount();
+                firebaseAuthWithGoogle(account);
+            } else {
+                updateUI(null);
+            }
+        }
+    }
+
+    // Google Failed
+    @Override
+    public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
+        Toast.makeText(this, getString(R.string.googleConnectionFailed), Toast.LENGTH_SHORT).show();
+    }
+
+    private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+
+        showProgressDialog();
+        // Get users date
+        AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
+        // logIn with Firebase
+        mAuth.signInWithCredential(credential)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                        } else {
+                            Toast.makeText(EmailPasswordActivity.this,  task.getException().getMessage().toString(),
+                                    Toast.LENGTH_SHORT).show();
+                            updateUI(null);
+                        }
+
+                        hideProgressDialog();
+                    }
+                });
+    }
+
+    //EmailAndLogin
+    private void createAccount(String email, String password) {
+
+        showProgressDialog();
+
+        mAuth.createUserWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+                            FirebaseUser user = mAuth.getCurrentUser();
+
+                            hideProgressDialog();
+                            mRegAlertDialog.dismiss();
+                        } else {
+                            // If sign in fails, display a message to the user.
+                            Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
+                                    Toast.LENGTH_LONG);
+                            toast.setGravity(Gravity.CENTER, 0, 0);
+                            toast.show();
+                            hideProgressDialog();
+                        }
+
+                    }
+                });
+    }
+
+    private void signInEmailPassword(String email, String password) {
+        showProgressDialog();
+        mAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
+                    @Override
+                    public void onComplete(@NonNull Task<AuthResult> task) {
+                        if (task.isSuccessful()) {
+                            // Sign in success, update UI with the signed-in user's information
+
+                            FirebaseUser user = mAuth.getCurrentUser();
+                            updateUI(user);
+                            /*Toast.makeText(EmailPasswordActivity.this, "Успешная авторизация!",
+                                    Toast.LENGTH_SHORT).show();*/
+                        } else {
+                            // If sign in fails, display a message to the user.
+
+                            updateUI(null);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(EmailPasswordActivity.this);
+                            builder.setTitle(getString(R.string.loginPassIncorrectTitle))
+                                    .setMessage(getString(R.string.loginPassIncorrect))
+                                    .setCancelable(false)
+                                    .setNegativeButton(getString(R.string.close),
+                                            new DialogInterface.OnClickListener() {
+                                                public void onClick(DialogInterface dialog, int id) {
+                                                    dialog.cancel();
+                                                }
+                                            });
+                            AlertDialog alert = builder.create();
+                            alert.show();
+                        }
+
+                        // ...
+                    }
+                });
+    }
+
+    private void sendPasswordResetEmail(String email) {
+        // Отправляем email с паролем
+        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener() {
+            @Override
+            public void onComplete(@NonNull Task task) {
+                if (task.isSuccessful()) {
+                    mRestoreAlertDialog.dismiss();
+                    Toast toast = Toast.makeText(EmailPasswordActivity.this, getString(R.string.forgotPassMessage) ,
+                            Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+                else {
+                    Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
+                            Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                }
+            }
+        });
+
+    }
+
+    private void updateUI(FirebaseUser user) {
+        mLoginErrorTextView.setVisibility(View.GONE);
+        mPasswordErrorTextView.setVisibility(View.GONE);
+        hideProgressDialog();
     }
 
     private boolean isValidEmail(String email) {
