@@ -44,6 +44,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
 
     private FirebaseAuth mAuth;
+    private FirebaseAuth.AuthStateListener mAuthListener;
 
     //GOOGLE
     private GoogleApiClient mGoogleApiClient;
@@ -107,6 +108,32 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                 .build();
 
         mAuth = FirebaseAuth.getInstance();
+
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent intent = new Intent(EmailPasswordActivity.this,MainActivity.class);
+                    startActivity(intent);
+                    // User is signed in
+
+                } else {
+                    // User is signed out
+
+                }
+
+            }
+        };
+
+        FirebaseUser user = mAuth.getCurrentUser();
+        if (user != null) {
+            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
+
+
+            updateUI(user);
     }
 
     @Override
@@ -305,6 +332,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                 // LogIn with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
+
             } else {
                 updateUI(null);
             }
@@ -380,8 +408,10 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
-                            /*Toast.makeText(EmailPasswordActivity.this, "Успешная авторизация!",
-                                    Toast.LENGTH_SHORT).show();*/
+
+                            Intent intent = new Intent(EmailPasswordActivity.this,MainActivity.class);
+                            startActivity(intent);
+
                         } else {
                             // If sign in fails, display a message to the user.
 
@@ -432,6 +462,10 @@ public class EmailPasswordActivity extends AppCompatActivity implements
         mLoginErrorTextView.setVisibility(View.GONE);
         mPasswordErrorTextView.setVisibility(View.GONE);
         hideProgressDialog();
+        if (user != null) {
+            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
+            startActivity(intent);
+        }
     }
 
     private boolean isValidEmail(String email) {

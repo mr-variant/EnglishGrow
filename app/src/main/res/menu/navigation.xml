@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+    android:id="@+id/navigation_user"
+    android:icon="@drawable/ic_boss"
+    android:title="@string/menu_down_user" />
+
+    <item
+    android:id="@+id/navigation_grammar"
+    android:icon="@drawable/ic_books"
+    android:title="@string/menu_down_grammar" />
+
+    <item
+    android:id="@+id/navigation_training"
+    android:icon="@drawable/ic_seeding"
+    android:title="@string/menu_down_training" />
+
+    <item
+    android:id="@+id/navigation_dictionary"
+    android:icon="@drawable/ic_text"
+    android:title="@string/menu_down_dictionary" />
+
+    <item
+    android:id="@+id/navigation_chat"
+    android:icon="@drawable/ic_chat"
+    android:title="@string/menu_down_chat" />
+
+</menu>
