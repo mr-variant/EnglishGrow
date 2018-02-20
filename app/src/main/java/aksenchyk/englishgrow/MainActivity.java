@@ -9,19 +9,12 @@ import android.support.design.widget.BottomNavigationView;
 import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.ListView;
-import android.widget.Toast;
+
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
-import com.google.firebase.database.DatabaseReference;
-import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.GenericTypeIndicator;
-import com.google.firebase.database.ValueEventListener;
 
-import java.util.List;
+
 
 import aksenchyk.englishgrow.bottom_navigation_fragments.ChatFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.DictionaryFragment;
@@ -33,10 +26,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
-    private DatabaseReference dataBaseRefence;
 
-    private List<String> discr;
-    private ListView listUserTasks;
 
 
     private BottomNavigationView mMainNav;
@@ -102,26 +92,11 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-
-        dataBaseRefence = FirebaseDatabase.getInstance().getReference();
         FirebaseUser user = mAuth.getInstance().getCurrentUser();
 
-        dataBaseRefence.child(user.getUid()).addValueEventListener(new ValueEventListener() {
-            @Override
-            public void onDataChange(DataSnapshot dataSnapshot) {
-                GenericTypeIndicator<List<String>> t = new GenericTypeIndicator<List<String>>() {};
-                discr = dataSnapshot.child("Tasks").getValue(t);
-                Toast.makeText(MainActivity.this, "--- " /*+ discr.get(1).toString()*/,Toast.LENGTH_LONG).show();
-                updateUI();
-            }
 
 
 
-            @Override
-            public void onCancelled(DatabaseError databaseError) {
-                Toast.makeText(MainActivity.this, "Filed read value! ",Toast.LENGTH_LONG).show();
-            }
-        });
 
     }
 
