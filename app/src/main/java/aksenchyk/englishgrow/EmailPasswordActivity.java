@@ -35,7 +35,14 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.regex.Pattern;
 
 public class EmailPasswordActivity extends AppCompatActivity implements
@@ -61,6 +68,8 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
     private TextView mLoginErrorTextView;
     private TextView mPasswordErrorTextView;
+
+
 
 
     @Override
@@ -357,6 +366,85 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             FirebaseUser user = mAuth.getCurrentUser();
+
+                            //Add new user in DB
+                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+
+
+
+
+                            firestore.collection("Users")
+                                    .get()
+                                    .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                                            if (task.isSuccessful()) {
+                                                boolean userExist = false;
+                                                String userUID = mAuth.getCurrentUser().getUid();
+
+                                                for (DocumentSnapshot document : task.getResult()) {
+                                                    String docID = document.getId();
+
+                                                    if(docID.equals(userUID)) {
+                                                        userExist = true;
+                                                    }
+                                                }
+
+                                                if(!userExist) {
+
+                                                    Map<String, Object> userMap = new HashMap<>();
+
+                                                    userMap.put("nickname", "User");
+                                                    userMap.put("level", 1);
+                                                    userMap.put("experience", 0);
+                                                    userMap.put("satiation", 0);
+                                                    userMap.put("dateCreatedAccount", new Date());
+
+                                                    FirebaseFirestore.getInstance().collection("Users").document(userUID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                                        @Override
+                                                        public void onSuccess(Void aVoid) {
+
+                                                        }
+                                                    }).addOnFailureListener(new OnFailureListener() {
+                                                        @Override
+                                                        public void onFailure(@NonNull Exception e) {
+                                                            String errorMsg = e.getMessage();
+                                                            Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                                        }
+                                                    });
+                                                }
+                                            }
+                                        }
+                                    });
+
+/*
+                            if(!userExist) {
+
+                                String userID = user.getUid();
+
+                                Map<String, Object> userMap = new HashMap<>();
+
+                                userMap.put("nickname", "User");
+                                userMap.put("level", 1);
+                                userMap.put("experience", 0);
+                                userMap.put("satiation", 0);
+                                userMap.put("dateCreatedAccount", new Date());
+
+                                firestore.collection("Users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                    @Override
+                                    public void onSuccess(Void aVoid) {
+
+                                    }
+                                }).addOnFailureListener(new OnFailureListener() {
+                                    @Override
+                                    public void onFailure(@NonNull Exception e) {
+                                        String errorMsg = e.getMessage();
+                                        Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                    }
+                                });
+                            }
+*/
+
                             updateUI(user);
                         } else {
                             Toast.makeText(EmailPasswordActivity.this,  task.getException().getMessage().toString(),
@@ -374,7 +462,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
         showProgressDialog();
 
-        mAuth.createUserWithEmailAndPassword(email, password)
+        Task<AuthResult> authResultTask = mAuth.createUserWithEmailAndPassword(email, password)
                 .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
@@ -382,11 +470,36 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             // Sign in success, update UI with the signed-in user's information
                             FirebaseUser user = mAuth.getCurrentUser();
 
+                            //Add new user in DB
+                            FirebaseFirestore firestore = FirebaseFirestore.getInstance();
+                            String userID = user.getUid().toString();
+
+                            Map<String, Object> userMap = new HashMap<>();
+
+                            userMap.put("nickname", "User");
+                            userMap.put("level", 1);
+                            userMap.put("experience", 0);
+                            userMap.put("satiation", 0);
+                            userMap.put("dateCreatedAccount", new Date());
+
+                            firestore.collection("Users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+
+                                }
+                            }).addOnFailureListener(new OnFailureListener() {
+                                @Override
+                                public void onFailure(@NonNull Exception e) {
+                                    String errorMsg = e.getMessage();
+                                    Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                }
+                            });
+
                             hideProgressDialog();
                             mRegAlertDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
+                            Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString(),
                                     Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();

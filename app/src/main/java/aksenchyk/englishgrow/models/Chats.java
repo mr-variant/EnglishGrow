@@ -1,10 +1,12 @@
 package aksenchyk.englishgrow.models;
 
+import aksenchyk.englishgrow.adapters.ChatRoomId;
+
 /**
  * Created by ixvar on 2/17/2018.
  */
 
-public class Chats {
+public class Chats extends ChatRoomId{
 
     private String name;
 

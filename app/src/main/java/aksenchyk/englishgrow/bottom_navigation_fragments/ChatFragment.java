@@ -116,7 +116,9 @@ public class ChatFragment extends Fragment {
                         //  String name = doc.getDocument().getString("name");
                         //  Toast.makeText(getActivity(),name,Toast.LENGTH_SHORT).show();
 
-                        Chats chats =  doc.getDocument().toObject(Chats.class);
+                        String chatId = doc.getDocument().getId();
+
+                        Chats chats =  doc.getDocument().toObject(Chats.class).withId(chatId);
                         chatsList.add(chats);
                         chatListAdapter.notifyDataSetChanged();
                     }

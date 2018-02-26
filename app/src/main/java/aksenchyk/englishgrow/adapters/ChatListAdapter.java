@@ -75,6 +75,8 @@ public class ChatListAdapter extends RecyclerView.Adapter<ChatListAdapter.ViewHo
                         Context context = v.getContext();
                         Intent intentToChatRoom = new Intent(context, ChatRoomActivity.class);
                         intentToChatRoom.putExtra("roomName",chatsList.get(position).getName());
+                        intentToChatRoom.putExtra("roomId",chatsList.get(position).chatRoomId);
+
                         context.startActivity(intentToChatRoom);
 
                         break;
