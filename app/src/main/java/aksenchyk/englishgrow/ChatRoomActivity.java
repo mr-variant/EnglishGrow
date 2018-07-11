@@ -4,9 +4,12 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
@@ -16,12 +19,24 @@ import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentReference;
+import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+
+import aksenchyk.englishgrow.adapters.ChatListAdapter;
+import aksenchyk.englishgrow.adapters.MessagesAdapter;
+import aksenchyk.englishgrow.models.Chats;
+import aksenchyk.englishgrow.models.Messages;
+import aksenchyk.englishgrow.models.UserInfo;
 
 public class ChatRoomActivity extends AppCompatActivity implements View.OnClickListener {
 
@@ -34,6 +49,11 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
     private String mChatId;
 
     private FirebaseFirestore mFirestore;
+    private RecyclerView mChatListRecyclerView;
+    private List<Messages> messagesList;
+    private MessagesAdapter messagesAdapter;
+
+    private String nickname;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +66,18 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
         mSendMessageButton.setOnClickListener(this);
 
+
+        messagesList = new ArrayList<>();
+        messagesAdapter = new MessagesAdapter(messagesList);
+
+        mChatListRecyclerView = (RecyclerView) findViewById(R.id.chatRoomListRecyclerView);
+        mChatListRecyclerView.setHasFixedSize(true);
+        mChatListRecyclerView.setLayoutManager(new LinearLayoutManager(this));
+        mChatListRecyclerView.setAdapter(messagesAdapter);
+
+
         mFirestore = FirebaseFirestore.getInstance();
+
 
 
         mSendMessageEditText.addTextChangedListener(new TextWatcher() {
@@ -80,7 +111,37 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
         mRoomToolbar.setTitle(mRoomName);
 
+        nickname = UserInfo.getNickname();
+
+
+        mFirestore.collection("Chats").document(mChatId).collection("Messages").addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                if(e != null) {
+                    Log.d("FireTag","Error" + e.getMessage());
+                }
+
+                for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+
+                    if(doc.getType() == DocumentChange.Type.ADDED) {
+                        //  String name = doc.getDocument().getString("name");
+                        //  Toast.makeText(getActivity(),name,Toast.LENGTH_SHORT).show();
+
+                        Messages messages =  doc.getDocument().toObject(Messages.class);
+                        messagesList.add(messages);
+                        messagesAdapter.notifyDataSetChanged();
+                    }
+
+                }
+
+            }
+        });
+
+
     }
+
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -103,7 +164,7 @@ public class ChatRoomActivity extends AppCompatActivity implements View.OnClickL
 
                 Map<String,Object> msgMap = new HashMap<>();
 
-                msgMap.put("nickname", "user");
+                msgMap.put("nickname", nickname);
                 msgMap.put("msg", message);
                 msgMap.put("time", new Date());
 

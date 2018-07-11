@@ -28,7 +28,7 @@
     <string name="forgotPassButt">Восстановить</string>
     <string name="forgotPassMessage">На вашу почту отправлено письмо для восстановления.</string>
     <string name="googleConnectionFailed">Ошибка сервисов Гугл.</string>
-    <string name="title_activity_main">MainActivity</string>
+
 
 
     <string name="menu_down_user">Вы</string>
@@ -43,4 +43,9 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="button_logout">Выйти</string>
+    доступ запрещен
+    <string name="permission_denied">Доступ запрещен</string>
+
+
 </resources>

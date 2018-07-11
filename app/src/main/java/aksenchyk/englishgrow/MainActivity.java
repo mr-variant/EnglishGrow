@@ -3,11 +3,16 @@ package aksenchyk.englishgrow;
 
 import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.FrameLayout;
 
 
@@ -21,6 +26,8 @@ import aksenchyk.englishgrow.bottom_navigation_fragments.DictionaryFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.GrammarFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.MeFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.TrainingFragment;
+import aksenchyk.englishgrow.models.UserInfo;
+import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -31,6 +38,8 @@ public class MainActivity extends AppCompatActivity {
 
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
+    private Toolbar main_toolbar;
+
 
     private MeFragment meFragment;
     private GrammarFragment grammarFragment;
@@ -45,8 +54,15 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+
+
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
+        main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
+
+
+        setSupportActionBar(main_toolbar);
 
         meFragment = new MeFragment();
         grammarFragment = new GrammarFragment();
@@ -92,12 +108,25 @@ public class MainActivity extends AppCompatActivity {
         });
 
 
-        FirebaseUser user = mAuth.getInstance().getCurrentUser();
 
 
+    }
 
 
+    @Override
+    protected void onStart() {
+        super.onStart();
 
+
+        FirebaseUser currentUser = mAuth.getInstance().getCurrentUser();
+
+        if(currentUser == null) {
+            Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
+            startActivity(loginIntent);
+            finish();
+        }
+
+        UserInfo.instance();
     }
 
     private void setFragment(Fragment fragment) {
@@ -106,14 +135,9 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
     }
 
-    private void updateUI() {
 
 
-    }
 
 
-    @Override public void onBackPressed() {
-
-    }
 
 }

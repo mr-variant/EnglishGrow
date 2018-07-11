@@ -7,7 +7,6 @@ import android.content.Intent;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.util.Patterns;
 import android.view.Gravity;
 import android.view.LayoutInflater;
@@ -35,7 +34,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
-import com.google.firebase.firestore.DocumentReference;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
@@ -45,7 +43,7 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class EmailPasswordActivity extends AppCompatActivity implements
+public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
@@ -70,12 +68,10 @@ public class EmailPasswordActivity extends AppCompatActivity implements
     private TextView mPasswordErrorTextView;
 
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_email_password);
+        setContentView(R.layout.activity_login);
 
         // Views
 
@@ -123,8 +119,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    Intent intent = new Intent(EmailPasswordActivity.this,MainActivity.class);
-                    startActivity(intent);
+                    Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
                     // User is signed in
 
                 } else {
@@ -135,14 +132,14 @@ public class EmailPasswordActivity extends AppCompatActivity implements
             }
         };
 
-        FirebaseUser user = mAuth.getCurrentUser();
+       /* FirebaseUser user = mAuth.getCurrentUser();
         if (user != null) {
-            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
+            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
             startActivity(intent);
         }
 
 
-            updateUI(user);
+            updateUI(user);*/
     }
 
     @Override
@@ -188,12 +185,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements
 
             case R.id.singUpButton:
                 AlertDialog.Builder regWindows = new AlertDialog.Builder(
-                        EmailPasswordActivity.this);
+                        LoginActivity.this);
 
                 regWindows.setPositiveButton(getString(R.string.alertRegOk), null);
                 regWindows.setNegativeButton(getString(R.string.cancel), null);
 
-                LayoutInflater inflater = EmailPasswordActivity.this.getLayoutInflater();
+                LayoutInflater inflater = LoginActivity.this.getLayoutInflater();
                 regWindows.setView(inflater.inflate(R.layout.alert_dialog_sign_up, null));
 
                 mRegAlertDialog = regWindows.create();
@@ -275,12 +272,12 @@ public class EmailPasswordActivity extends AppCompatActivity implements
             case R.id.forgetPasswordTextView:
 
                 AlertDialog.Builder restoreWindows = new AlertDialog.Builder(
-                        EmailPasswordActivity.this);
+                        LoginActivity.this);
 
                 restoreWindows.setPositiveButton(getString(R.string.forgotPassButt), null);
                 restoreWindows.setNegativeButton(getString(R.string.cancel), null);
 
-                LayoutInflater inflaterRestore = EmailPasswordActivity.this.getLayoutInflater();
+                LayoutInflater inflaterRestore = LoginActivity.this.getLayoutInflater();
                 restoreWindows.setView(inflaterRestore.inflate(R.layout.alert_dialog_forgot_password, null));
 
                 mRestoreAlertDialog = restoreWindows.create();
@@ -370,9 +367,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             //Add new user in DB
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
 
-
-
-
                             firestore.collection("Users")
                                     .get()
                                     .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
@@ -395,7 +389,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                                                     Map<String, Object> userMap = new HashMap<>();
 
                                                     userMap.put("nickname", "User");
-                                                    userMap.put("level", 1);
                                                     userMap.put("experience", 0);
                                                     userMap.put("satiation", 0);
                                                     userMap.put("dateCreatedAccount", new Date());
@@ -409,7 +402,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                                                         @Override
                                                         public void onFailure(@NonNull Exception e) {
                                                             String errorMsg = e.getMessage();
-                                                            Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                                            Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                                                         }
                                                     });
                                                 }
@@ -417,37 +410,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                                         }
                                     });
 
-/*
-                            if(!userExist) {
-
-                                String userID = user.getUid();
-
-                                Map<String, Object> userMap = new HashMap<>();
-
-                                userMap.put("nickname", "User");
-                                userMap.put("level", 1);
-                                userMap.put("experience", 0);
-                                userMap.put("satiation", 0);
-                                userMap.put("dateCreatedAccount", new Date());
-
-                                firestore.collection("Users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void aVoid) {
-
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-                                        String errorMsg = e.getMessage();
-                                        Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
-                                    }
-                                });
-                            }
-*/
-
                             updateUI(user);
                         } else {
-                            Toast.makeText(EmailPasswordActivity.this,  task.getException().getMessage().toString(),
+                            Toast.makeText(LoginActivity.this,  task.getException().getMessage().toString(),
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -477,7 +442,6 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             Map<String, Object> userMap = new HashMap<>();
 
                             userMap.put("nickname", "User");
-                            userMap.put("level", 1);
                             userMap.put("experience", 0);
                             userMap.put("satiation", 0);
                             userMap.put("dateCreatedAccount", new Date());
@@ -491,7 +455,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                                 @Override
                                 public void onFailure(@NonNull Exception e) {
                                     String errorMsg = e.getMessage();
-                                    Toast.makeText(EmailPasswordActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(LoginActivity.this, errorMsg, Toast.LENGTH_SHORT).show();
                                 }
                             });
 
@@ -499,7 +463,7 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             mRegAlertDialog.dismiss();
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString(),
+                            Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString(),
                                     Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
@@ -522,14 +486,14 @@ public class EmailPasswordActivity extends AppCompatActivity implements
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
-                            Intent intent = new Intent(EmailPasswordActivity.this,MainActivity.class);
+                            Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
 
                         } else {
                             // If sign in fails, display a message to the user.
 
                             updateUI(null);
-                            AlertDialog.Builder builder = new AlertDialog.Builder(EmailPasswordActivity.this);
+                            AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle(getString(R.string.loginPassIncorrectTitle))
                                     .setMessage(getString(R.string.loginPassIncorrect))
                                     .setCancelable(false)
@@ -555,13 +519,13 @@ public class EmailPasswordActivity extends AppCompatActivity implements
             public void onComplete(@NonNull Task task) {
                 if (task.isSuccessful()) {
                     mRestoreAlertDialog.dismiss();
-                    Toast toast = Toast.makeText(EmailPasswordActivity.this, getString(R.string.forgotPassMessage) ,
+                    Toast toast = Toast.makeText(LoginActivity.this, getString(R.string.forgotPassMessage) ,
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
                 }
                 else {
-                    Toast toast = Toast.makeText(EmailPasswordActivity.this, task.getException().getMessage().toString() ,
+                    Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString() ,
                             Toast.LENGTH_LONG);
                     toast.setGravity(Gravity.CENTER, 0, 0);
                     toast.show();
@@ -576,8 +540,9 @@ public class EmailPasswordActivity extends AppCompatActivity implements
         mPasswordErrorTextView.setVisibility(View.GONE);
         hideProgressDialog();
         if (user != null) {
-            Intent intent = new Intent(EmailPasswordActivity.this, MainActivity.class);
-            startActivity(intent);
+            Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);
+            startActivity(mainIntent);
+            finish();
         }
     }
 
