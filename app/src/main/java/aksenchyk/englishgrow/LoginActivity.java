@@ -132,14 +132,6 @@ public class LoginActivity extends AppCompatActivity implements
             }
         };
 
-       /* FirebaseUser user = mAuth.getCurrentUser();
-        if (user != null) {
-            Intent intent = new Intent(LoginActivity.this, MainActivity.class);
-            startActivity(intent);
-        }
-
-
-            updateUI(user);*/
     }
 
     @Override
@@ -388,10 +380,11 @@ public class LoginActivity extends AppCompatActivity implements
 
                                                     Map<String, Object> userMap = new HashMap<>();
 
-                                                    userMap.put("nickname", "User");
+                                                    userMap.put("name", "User");
+                                                    userMap.put("image", "https://firebasestorage.googleapis.com/v0/b/englishgrow-36226.appspot.com/o/profile_images%2Fdefault_profile.png?alt=media&token=1a8ee012-2666-4ca6-b5a5-c64b1f1c297b");
                                                     userMap.put("experience", 0);
                                                     userMap.put("satiation", 0);
-                                                    userMap.put("dateCreatedAccount", new Date());
+
 
                                                     FirebaseFirestore.getInstance().collection("Users").document(userUID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                                         @Override
@@ -441,10 +434,11 @@ public class LoginActivity extends AppCompatActivity implements
 
                             Map<String, Object> userMap = new HashMap<>();
 
-                            userMap.put("nickname", "User");
+                            userMap.put("name", "User");
+                            userMap.put("image", "https://firebasestorage.googleapis.com/v0/b/englishgrow-36226.appspot.com/o/profile_images%2Fdefault_profile.png?alt=media&token=1a8ee012-2666-4ca6-b5a5-c64b1f1c297b");
                             userMap.put("experience", 0);
                             userMap.put("satiation", 0);
-                            userMap.put("dateCreatedAccount", new Date());
+
 
                             firestore.collection("Users").document(userID).set(userMap).addOnSuccessListener(new OnSuccessListener<Void>() {
                                 @Override

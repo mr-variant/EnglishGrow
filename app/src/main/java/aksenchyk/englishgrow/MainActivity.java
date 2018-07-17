@@ -4,15 +4,12 @@ package aksenchyk.englishgrow;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.Intent;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.design.widget.BottomNavigationView;
-import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.FrameLayout;
 
 
@@ -26,8 +23,6 @@ import aksenchyk.englishgrow.bottom_navigation_fragments.DictionaryFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.GrammarFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.MeFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.TrainingFragment;
-import aksenchyk.englishgrow.models.UserInfo;
-import de.hdodenhof.circleimageview.CircleImageView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -59,9 +54,9 @@ public class MainActivity extends AppCompatActivity {
 
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
+
+
         main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-
-
         setSupportActionBar(main_toolbar);
 
         meFragment = new MeFragment();
@@ -71,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         chatFragment = new ChatFragment();
 
         setFragment(meFragment);
-        setTitle(getString(R.string.profile));
+        //setTitle(getString(R.string.profile));
 
         mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -79,23 +74,23 @@ public class MainActivity extends AppCompatActivity {
 
                 switch (item.getItemId()) {
                     case R.id.navigation_user:
-                        setTitle(getString(R.string.profile));
+                     //   setTitle(getString(R.string.profile));
                         setFragment(meFragment);
                         return true;
                     case R.id.navigation_grammar:
-                        setTitle(getString(R.string.menu_down_grammar));
+                     //   setTitle(getString(R.string.menu_down_grammar));
                         setFragment(grammarFragment);
                         return true;
                     case R.id.navigation_training:
-                        setTitle(getString(R.string.menu_down_training));
+                     //   setTitle(getString(R.string.menu_down_training));
                         setFragment(trainingFragment);
                         return true;
                     case R.id.navigation_dictionary:
-                        setTitle(getString(R.string.menu_down_dictionary));
+                    //    setTitle(getString(R.string.menu_down_dictionary));
                         setFragment(dictionaryFragment);
                         return true;
                     case R.id.navigation_chat:
-                        setTitle(getString(R.string.menu_down_chat));
+                    //    setTitle(getString(R.string.menu_down_chat));
                         setFragment(chatFragment);
                         return true;
 
@@ -126,7 +121,7 @@ public class MainActivity extends AppCompatActivity {
             finish();
         }
 
-        UserInfo.instance();
+
     }
 
     private void setFragment(Fragment fragment) {

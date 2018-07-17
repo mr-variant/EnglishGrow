@@ -30,12 +30,11 @@
     <string name="googleConnectionFailed">Ошибка сервисов Гугл.</string>
 
 
-
     <string name="menu_down_user">Вы</string>
     <string name="menu_down_grammar">Грамматика</string>
     <string name="menu_down_training">Тренеровки</string>
     <string name="menu_down_dictionary">Словарь</string>
-    <string name="menu_down_chat">Чат</string>
+    <string name="menu_down_chat">Блог</string>
 
     <string name="profile">Профиль</string>
 
@@ -43,9 +42,22 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="button_logout">Выйти</string>
-    доступ запрещен
+    <string name="button_logout">Выйти из аккаунта</string>
+
     <string name="permission_denied">Доступ запрещен</string>
+    <string name="title_setup">Изменить профиль</string>
+    <string name="textedit_name_hint">Ваше имя...</string>
+    <string name="setup_error">Ошибка: </string>
+
+    <string name="alert_dialog_logout_close">Отмена</string>
+    <string name="alert_dialog_logout_exit">Выйти</string>
+    <string name="alert_dialog_logout_msg">Вы уверены что хотите выйти?</string>
+    <string name="connection_bad">Нет соединения с интернетом</string>
+    <string name="toolbar_blog">Общение</string>
+    <string name="toolbar_new_post">Добавить новое сообщение</string>
+    <string name="editText_NewPost_hint">Добавьте ваше сообщение...</string>
+    <string name="btn_addNewPost">Опубликовать</string>
+    <string name="new_post_successful">Сообщение было добавлено</string>
 
 
 </resources>
