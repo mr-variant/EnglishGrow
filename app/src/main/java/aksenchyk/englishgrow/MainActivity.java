@@ -11,6 +11,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -28,7 +29,7 @@ public class MainActivity extends AppCompatActivity {
 
 
     private FirebaseAuth mAuth;
-
+    private FirebaseUser currentUser;
 
 
     private BottomNavigationView mMainNav;
@@ -48,7 +49,6 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
 
 
@@ -112,8 +112,7 @@ public class MainActivity extends AppCompatActivity {
     protected void onStart() {
         super.onStart();
 
-
-        FirebaseUser currentUser = mAuth.getInstance().getCurrentUser();
+        currentUser = mAuth.getInstance().getCurrentUser();
 
         if(currentUser == null) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -129,8 +128,6 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.replace(R.id.main_frame, fragment);
         fragmentTransaction.commit();
     }
-
-
 
 
 

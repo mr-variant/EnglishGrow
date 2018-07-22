@@ -90,6 +90,27 @@
         android:textSize="8sp"
         android:visibility="invisible" />
 
+    <EditText
+        android:id="@+id/newUserNameEditText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:drawableLeft="@drawable/ic_boss"
+        android:ems="10"
+        android:hint="@string/new_user_name"
+        android:inputType="textPersonName"
+        android:singleLine="true" />
+
+    <TextView
+        android:id="@+id/newUserNameErrorTextView"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="12dp"
+        android:layout_marginRight="12dp"
+        android:text="1234"
+        android:textColor="@color/colorScarlet"
+        android:textSize="8sp"
+        android:visibility="invisible" />
+
     <CheckBox
         android:id="@+id/rulesCheckBox"
         android:layout_width="match_parent"

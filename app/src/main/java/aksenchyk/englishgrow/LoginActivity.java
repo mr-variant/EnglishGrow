@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -200,26 +201,29 @@ public class LoginActivity extends AppCompatActivity implements
                                 final EditText newEmailEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailEditText);
                                 final EditText newPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPasswordEditText);
                                 final EditText newConfirmPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newConfirmPasswordEditText);
+                                final EditText newUserNameEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newUserNameEditText);
                                 final CheckBox rulesCheckBox = (CheckBox) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesCheckBox);
 
                                 String newEmail = newEmailEditText.getText().toString();
                                 String newPass = newPasswordEditText.getText().toString();
                                 String newConfPass = newConfirmPasswordEditText.getText().toString();
-
+                                String newUserName =  newUserNameEditText.getText().toString();
 
                                 final TextView emailError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailErrorTextView);
                                 final TextView passError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassErrorTextView);
                                 final TextView confPassError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassConfErrorTextView);
+                                final TextView newUserNameErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newUserNameErrorTextView);
                                 final TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
 
 
                                 emailError.setVisibility(View.GONE);
                                 passError.setVisibility(View.GONE);
                                 confPassError.setVisibility(View.GONE);
+                                newUserNameErrorTextView.setVisibility(View.GONE);
                                 rulesErrorTextView.setVisibility(View.GONE);
 
 
-                                if(newEmail.isEmpty() || newPass.isEmpty() || newConfPass.isEmpty()) {
+                                if(newEmail.isEmpty() || newPass.isEmpty() || newConfPass.isEmpty() || newUserName.isEmpty()) {
                                     if(newEmail.isEmpty()) {
                                         emailError.setText(getString(R.string.loginIsNull));
                                         emailError.setVisibility(View.VISIBLE);
@@ -235,6 +239,11 @@ public class LoginActivity extends AppCompatActivity implements
                                         confPassError.setVisibility(View.VISIBLE);
                                     }
 
+                                    if(newUserName.isEmpty()) {
+                                        newUserNameErrorTextView.setText(getString(R.string.nameIsNull));
+                                        newUserNameErrorTextView.setVisibility(View.VISIBLE);
+                                    }
+
                                 } else if(!isValidEmail(newEmail)) {
                                     emailError.setText(getString(R.string.loginIsNotValid));
                                     emailError.setVisibility(View.VISIBLE);
@@ -248,7 +257,8 @@ public class LoginActivity extends AppCompatActivity implements
                                     rulesErrorTextView.setText(getString(R.string.rulesErr));
                                     rulesErrorTextView.setVisibility(View.VISIBLE);
                                 } else {
-                                    createAccount(newEmail,newPass);
+                                    createAccount(newEmail,newPass,newUserName);
+                                    //signInEmailPassword(newEmail,newPass);
                                 }
 
                             }
@@ -257,6 +267,8 @@ public class LoginActivity extends AppCompatActivity implements
                 });
 
                 mRegAlertDialog.show();
+
+                mRegAlertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
 
                 break;
 
@@ -306,7 +318,7 @@ public class LoginActivity extends AppCompatActivity implements
                 });
 
                 mRestoreAlertDialog.show();
-
+                mRestoreAlertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
                 break;
         }
 
@@ -354,7 +366,7 @@ public class LoginActivity extends AppCompatActivity implements
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
-                            FirebaseUser user = mAuth.getCurrentUser();
+                            final FirebaseUser user = mAuth.getCurrentUser();
 
                             //Add new user in DB
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
@@ -379,9 +391,11 @@ public class LoginActivity extends AppCompatActivity implements
                                                 if(!userExist) {
 
                                                     Map<String, Object> userMap = new HashMap<>();
+                                                    String userName = user.getDisplayName();
+                                                    String userImageURL = user.getPhotoUrl().toString();
 
-                                                    userMap.put("name", "User");
-                                                    userMap.put("image", "https://firebasestorage.googleapis.com/v0/b/englishgrow-36226.appspot.com/o/profile_images%2Fdefault_profile.png?alt=media&token=1a8ee012-2666-4ca6-b5a5-c64b1f1c297b");
+                                                    userMap.put("name", userName);
+                                                    userMap.put("image", userImageURL);
                                                     userMap.put("experience", 0);
                                                     userMap.put("satiation", 0);
 
@@ -416,7 +430,7 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     //EmailAndLogin
-    private void createAccount(String email, String password) {
+    private void createAccount(final String email,final String password, final String newUserName) {
 
         showProgressDialog();
 
@@ -434,7 +448,7 @@ public class LoginActivity extends AppCompatActivity implements
 
                             Map<String, Object> userMap = new HashMap<>();
 
-                            userMap.put("name", "User");
+                            userMap.put("name", newUserName);
                             userMap.put("image", "https://firebasestorage.googleapis.com/v0/b/englishgrow-36226.appspot.com/o/profile_images%2Fdefault_profile.png?alt=media&token=1a8ee012-2666-4ca6-b5a5-c64b1f1c297b");
                             userMap.put("experience", 0);
                             userMap.put("satiation", 0);
@@ -455,12 +469,18 @@ public class LoginActivity extends AppCompatActivity implements
 
                             hideProgressDialog();
                             mRegAlertDialog.dismiss();
+                            signInEmailPassword(email,password);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString(),
+                           /* Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString(),
                                     Toast.LENGTH_LONG);
                             toast.setGravity(Gravity.CENTER, 0, 0);
                             toast.show();
+                            hideProgressDialog();*/
+
+                            TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
+                            rulesErrorTextView.setVisibility(View.VISIBLE);
+                            rulesErrorTextView.setText(task.getException().getMessage().toString());
                             hideProgressDialog();
                         }
 
@@ -489,7 +509,7 @@ public class LoginActivity extends AppCompatActivity implements
                             updateUI(null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle(getString(R.string.loginPassIncorrectTitle))
-                                    .setMessage(getString(R.string.loginPassIncorrect))
+                                    .setMessage(task.getException().getMessage().toString())
                                     .setCancelable(false)
                                     .setNegativeButton(getString(R.string.close),
                                             new DialogInterface.OnClickListener() {

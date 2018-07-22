@@ -9,6 +9,7 @@
 
     <string name="loginIsNull">Введите ваш логин!</string>
     <string name="passwordIsNull">Введите ваш пароль!</string>
+    <string name="nameIsNull">Введите ваше имя!</string>
     <string name="passwordLessSix">Длина меньше 6 символов!</string>
     <string name="loginIsNotValid">Не верный E-mail!</string>
     <string name="loading">Загрузка... Пожалуйста подождите.</string>
@@ -58,6 +59,7 @@
     <string name="editText_NewPost_hint">Добавьте ваше сообщение...</string>
     <string name="btn_addNewPost">Опубликовать</string>
     <string name="new_post_successful">Сообщение было добавлено</string>
+    <string name="new_user_name">Имя пользователя</string>
 
 
 </resources>
