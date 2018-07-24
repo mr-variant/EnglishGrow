@@ -2,7 +2,7 @@ package aksenchyk.englishgrow.models;
 
 import java.util.Date;
 
-public class BlogPost {
+public class BlogPost extends BlogPostID {
 
     private String user_id;
     private String desc;

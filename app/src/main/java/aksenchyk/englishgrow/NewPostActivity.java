@@ -42,7 +42,6 @@ import id.zelory.compressor.Compressor;
 
 public class NewPostActivity extends AppCompatActivity {
 
-
     private Toolbar toolbarAddNewPost;
     private ImageView imageViewNewPost;
     private EditText editTextDescriptionNewPost;
@@ -65,19 +64,21 @@ public class NewPostActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_new_post);
 
-
+        //firebase
         storageReference = FirebaseStorage.getInstance().getReference();
         firebaseFirestore = FirebaseFirestore.getInstance();
         firebaseAuth = FirebaseAuth.getInstance();
-
         userID = firebaseAuth.getCurrentUser().getUid();
 
-
+        //Views
         toolbarAddNewPost = (Toolbar) findViewById(R.id.toolbarAddNewPost);
         imageViewNewPost = (ImageView) findViewById(R.id.imageViewNewPost);
         editTextDescriptionNewPost = (EditText) findViewById(R.id.editTextDescriptionNewPost);
         buttonAddNewPost = (Button) findViewById(R.id.buttonAddNewPost);
         progressBarAddNewPost = (ProgressBar) findViewById(R.id.progressBarAddNewPost);
+
+
+
 
         setSupportActionBar(toolbarAddNewPost);
         getSupportActionBar().setTitle(getString(R.string.toolbar_new_post));
@@ -192,10 +193,9 @@ public class NewPostActivity extends AppCompatActivity {
                                                 if(task.isSuccessful()){
 
                                                     Toast.makeText(NewPostActivity.this, "Post was added", Toast.LENGTH_LONG).show();
-                                                    Intent mainIntent = new Intent(NewPostActivity.this, MainActivity.class);
-                                                    startActivity(mainIntent);
+                                                    //Intent mainIntent = new Intent(NewPostActivity.this, MainActivity.class);
+                                                    //startActivity(mainIntent);
                                                     finish();
-
                                                 } else {
 
 

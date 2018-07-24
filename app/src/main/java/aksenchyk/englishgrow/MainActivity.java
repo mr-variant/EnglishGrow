@@ -16,7 +16,7 @@ import android.widget.Toast;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-
+import com.google.firebase.firestore.FirebaseFirestore;
 
 
 import aksenchyk.englishgrow.bottom_navigation_fragments.ChatFragment;
@@ -30,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
-
+    private FirebaseFirestore firebaseFirestore;
 
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
@@ -59,51 +59,51 @@ public class MainActivity extends AppCompatActivity {
         main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
         setSupportActionBar(main_toolbar);
 
-        meFragment = new MeFragment();
-        grammarFragment = new GrammarFragment();
-        trainingFragment = new TrainingFragment();
-        dictionaryFragment = new DictionaryFragment();
-        chatFragment = new ChatFragment();
 
-        setFragment(meFragment);
-        //setTitle(getString(R.string.profile));
+        mAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
-        mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-            @Override
-            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(mAuth.getCurrentUser() != null) {
 
-                switch (item.getItemId()) {
-                    case R.id.navigation_user:
-                     //   setTitle(getString(R.string.profile));
-                        setFragment(meFragment);
-                        return true;
-                    case R.id.navigation_grammar:
-                     //   setTitle(getString(R.string.menu_down_grammar));
-                        setFragment(grammarFragment);
-                        return true;
-                    case R.id.navigation_training:
-                     //   setTitle(getString(R.string.menu_down_training));
-                        setFragment(trainingFragment);
-                        return true;
-                    case R.id.navigation_dictionary:
-                    //    setTitle(getString(R.string.menu_down_dictionary));
-                        setFragment(dictionaryFragment);
-                        return true;
-                    case R.id.navigation_chat:
-                    //    setTitle(getString(R.string.menu_down_chat));
-                        setFragment(chatFragment);
-                        return true;
+            meFragment = new MeFragment();
+            grammarFragment = new GrammarFragment();
+            trainingFragment = new TrainingFragment();
+            dictionaryFragment = new DictionaryFragment();
+            chatFragment = new ChatFragment();
 
-                    default:
+            initializeFragment();
 
-                        return false;
+            mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+                @Override
+                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                    Fragment currentFragment = getFragmentManager().findFragmentById(R.id.main_frame);
+
+                    switch (item.getItemId()) {
+                        case R.id.navigation_user:
+                            replaceFragment(meFragment, currentFragment);
+                            return true;
+                        case R.id.navigation_grammar:
+                            replaceFragment(grammarFragment, currentFragment);
+                            return true;
+                        case R.id.navigation_training:
+                            replaceFragment(trainingFragment, currentFragment);
+                            return true;
+                        case R.id.navigation_dictionary:
+                            replaceFragment(dictionaryFragment, currentFragment);
+                            return true;
+                        case R.id.navigation_chat:
+                            replaceFragment(chatFragment, currentFragment);
+                            return true;
+                        default:
+                            return false;
+                    }
+
                 }
-
-            }
-        });
+            });
 
 
-
+        }
 
     }
 
@@ -123,9 +123,79 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+
+    /*
     private void setFragment(Fragment fragment) {
         FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
         fragmentTransaction.replace(R.id.main_frame, fragment);
+        fragmentTransaction.commit();
+    }*/
+
+
+
+    private void initializeFragment(){
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        fragmentTransaction.add(R.id.main_frame, meFragment);
+        fragmentTransaction.add(R.id.main_frame, grammarFragment);
+        fragmentTransaction.add(R.id.main_frame, trainingFragment);
+        fragmentTransaction.add(R.id.main_frame, dictionaryFragment);
+        fragmentTransaction.add(R.id.main_frame, chatFragment);
+
+
+        fragmentTransaction.hide(grammarFragment);
+        fragmentTransaction.hide(trainingFragment);
+        fragmentTransaction.hide(dictionaryFragment);
+        fragmentTransaction.hide(chatFragment);
+
+        fragmentTransaction.commit();
+    }
+
+
+    private void replaceFragment(Fragment fragment, Fragment currentFragment){
+
+        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+
+        if(fragment == meFragment){
+            fragmentTransaction.hide(grammarFragment);
+            fragmentTransaction.hide(trainingFragment);
+            fragmentTransaction.hide(dictionaryFragment);
+            fragmentTransaction.hide(chatFragment);
+        }
+
+
+        if(fragment == grammarFragment){
+            fragmentTransaction.hide(meFragment);
+            fragmentTransaction.hide(trainingFragment);
+            fragmentTransaction.hide(dictionaryFragment);
+            fragmentTransaction.hide(chatFragment);
+        }
+
+
+        if(fragment == trainingFragment){
+            fragmentTransaction.hide(grammarFragment);
+            fragmentTransaction.hide(meFragment);
+            fragmentTransaction.hide(dictionaryFragment);
+            fragmentTransaction.hide(chatFragment);
+        }
+
+        if(fragment == dictionaryFragment){
+            fragmentTransaction.hide(grammarFragment);
+            fragmentTransaction.hide(trainingFragment);
+            fragmentTransaction.hide(meFragment);
+            fragmentTransaction.hide(chatFragment);
+        }
+
+        if(fragment == chatFragment){
+            fragmentTransaction.hide(grammarFragment);
+            fragmentTransaction.hide(trainingFragment);
+            fragmentTransaction.hide(dictionaryFragment);
+            fragmentTransaction.hide(meFragment);
+        }
+
+        fragmentTransaction.show(fragment);
+        //fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.commit();
     }
 

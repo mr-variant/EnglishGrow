@@ -21,14 +21,14 @@
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
-            android:layout_height="match_parent">
+            android:layout_height="wrap_content">
 
             <de.hdodenhof.circleimageview.CircleImageView
                 android:id="@+id/circleImageViewUserPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:src="@drawable/profile_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -37,7 +37,7 @@
                 android:id="@+id/textViewBlogPostedDate"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
+                android:layout_marginStart="8dp"
                 android:text="01.01.2000"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toBottomOf="@+id/textViewBlogUsername" />
@@ -46,8 +46,8 @@
                 android:id="@+id/textViewBlogUsername"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
                 android:text="User"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -56,7 +56,7 @@
                 android:id="@+id/imageViewBlogPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="200dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -67,15 +67,62 @@
                 android:id="@+id/textViewBlogDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:text="The attorney for the 29-year-old Russian woman accused of trying to win influence in American political circles as a secret agent for her home country pushed back on the US government portrayal of his client as a spy in an interview televised on CNN."
-                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/imageViewBlogPhoto" />
+
+            <ImageView
+                android:id="@+id/imageViewBlogLikeBtn"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_favorite" />
+
+            <TextView
+                android:id="@+id/textViewBlogLikeCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="1000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewBlogLikeBtn"
+                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc" />
+
+            <ImageView
+                android:id="@+id/imageViewComments"
+                android:layout_width="32dp"
+                android:layout_height="32dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="24dp"
+                android:layout_marginTop="8dp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewBlogLikeCount"
+                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
+                app:srcCompat="@drawable/ic_mode_comment" />
+
+            <TextView
+                android:id="@+id/textViewBlogCommentsCount"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="8dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="8dp"
+                android:text="1000"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/imageViewComments"
+                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc" />
 
         </android.support.constraint.ConstraintLayout>
 
