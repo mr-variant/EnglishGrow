@@ -194,7 +194,7 @@ public class SetupActivity extends AppCompatActivity {
 
                                     } else {
                                         String error = task.getException().getMessage();
-                                        Toast.makeText(SetupActivity.this, getString(R.string.setup_error) + error, Toast.LENGTH_LONG).show();
+                                        Toast.makeText(SetupActivity.this, getString(R.string.error) + error, Toast.LENGTH_LONG).show();
                                     }
 
                                     progressBarSetup.setVisibility(View.INVISIBLE);
@@ -204,7 +204,7 @@ public class SetupActivity extends AppCompatActivity {
 
                         } else {
                             String error = task.getException().getMessage();
-                            Toast.makeText(SetupActivity.this, getString(R.string.setup_error), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SetupActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
                         }
 
                         progressBarSetup.setVisibility(View.INVISIBLE);

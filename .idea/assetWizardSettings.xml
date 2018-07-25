@@ -33,9 +33,10 @@
                         </option>
                         <option name="values">
                           <map>
+                            <entry key="assetSourceType" value="FILE" />
                             <entry key="color" value="ff4b55" />
-                            <entry key="outputName" value="ic_favorite_red" />
-                            <entry key="sourceFile" value="C:\Users\ixvar" />
+                            <entry key="outputName" value="ic_share" />
+                            <entry key="sourceFile" value="C:\Users\ixvar\Desktop\4444444444444\share.svg" />
                           </map>
                         </option>
                       </PersistentState>
