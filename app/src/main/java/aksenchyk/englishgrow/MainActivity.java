@@ -195,8 +195,8 @@ public class MainActivity extends AppCompatActivity {
         }
 
         fragmentTransaction.show(fragment);
-        //fragmentTransaction.replace(R.id.main_container, fragment);
         fragmentTransaction.commit();
+
     }
 
 

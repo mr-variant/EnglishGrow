@@ -107,7 +107,7 @@
                 android:layout_width="24dp"
                 android:layout_height="24dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="32dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/textViewBlogLikeCount"
@@ -121,7 +121,7 @@
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="1000"
+                android:text="100"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toEndOf="@+id/imageViewComments"
                 app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc" />
@@ -131,10 +131,10 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginEnd="16dp"
+                android:layout_marginStart="48dp"
                 android:layout_marginTop="8dp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toEndOf="@+id/textViewBlogCommentsCount"
                 app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
                 app:srcCompat="@drawable/ic_share" />
 

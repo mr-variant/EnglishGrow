@@ -7,6 +7,7 @@ import android.graphics.BitmapFactory;
 import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.Bundle;
 import android.os.Environment;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -38,6 +39,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import aksenchyk.englishgrow.CommentsActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.BlogPost;
 import de.hdodenhof.circleimageview.CircleImageView;
@@ -136,6 +138,20 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         });
 
 
+        //Get Comments Count
+        firebaseFirestore.collection("Posts/" + blogPostID + "/Comments").addSnapshotListener( new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                if(documentSnapshots.isEmpty()){
+                    holder.updateCommentsCount(0);
+                } else {
+                    int count = documentSnapshots.size();
+                    holder.updateCommentsCount(count);
+                }
+            }
+        });
+
+
         holder.imageViewBlogLikeBtn.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -175,6 +191,19 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 }
             }
         });
+
+
+        holder.imageViewComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intentComments = new Intent(context, CommentsActivity.class);
+                intentComments.putExtra("blogPostID", blogPostID);
+                context.startActivity(intentComments);
+
+            }
+        });
+
+
     }
 
 
@@ -197,15 +226,17 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         private CircleImageView circleImageViewUserPhoto;
         private ImageView imageViewBlogLikeBtn;
         private TextView textViewBlogLikeCount;
+        private TextView textViewBlogCommentsCount;
         private ImageView imageViewBlogShare;
-
+        private ImageView imageViewComments;
 
         public ViewHolder(View itemView) {
             super(itemView);
             mView = itemView;
 
             imageViewBlogLikeBtn = mView.findViewById(R.id.imageViewBlogLikeBtn);
-            imageViewBlogShare= mView.findViewById(R.id.imageViewBlogShare);
+            imageViewBlogShare = mView.findViewById(R.id.imageViewBlogShare);
+            imageViewComments = mView.findViewById(R.id.imageViewComments);
         }
 
         public void setDescText(String descText) {
@@ -245,6 +276,12 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             textViewBlogLikeCount = mView.findViewById(R.id.textViewBlogLikeCount);
             textViewBlogLikeCount.setText(String.valueOf(count));
         }
+
+        public void updateCommentsCount(int count){
+            textViewBlogCommentsCount = mView.findViewById(R.id.textViewBlogCommentsCount);
+            textViewBlogCommentsCount.setText(String.valueOf(count));
+        }
+
 
         public String getDesc() {
             return textViewBlogDesc.getText().toString();

@@ -1,6 +1,7 @@
 package aksenchyk.englishgrow.bottom_navigation_fragments;
 
 
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
@@ -147,6 +148,7 @@ public class ChatFragment extends Fragment {
             });
         }
 
+
         // Inflate the layout for this fragment
         return rootView;
     }
@@ -156,6 +158,7 @@ public class ChatFragment extends Fragment {
         super.onStart();
         fab_addPost.startAnimation(animFabShow);
     }
+
 
 
     public void loadMorePosts() {
