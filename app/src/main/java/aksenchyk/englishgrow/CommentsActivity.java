@@ -1,6 +1,5 @@
 package aksenchyk.englishgrow;
 
-import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
@@ -30,8 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import aksenchyk.englishgrow.adapters.CommentsRecyclerAdapter;
-import aksenchyk.englishgrow.models.BlogPost;
-import aksenchyk.englishgrow.models.Comments;
+import aksenchyk.englishgrow.models.Comment;
 
 
 public class CommentsActivity extends AppCompatActivity {
@@ -44,7 +42,7 @@ public class CommentsActivity extends AppCompatActivity {
     private String blogPostID;
     private String currentUserID;
 
-    private List<Comments> commentsList;
+    private List<Comment> commentsList;
     private CommentsRecyclerAdapter commentsRecyclerAdapter;
 
     private FirebaseFirestore firebaseFirestore;
@@ -91,7 +89,7 @@ public class CommentsActivity extends AppCompatActivity {
         });
 
 
-        firebaseFirestore.collection("Posts/" + blogPostID + "/Comments")
+        firebaseFirestore.collection("Posts/" + blogPostID + "/Comment")
                 .addSnapshotListener(CommentsActivity.this, new EventListener<QuerySnapshot>() {
                     @Override
                     public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
@@ -99,7 +97,7 @@ public class CommentsActivity extends AppCompatActivity {
                             for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                                 if (doc.getType() == DocumentChange.Type.ADDED) {
                                     String commentId = doc.getDocument().getId();
-                                    Comments comments = doc.getDocument().toObject(Comments.class);
+                                    Comment comments = doc.getDocument().toObject(Comment.class);
                                     commentsList.add(comments);
                                     commentsRecyclerAdapter.notifyDataSetChanged();
                                 }
@@ -123,7 +121,7 @@ public class CommentsActivity extends AppCompatActivity {
                     commentsMap.put("user_id", currentUserID);
                     commentsMap.put("timestamp", FieldValue.serverTimestamp());
 
-                    firebaseFirestore.collection("Posts/" + blogPostID + "/Comments").add(commentsMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                    firebaseFirestore.collection("Posts/" + blogPostID + "/Comment").add(commentsMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                         @Override
                         public void onComplete(@NonNull Task<DocumentReference> task) {
                             if(task.isSuccessful()) {

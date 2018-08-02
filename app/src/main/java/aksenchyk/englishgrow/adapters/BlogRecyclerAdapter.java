@@ -15,6 +15,7 @@ import android.text.format.DateFormat;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -22,6 +23,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -42,19 +44,23 @@ import java.util.Map;
 import aksenchyk.englishgrow.CommentsActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.BlogPost;
+import aksenchyk.englishgrow.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
 
     private List<BlogPost> blogList;
+    private List<User> userList;
     private Context context;
 
     private FirebaseFirestore firebaseFirestore;
 
     private FirebaseAuth firebaseAuth;
 
-    public BlogRecyclerAdapter(List<BlogPost> blogList) {
+
+    public BlogRecyclerAdapter(List<BlogPost> blogList, List<User> userList) {
         this.blogList = blogList;
+        this.userList = userList;
     }
 
     @NonNull
@@ -68,30 +74,29 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
     }
 
     @Override
-    public void onBindViewHolder(@NonNull final ViewHolder holder, int position) {
+    public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         final String blogPostID = blogList.get(position).BlogPostID;
         final String currentUserId = firebaseAuth.getCurrentUser().getUid();
 
 
 
-        String user_id = blogList.get(position).getUser_id();
+        String blog_user_id = blogList.get(position).getUser_id();
 
 
-        firebaseFirestore.collection("Users").document(user_id).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if(task.isSuccessful()){
+        //!!!!! to-do
+        if(blog_user_id.equals(currentUserId)) {
+            holder.imageViewBlogMoreBtn.setVisibility(View.VISIBLE);
 
-                    String userName = task.getResult().getString("name");
-                    String userImage = task.getResult().getString("image");
 
-                    holder.setUserData(userName, userImage);
-                } else {
-                    //Firebase Exception
-                }
-            }
-        });
+        }
+
+        String userName = userList.get(position).getName();
+        String userImage = userList.get(position).getImage();
+
+        holder.setUserData(userName, userImage);
+
+
 
         String desc_data = blogList.get(position).getDesc();
         holder.setDescText(desc_data);
@@ -138,8 +143,8 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         });
 
 
-        //Get Comments Count
-        firebaseFirestore.collection("Posts/" + blogPostID + "/Comments").addSnapshotListener( new EventListener<QuerySnapshot>() {
+        //Get Comment Count
+        firebaseFirestore.collection("Posts/" + blogPostID + "/Comment").addSnapshotListener( new EventListener<QuerySnapshot>() {
             @Override
             public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
                 if(documentSnapshots.isEmpty()){
@@ -204,6 +209,22 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         });
 
 
+        holder.imageViewBlogMoreBtn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+
+                firebaseFirestore.collection("Posts").document(blogPostID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        blogList.remove(position);
+                        userList.remove(position);
+                    }
+                });
+
+            }
+        });
+
+
     }
 
 
@@ -229,6 +250,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         private TextView textViewBlogCommentsCount;
         private ImageView imageViewBlogShare;
         private ImageView imageViewComments;
+        private ImageView imageViewBlogMoreBtn;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -237,6 +259,8 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             imageViewBlogLikeBtn = mView.findViewById(R.id.imageViewBlogLikeBtn);
             imageViewBlogShare = mView.findViewById(R.id.imageViewBlogShare);
             imageViewComments = mView.findViewById(R.id.imageViewComments);
+            imageViewBlogMoreBtn = mView.findViewById(R.id.imageViewBlogMoreBtn);
+
         }
 
         public void setDescText(String descText) {

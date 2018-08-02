@@ -1,11 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4caf50</color>
+    <color name="colorPrimary">#4CAF50</color>
     <color name="colorPrimaryDark">#2e2f31</color>
-    <color name="colorAccent">#00c853</color>
+    <color name="colorAccent">#66BB6A</color>
     <color name="colorSingInButton">#3dd624</color>
     <color name="colorSingUnButton">#2e2f31</color>
     <color name="colorLoginElements">#000000</color>
+
+    <color name="bg_login_green">#1d6742</color>
+
+
 
     <color name="colorScarlet">#ff2400</color>
     <color name="colorWhite">#ffffff</color>

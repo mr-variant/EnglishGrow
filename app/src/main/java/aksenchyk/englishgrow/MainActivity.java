@@ -1,8 +1,9 @@
 package aksenchyk.englishgrow;
 
 
-import android.app.Fragment;
-import android.app.FragmentTransaction;
+
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -11,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -27,16 +27,19 @@ import aksenchyk.englishgrow.bottom_navigation_fragments.TrainingFragment;
 
 public class MainActivity extends AppCompatActivity {
 
-
+    //Firebase
     private FirebaseAuth mAuth;
     private FirebaseUser currentUser;
     private FirebaseFirestore firebaseFirestore;
 
+
+    //Views
     private BottomNavigationView mMainNav;
     private FrameLayout mMainFrame;
-    private Toolbar main_toolbar;
+    private Toolbar toolbarMain;
 
 
+    //Fragments
     private MeFragment meFragment;
     private GrammarFragment grammarFragment;
     private TrainingFragment trainingFragment;
@@ -50,14 +53,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
         mMainFrame = (FrameLayout) findViewById(R.id.main_frame);
         mMainNav = (BottomNavigationView) findViewById(R.id.main_nav);
+        toolbarMain = (Toolbar) findViewById(R.id.toolbarMain);
 
 
-        main_toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        setSupportActionBar(main_toolbar);
+        setSupportActionBar(toolbarMain);
 
 
         mAuth = FirebaseAuth.getInstance();
@@ -77,7 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 @Override
                 public boolean onNavigationItemSelected(@NonNull MenuItem item) {
 
-                    Fragment currentFragment = getFragmentManager().findFragmentById(R.id.main_frame);
+                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
 
                     switch (item.getItemId()) {
                         case R.id.navigation_user:
@@ -124,18 +125,11 @@ public class MainActivity extends AppCompatActivity {
     }
 
 
-    /*
-    private void setFragment(Fragment fragment) {
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-        fragmentTransaction.replace(R.id.main_frame, fragment);
-        fragmentTransaction.commit();
-    }*/
-
 
 
     private void initializeFragment(){
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         fragmentTransaction.add(R.id.main_frame, meFragment);
         fragmentTransaction.add(R.id.main_frame, grammarFragment);
@@ -155,7 +149,7 @@ public class MainActivity extends AppCompatActivity {
 
     private void replaceFragment(Fragment fragment, Fragment currentFragment){
 
-        FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
+        FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
 
         if(fragment == meFragment){
             fragmentTransaction.hide(grammarFragment);
@@ -192,6 +186,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.hide(trainingFragment);
             fragmentTransaction.hide(dictionaryFragment);
             fragmentTransaction.hide(meFragment);
+            chatFragment.setAnimFabShow();
         }
 
         fragmentTransaction.show(fragment);

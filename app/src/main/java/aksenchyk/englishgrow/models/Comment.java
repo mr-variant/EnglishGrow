@@ -2,28 +2,28 @@ package aksenchyk.englishgrow.models;
 
 import java.util.Date;
 
-public class Comments {
+public class Comment {
 
-    private String userID;
+    private String user_id;
     private String message;
     private Date timestamp;
 
 
-    public Comments(){
+    public Comment(){
     }
 
-    public Comments(String message, String userID, Date timestamp) {
+    public Comment(String message, String user_id, Date timestamp) {
         this.message = message;
-        this.userID = userID;
+        this.user_id = user_id;
         this.timestamp = timestamp;
     }
 
-    public String getUserID() {
-        return userID;
+    public String getUser_id() {
+        return user_id;
     }
 
-    public void setUserID(String userID) {
-        this.userID = userID;
+    public void setUser_id(String userID) {
+        this.user_id = userID;
     }
 
     public String getMessage() {

@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">English Grow</string>
+    <string name="app_name">English</string>
     <string name="logInButton">Войти</string>
     <string name="singUpButton">Регистрация</string>
     <string name="fieldPassword">Пароль</string>

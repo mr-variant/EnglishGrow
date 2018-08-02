@@ -48,7 +48,7 @@ public class LoginActivity extends AppCompatActivity implements
         GoogleApiClient.OnConnectionFailedListener,
         View.OnClickListener {
 
-
+    //Firebase
     private FirebaseAuth mAuth;
     private FirebaseAuth.AuthStateListener mAuthListener;
 
@@ -57,8 +57,9 @@ public class LoginActivity extends AppCompatActivity implements
     private SignInButton mGooglesignInButton;
     private static final int RC_SIGN_IN = 9001;
 
-    //UI
+    //Views
     private ProgressDialog mProgressDialog;
+
     private AlertDialog mRegAlertDialog;
     private AlertDialog mRestoreAlertDialog;
 
@@ -74,11 +75,13 @@ public class LoginActivity extends AppCompatActivity implements
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        // Views
-
-
-        // Buttons
+        //Views
         mGooglesignInButton = (SignInButton) findViewById (R.id. sign_in_google_button);
+        mLoginErrorTextView = (TextView) findViewById(R.id.loginErrorTextView);
+        mPasswordErrorTextView = (TextView) findViewById(R.id.passwordErrorTextView);
+        mLoginEditText = (EditText) findViewById(R.id.loginEditText);
+        mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
+
         mGooglesignInButton.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -86,21 +89,18 @@ public class LoginActivity extends AppCompatActivity implements
             }
         });
 
-        findViewById(R.id.logInButton).setOnClickListener(this);
-        findViewById(R.id.singUpButton).setOnClickListener(this);
 
-        //TextViews
-        mLoginErrorTextView = (TextView) findViewById(R.id.loginErrorTextView);
-        mPasswordErrorTextView = (TextView) findViewById(R.id.passwordErrorTextView);
+
 
         mLoginErrorTextView.setVisibility(View.INVISIBLE);
         mPasswordErrorTextView.setVisibility(View.INVISIBLE);
 
+
+        findViewById(R.id.logInButton).setOnClickListener(this);
+        findViewById(R.id.singUpButton).setOnClickListener(this);
         findViewById(R.id.forgetPasswordTextView).setOnClickListener(this);
 
-        // EditTexts
-        mLoginEditText = (EditText) findViewById(R.id.loginEditText);
-        mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
+
 
 
         // Google login config
@@ -132,6 +132,10 @@ public class LoginActivity extends AppCompatActivity implements
 
             }
         };
+
+
+
+
 
     }
 
@@ -286,30 +290,47 @@ public class LoginActivity extends AppCompatActivity implements
 
                 mRestoreAlertDialog = restoreWindows.create();
                 mRestoreAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
                     @Override
                     public void onShow(DialogInterface dialog) {
 
                         Button b = mRestoreAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
                         b.setOnClickListener(new View.OnClickListener() {
-
                             @Override
                             public void onClick(View view) {
 
-                                final EditText restoreEmailEditText = (EditText) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailEditText);
-                                String email = restoreEmailEditText.getText().toString();
-                                final TextView emailError = (TextView) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.restoreEmailErrorTextView);
+                                final EditText editTextRestoreEmail = (EditText) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.editTextRestoreEmail);
+                                final TextView textViewRestoreEmailError = (TextView) ((AlertDialog) mRestoreAlertDialog).findViewById(R.id.textViewRestoreEmailError);
 
-                                emailError.setVisibility(View.GONE);
+                                String email = editTextRestoreEmail.getText().toString();
+                                textViewRestoreEmailError.setVisibility(View.GONE);
 
                                 if(email.isEmpty()) {
-                                    emailError.setText(getString(R.string.loginIsNull));
-                                    emailError.setVisibility(View.VISIBLE);
+                                    textViewRestoreEmailError.setText(getString(R.string.loginIsNull));
+                                    textViewRestoreEmailError.setVisibility(View.VISIBLE);
                                 } else if(!isValidEmail(email)){
-                                    emailError.setText(getString(R.string.loginIsNotValid));
-                                    emailError.setVisibility(View.VISIBLE);
+                                    textViewRestoreEmailError.setText(getString(R.string.loginIsNotValid));
+                                    textViewRestoreEmailError.setVisibility(View.VISIBLE);
                                 } else {
-                                    sendPasswordResetEmail(email);
+                                    // Отправляем email с паролем
+                                    mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener() {
+                                        @Override
+                                        public void onComplete(@NonNull Task task) {
+                                            if (task.isSuccessful()) {
+                                                mRestoreAlertDialog.dismiss();
+                                                Toast toast = Toast.makeText(LoginActivity.this, getString(R.string.forgotPassMessage) ,
+                                                        Toast.LENGTH_LONG);
+                                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                                toast.show();
+                                            }
+                                            else {
+                                                Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString() ,
+                                                        Toast.LENGTH_LONG);
+                                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                                toast.show();
+                                            }
+                                        }
+                                    });
+
                                 }
 
                             }
@@ -342,7 +363,6 @@ public class LoginActivity extends AppCompatActivity implements
                 // LogIn with Firebase
                 GoogleSignInAccount account = result.getSignInAccount();
                 firebaseAuthWithGoogle(account);
-
             } else {
                 updateUI(null);
             }
@@ -356,7 +376,6 @@ public class LoginActivity extends AppCompatActivity implements
     }
 
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-
         showProgressDialog();
         // Get users date
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -389,6 +408,7 @@ public class LoginActivity extends AppCompatActivity implements
                                                 }
 
                                                 if(!userExist) {
+                                                    //to-do!!!!!!!!!!!
 
                                                     Map<String, Object> userMap = new HashMap<>();
                                                     String userName = user.getDisplayName();
@@ -413,6 +433,8 @@ public class LoginActivity extends AppCompatActivity implements
                                                         }
                                                     });
                                                 }
+
+
                                             }
                                         }
                                     });
@@ -471,12 +493,6 @@ public class LoginActivity extends AppCompatActivity implements
                             mRegAlertDialog.dismiss();
                             signInEmailPassword(email,password);
                         } else {
-                            // If sign in fails, display a message to the user.
-                           /* Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString(),
-                                    Toast.LENGTH_LONG);
-                            toast.setGravity(Gravity.CENTER, 0, 0);
-                            toast.show();
-                            hideProgressDialog();*/
 
                             TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
                             rulesErrorTextView.setVisibility(View.VISIBLE);
@@ -526,28 +542,7 @@ public class LoginActivity extends AppCompatActivity implements
                 });
     }
 
-    private void sendPasswordResetEmail(String email) {
-        // Отправляем email с паролем
-        mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener() {
-            @Override
-            public void onComplete(@NonNull Task task) {
-                if (task.isSuccessful()) {
-                    mRestoreAlertDialog.dismiss();
-                    Toast toast = Toast.makeText(LoginActivity.this, getString(R.string.forgotPassMessage) ,
-                            Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-                else {
-                    Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString() ,
-                            Toast.LENGTH_LONG);
-                    toast.setGravity(Gravity.CENTER, 0, 0);
-                    toast.show();
-                }
-            }
-        });
 
-    }
 
     private void updateUI(FirebaseUser user) {
         mLoginErrorTextView.setVisibility(View.GONE);

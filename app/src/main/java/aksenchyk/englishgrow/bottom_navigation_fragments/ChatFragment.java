@@ -6,12 +6,15 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.app.Fragment;
+import android.support.annotation.NonNull;
+import android.support.v4.app.Fragment;
 
+import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -23,6 +26,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
@@ -35,6 +41,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.util.ArrayList;
 import java.util.List;
 
+import aksenchyk.englishgrow.CommentsActivity;
 import aksenchyk.englishgrow.LoginActivity;
 import aksenchyk.englishgrow.MainActivity;
 import aksenchyk.englishgrow.NewPostActivity;
@@ -42,6 +49,7 @@ import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.SetupActivity;
 import aksenchyk.englishgrow.adapters.BlogRecyclerAdapter;
 import aksenchyk.englishgrow.models.BlogPost;
+import aksenchyk.englishgrow.models.User;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -50,6 +58,7 @@ public class ChatFragment extends Fragment {
     private FloatingActionButton fab_addPost;
     private RecyclerView rv_blog_posts;
     private List<BlogPost> blogList;
+    private List<User> userList;
 
     private BlogRecyclerAdapter blogRecyclerAdapter;
 
@@ -75,6 +84,8 @@ public class ChatFragment extends Fragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(getString(R.string.toolbar_blog));
 
+
+
         firebaseAuth = FirebaseAuth.getInstance();
 
         fab_addPost = (FloatingActionButton) rootView.findViewById(R.id.fab_addPost);
@@ -82,7 +93,9 @@ public class ChatFragment extends Fragment {
 
 
         blogList = new ArrayList<>();
-        blogRecyclerAdapter = new BlogRecyclerAdapter(blogList);
+        userList = new ArrayList<>();
+
+        blogRecyclerAdapter = new BlogRecyclerAdapter(blogList, userList);
         rv_blog_posts.setLayoutManager(new LinearLayoutManager(getActivity()));
         rv_blog_posts.setAdapter(blogRecyclerAdapter);
 
@@ -108,28 +121,58 @@ public class ChatFragment extends Fragment {
 
             firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
                 @Override
-                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                    lastVisiblePost = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+                    if (e != null) {
+                        return;
+                    }
+
+
+                    int size = documentSnapshots.size() - 1;
+
+                    if(size < 1) {
+                        return;
+                    }
+
+                    lastVisiblePost = documentSnapshots.getDocuments().get(size);
 
                     if (isFirstPageFirstLoad) {
                         lastVisiblePost = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
                         blogList.clear();
+                        userList.clear();
                     }
 
                     for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                         if (doc.getType() == DocumentChange.Type.ADDED) {
 
                             String blogPostID = doc.getDocument().getId();
-                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
+                            final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
 
-                            if (isFirstPageFirstLoad) {
-                                blogList.add(blogPost);
-                            } else {
-                                blogList.add(0, blogPost);
-                            }
+                            String blogUserID = doc.getDocument().getString("user_id");
+                            firebaseFirestore.collection("Users").document(blogUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        User user = task.getResult().toObject(User.class);
 
-                            blogRecyclerAdapter.notifyDataSetChanged();
+
+                                        if (isFirstPageFirstLoad) {
+                                            userList.add(user);
+                                            blogList.add(blogPost);
+                                        } else {
+                                            userList.add(0, user);
+                                            blogList.add(0, blogPost);
+                                        }
+
+                                        blogRecyclerAdapter.notifyDataSetChanged();
+
+                                    }
+                                }
+                            });
+
+
+
+
                         }
                     }
 
@@ -142,8 +185,11 @@ public class ChatFragment extends Fragment {
             fab_addPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+
+                    fab_addPost.startAnimation(animFabHide);
                     Intent newPostIntent = new Intent(getActivity(), NewPostActivity.class);
                     startActivity(newPostIntent);
+
                 }
             });
         }
@@ -156,6 +202,11 @@ public class ChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
+        fab_addPost.startAnimation(animFabShow);
+    }
+
+
+    public void setAnimFabShow() {
         fab_addPost.startAnimation(animFabShow);
     }
 
@@ -177,9 +228,26 @@ public class ChatFragment extends Fragment {
                     for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
                         if (doc.getType() == DocumentChange.Type.ADDED) {
                             String blogPostID = doc.getDocument().getId();
-                            BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
-                            blogList.add(blogPost);
-                            blogRecyclerAdapter.notifyDataSetChanged();
+                            final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
+
+
+
+                            String blogUserID = doc.getDocument().getString("user_id");
+                            firebaseFirestore.collection("Users").document(blogUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                @Override
+                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                    if(task.isSuccessful()) {
+                                        User user = task.getResult().toObject(User.class);
+
+                                        userList.add(user);
+                                        blogList.add(blogPost);
+
+
+                                        blogRecyclerAdapter.notifyDataSetChanged();
+
+                                    }
+                                }
+                            });
                         }
                     }
                 }
