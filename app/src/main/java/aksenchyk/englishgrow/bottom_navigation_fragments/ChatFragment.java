@@ -65,8 +65,8 @@ public class ChatFragment extends Fragment {
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
-    private Animation animFabShow,
-                      animFabHide;
+    private Animation animFabShow;
+    private Animation animFabHide;
 
     private DocumentSnapshot lastVisiblePost;
     private Boolean isFirstPageFirstLoad = true;
@@ -123,14 +123,10 @@ public class ChatFragment extends Fragment {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
 
-                    if (e != null) {
-                        return;
-                    }
-
 
                     int size = documentSnapshots.size() - 1;
 
-                    if(size < 1) {
+                    if(size < 0 || e != null) {
                         return;
                     }
 
@@ -206,54 +202,60 @@ public class ChatFragment extends Fragment {
     }
 
 
-    public void setAnimFabShow() {
-        fab_addPost.startAnimation(animFabShow);
+
+    public void loadMorePosts() {
+        if(firebaseAuth.getCurrentUser() != null) {
+
+            Query nextQuery = firebaseFirestore.collection("Posts")
+                    .orderBy("timestamp", Query.Direction.DESCENDING)
+                    .startAfter(lastVisiblePost)
+                    .limit(3);
+
+            nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+
+                    if (!documentSnapshots.isEmpty()) {
+
+                        lastVisiblePost = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
+
+                        for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
+
+                            if (doc.getType() == DocumentChange.Type.ADDED) {
+
+                                String blogPostID = doc.getDocument().getId();
+                                final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
+
+
+                                String blogUserID = doc.getDocument().getString("user_id");
+                                firebaseFirestore.collection("Users").document(blogUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                    @Override
+                                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                        if (task.isSuccessful()) {
+                                            User user = task.getResult().toObject(User.class);
+
+                                            userList.add(user);
+                                            blogList.add(blogPost);
+
+
+                                            blogRecyclerAdapter.notifyDataSetChanged();
+
+                                        }
+                                    }
+                                });
+
+                            }
+                        }
+                    }
+
+                }
+            });
+        }
     }
 
 
-
-    public void loadMorePosts() {
-        Query nextQuery =  firebaseFirestore.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING)
-                .startAfter(lastVisiblePost)
-                .limit(3);
-
-        nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-
-                if (!documentSnapshots.isEmpty()) {
-
-                    lastVisiblePost = documentSnapshots.getDocuments().get(documentSnapshots.size() - 1);
-
-                    for (DocumentChange doc : documentSnapshots.getDocumentChanges()) {
-                        if (doc.getType() == DocumentChange.Type.ADDED) {
-                            String blogPostID = doc.getDocument().getId();
-                            final BlogPost blogPost = doc.getDocument().toObject(BlogPost.class).withId(blogPostID);
-
-
-
-                            String blogUserID = doc.getDocument().getString("user_id");
-                            firebaseFirestore.collection("Users").document(blogUserID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                @Override
-                                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                    if(task.isSuccessful()) {
-                                        User user = task.getResult().toObject(User.class);
-
-                                        userList.add(user);
-                                        blogList.add(blogPost);
-
-
-                                        blogRecyclerAdapter.notifyDataSetChanged();
-
-                                    }
-                                }
-                            });
-                        }
-                    }
-                }
-
-            }
-        });
+    public void setAnimFabShow() {
+        fab_addPost.startAnimation(animFabShow);
     }
 
 

@@ -1,9 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <color name="colorPrimary">#4CAF50</color>
+
     <color name="colorPrimaryDark">#2e2f31</color>
-    <color name="colorAccent">#66BB6A</color>
-    <color name="colorSingInButton">#3dd624</color>
+    <color name="colorAccent">#4caf50</color>
+    <color name="colorPrimary">#43A047</color>
+
+
+
+    <color name="colorSingInButton">#4caf50</color>
     <color name="colorSingUnButton">#2e2f31</color>
     <color name="colorLoginElements">#000000</color>
 

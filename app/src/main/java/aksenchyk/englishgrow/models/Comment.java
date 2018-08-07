@@ -1,11 +1,15 @@
 package aksenchyk.englishgrow.models;
 
+import com.google.firebase.firestore.ServerTimestamp;
+
 import java.util.Date;
 
 public class Comment {
 
     private String user_id;
     private String message;
+
+    @ServerTimestamp
     private Date timestamp;
 
 

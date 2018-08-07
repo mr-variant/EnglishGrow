@@ -67,4 +67,20 @@
 
     <string name="error_post_comment">Ошибка при отправке комментария, </string>
 
+    <string name="popup_blog_report">Пожаловаться</string>
+    <string name="popup_blog_delete">Удалить</string>
+    <string name="popup_blog_report_msg">Вы уже отправили жалобу</string>
+
+
+    <string name="one_minute_ago">меньше минуты назад</string>
+    <string name="n_minute_ago">минут назад</string>
+    <string name="one_hour_ago">Один час назад</string>
+    <string name="today_at">сегодня в</string>
+    <string name="yesterday_at">вчера в</string>
+    <string name="in">в</string>
+
+
+
+
+
 </resources>

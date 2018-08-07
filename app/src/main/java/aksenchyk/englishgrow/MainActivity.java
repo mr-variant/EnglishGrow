@@ -114,6 +114,7 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         currentUser = mAuth.getInstance().getCurrentUser();
+        mMainNav.setSelectedItemId(R.id.navigation_chat);
 
         if(currentUser == null) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);

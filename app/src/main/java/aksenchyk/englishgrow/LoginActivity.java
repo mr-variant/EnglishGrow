@@ -39,14 +39,11 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
-public class LoginActivity extends AppCompatActivity implements
-        GoogleApiClient.OnConnectionFailedListener,
-        View.OnClickListener {
+public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     //Firebase
     private FirebaseAuth mAuth;
@@ -54,7 +51,7 @@ public class LoginActivity extends AppCompatActivity implements
 
     //GOOGLE
     private GoogleApiClient mGoogleApiClient;
-    private SignInButton mGooglesignInButton;
+    private SignInButton buttonSignInGoogle;
     private static final int RC_SIGN_IN = 9001;
 
     //Views
@@ -63,11 +60,15 @@ public class LoginActivity extends AppCompatActivity implements
     private AlertDialog mRegAlertDialog;
     private AlertDialog mRestoreAlertDialog;
 
-    private EditText mLoginEditText;
-    private EditText mPasswordEditText;
+    private EditText editTextLoginEmail;
+    private EditText editTextLoginPassword;
 
-    private TextView mLoginErrorTextView;
-    private TextView mPasswordErrorTextView;
+    private TextView textViewLoginError;
+    private TextView textViewLoginPasswordError;
+    private TextView textViewLoginForgetPassword;
+
+    private Button buttonLogin;
+    private Button buttonSingUp;
 
 
     @Override
@@ -76,13 +77,16 @@ public class LoginActivity extends AppCompatActivity implements
         setContentView(R.layout.activity_login);
 
         //Views
-        mGooglesignInButton = (SignInButton) findViewById (R.id. sign_in_google_button);
-        mLoginErrorTextView = (TextView) findViewById(R.id.loginErrorTextView);
-        mPasswordErrorTextView = (TextView) findViewById(R.id.passwordErrorTextView);
-        mLoginEditText = (EditText) findViewById(R.id.loginEditText);
-        mPasswordEditText = (EditText) findViewById(R.id.passwordEditText);
+        buttonSignInGoogle = (SignInButton) findViewById (R.id.buttonSignInGoogle);
+        textViewLoginError = (TextView) findViewById(R.id.textViewLoginError);
+        textViewLoginPasswordError = (TextView) findViewById(R.id.textViewLoginPasswordError);
+        editTextLoginEmail = (EditText) findViewById(R.id.editTextLoginEmail);
+        editTextLoginPassword = (EditText) findViewById(R.id.editTextLoginPassword);
+        buttonLogin = (Button) findViewById(R.id.buttonLogin);
+        buttonSingUp = (Button) findViewById(R.id.buttonSingUp);
+        textViewLoginForgetPassword = (TextView) findViewById(R.id.textViewLoginForgetPassword);
 
-        mGooglesignInButton.setOnClickListener (new View.OnClickListener() {
+        buttonSignInGoogle.setOnClickListener (new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 signInGoogle();
@@ -90,179 +94,120 @@ public class LoginActivity extends AppCompatActivity implements
         });
 
 
-
-
-        mLoginErrorTextView.setVisibility(View.INVISIBLE);
-        mPasswordErrorTextView.setVisibility(View.INVISIBLE);
-
-
-        findViewById(R.id.logInButton).setOnClickListener(this);
-        findViewById(R.id.singUpButton).setOnClickListener(this);
-        findViewById(R.id.forgetPasswordTextView).setOnClickListener(this);
-
-
-
-
-        // Google login config
-        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                .requestIdToken(getString(R.string.default_web_client_id))
-                .requestEmail()
-                .build();
-        mGoogleApiClient = new GoogleApiClient.Builder(this)
-                .enableAutoManage(this, this)
-                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
-                .build();
-
-        mAuth = FirebaseAuth.getInstance();
-
-        mAuthListener = new FirebaseAuth.AuthStateListener() {
+        buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
-                    startActivity(mainIntent);
-                    finish();
-                    // User is signed in
+            public void onClick(View v) {
+                updateUI(null);
 
-                } else {
-                    // User is signed out
-
-                }
-
-            }
-        };
-
-
-
-
-
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
-    }
-
-    @Override
-    public void onClick(View view) {
-
-        updateUI(null);
-
-        switch (view.getId()) {
-
-            case R.id.logInButton:
-                String login = mLoginEditText.getText().toString();
-                String password = mPasswordEditText.getText().toString();
+                String login = editTextLoginEmail.getText().toString();
+                String password = editTextLoginPassword.getText().toString();
 
                 if(login.isEmpty() || password.isEmpty()) {
                     if(login.isEmpty()) {
-                        mLoginErrorTextView.setText(getString(R.string.loginIsNull));
-                        mLoginErrorTextView.setVisibility(View.VISIBLE);
+                        textViewLoginError.setText(getString(R.string.loginIsNull));
+                        textViewLoginError.setVisibility(View.VISIBLE);
                     }
                     if(password.isEmpty()) {
-                        mPasswordErrorTextView.setText(getString(R.string.passwordIsNull));
-                        mPasswordErrorTextView.setVisibility(View.VISIBLE);
+                        textViewLoginPasswordError.setText(getString(R.string.passwordIsNull));
+                        textViewLoginPasswordError.setVisibility(View.VISIBLE);
                     }
                 } else if(!isValidEmail(login)) {
-                    mLoginErrorTextView.setText(getString(R.string.loginIsNotValid));
-                    mLoginErrorTextView.setVisibility(View.VISIBLE);
+                    textViewLoginError.setText(getString(R.string.loginIsNotValid));
+                    textViewLoginError.setVisibility(View.VISIBLE);
                 } else if(password.length() < 6) {
-                    mPasswordErrorTextView.setText(getString(R.string.passwordLessSix));
-                    mPasswordErrorTextView.setVisibility(View.VISIBLE);
+                    textViewLoginPasswordError.setText(getString(R.string.passwordLessSix));
+                    textViewLoginPasswordError.setVisibility(View.VISIBLE);
                 } else {
                     signInEmailPassword(login,password);
                 }
 
-                break;
+            }
+        });
 
 
-            case R.id.singUpButton:
-                AlertDialog.Builder regWindows = new AlertDialog.Builder(
-                        LoginActivity.this);
+        buttonSingUp.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUI(null);
 
-                regWindows.setPositiveButton(getString(R.string.alertRegOk), null);
-                regWindows.setNegativeButton(getString(R.string.cancel), null);
+                AlertDialog.Builder registrationWindow = new AlertDialog.Builder(LoginActivity.this);
+
+                registrationWindow.setPositiveButton(getString(R.string.alertRegOk), null);
+                registrationWindow.setNegativeButton(getString(R.string.cancel), null);
 
                 LayoutInflater inflater = LoginActivity.this.getLayoutInflater();
-                regWindows.setView(inflater.inflate(R.layout.alert_dialog_sign_up, null));
+                registrationWindow.setView(inflater.inflate(R.layout.alert_dialog_sign_up, null));
 
-                mRegAlertDialog = regWindows.create();
+                mRegAlertDialog = registrationWindow.create();
                 mRegAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
-
                     @Override
                     public void onShow(DialogInterface dialog) {
 
-                        Button b = mRegAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
-                        b.setOnClickListener(new View.OnClickListener() {
-
+                        Button buttoAddNewUser = mRegAlertDialog.getButton(AlertDialog.BUTTON_POSITIVE);
+                        buttoAddNewUser.setOnClickListener(new View.OnClickListener() {
                             @Override
                             public void onClick(View view) {
+                                final EditText editTextNewEmail = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.editTextNewEmail);
+                                final EditText editTextNewPassword = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.editTextNewPassword);
+                                final EditText editTextNewConfirmPassword = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.editTextNewConfirmPassword);
+                                final EditText editTextNewUserName = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.editTextNewUserName);
+                                final CheckBox CheckBoxRulesNewUser = (CheckBox) ((AlertDialog) mRegAlertDialog).findViewById(R.id.CheckBoxRulesNewUser);
 
-                                final EditText newEmailEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailEditText);
-                                final EditText newPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPasswordEditText);
-                                final EditText newConfirmPasswordEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newConfirmPasswordEditText);
-                                final EditText newUserNameEditText = (EditText) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newUserNameEditText);
-                                final CheckBox rulesCheckBox = (CheckBox) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesCheckBox);
-
-                                String newEmail = newEmailEditText.getText().toString();
-                                String newPass = newPasswordEditText.getText().toString();
-                                String newConfPass = newConfirmPasswordEditText.getText().toString();
-                                String newUserName =  newUserNameEditText.getText().toString();
-
-                                final TextView emailError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newEmailErrorTextView);
-                                final TextView passError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassErrorTextView);
-                                final TextView confPassError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newPassConfErrorTextView);
-                                final TextView newUserNameErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.newUserNameErrorTextView);
-                                final TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
+                                final TextView textViewNewEmailError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewNewEmailError);
+                                final TextView textViewNewPassError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewNewPassError);
+                                final TextView textViewNewPassConfError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewNewPassConfError);
+                                final TextView textViewNewUserNameError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewNewUserNameError);
+                                final TextView textViewRulesError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewRulesError);
 
 
-                                emailError.setVisibility(View.GONE);
-                                passError.setVisibility(View.GONE);
-                                confPassError.setVisibility(View.GONE);
-                                newUserNameErrorTextView.setVisibility(View.GONE);
-                                rulesErrorTextView.setVisibility(View.GONE);
+                                String newEmail = editTextNewEmail.getText().toString();
+                                String newPass = editTextNewPassword.getText().toString();
+                                String newConfPass = editTextNewConfirmPassword.getText().toString();
+                                String newUserName =  editTextNewUserName.getText().toString();
+
+
+                                textViewNewEmailError.setVisibility(View.GONE);
+                                textViewNewPassError.setVisibility(View.GONE);
+                                textViewNewPassConfError.setVisibility(View.GONE);
+                                textViewNewUserNameError.setVisibility(View.GONE);
+                                textViewRulesError.setVisibility(View.GONE);
 
 
                                 if(newEmail.isEmpty() || newPass.isEmpty() || newConfPass.isEmpty() || newUserName.isEmpty()) {
                                     if(newEmail.isEmpty()) {
-                                        emailError.setText(getString(R.string.loginIsNull));
-                                        emailError.setVisibility(View.VISIBLE);
+                                        textViewNewEmailError.setText(getString(R.string.loginIsNull));
+                                        textViewNewEmailError.setVisibility(View.VISIBLE);
                                     }
 
                                     if(newPass.isEmpty()) {
-                                        passError.setText(getString(R.string.passwordIsNull));
-                                        passError.setVisibility(View.VISIBLE);
+                                        textViewNewPassError.setText(getString(R.string.passwordIsNull));
+                                        textViewNewPassError.setVisibility(View.VISIBLE);
                                     }
 
                                     if(newConfPass.isEmpty()) {
-                                        confPassError.setText(getString(R.string.passwordIsNull));
-                                        confPassError.setVisibility(View.VISIBLE);
+                                        textViewNewPassConfError.setText(getString(R.string.passwordIsNull));
+                                        textViewNewPassConfError.setVisibility(View.VISIBLE);
                                     }
 
                                     if(newUserName.isEmpty()) {
-                                        newUserNameErrorTextView.setText(getString(R.string.nameIsNull));
-                                        newUserNameErrorTextView.setVisibility(View.VISIBLE);
+                                        textViewNewUserNameError.setText(getString(R.string.nameIsNull));
+                                        textViewNewUserNameError.setVisibility(View.VISIBLE);
                                     }
 
                                 } else if(!isValidEmail(newEmail)) {
-                                    emailError.setText(getString(R.string.loginIsNotValid));
-                                    emailError.setVisibility(View.VISIBLE);
+                                    textViewNewEmailError.setText(getString(R.string.loginIsNotValid));
+                                    textViewNewEmailError.setVisibility(View.VISIBLE);
                                 } else if(newPass.length() < 6) {
-                                    passError.setText(getString(R.string.passwordLessSix));
-                                    passError.setVisibility(View.VISIBLE);
+                                    textViewNewPassError.setText(getString(R.string.passwordLessSix));
+                                    textViewNewPassError.setVisibility(View.VISIBLE);
                                 } else if(!newPass.equals(newConfPass)){
-                                    passError.setText(getString(R.string.passDontEquals));
-                                    passError.setVisibility(View.VISIBLE);
-                                } else if(!rulesCheckBox.isChecked()){
-                                    rulesErrorTextView.setText(getString(R.string.rulesErr));
-                                    rulesErrorTextView.setVisibility(View.VISIBLE);
+                                    textViewNewPassError.setText(getString(R.string.passDontEquals));
+                                    textViewNewPassError.setVisibility(View.VISIBLE);
+                                } else if(!CheckBoxRulesNewUser.isChecked()){
+                                    textViewRulesError.setText(getString(R.string.rulesErr));
+                                    textViewRulesError.setVisibility(View.VISIBLE);
                                 } else {
                                     createAccount(newEmail,newPass,newUserName);
-                                    //signInEmailPassword(newEmail,newPass);
                                 }
 
                             }
@@ -271,24 +216,24 @@ public class LoginActivity extends AppCompatActivity implements
                 });
 
                 mRegAlertDialog.show();
-
                 mRegAlertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
+            }
+        });
 
-                break;
 
+        textViewLoginForgetPassword.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                updateUI(null);
+                AlertDialog.Builder restoreWindow = new AlertDialog.Builder(LoginActivity.this);
 
-            case R.id.forgetPasswordTextView:
-
-                AlertDialog.Builder restoreWindows = new AlertDialog.Builder(
-                        LoginActivity.this);
-
-                restoreWindows.setPositiveButton(getString(R.string.forgotPassButt), null);
-                restoreWindows.setNegativeButton(getString(R.string.cancel), null);
+                restoreWindow.setPositiveButton(getString(R.string.forgotPassButt), null);
+                restoreWindow.setNegativeButton(getString(R.string.cancel), null);
 
                 LayoutInflater inflaterRestore = LoginActivity.this.getLayoutInflater();
-                restoreWindows.setView(inflaterRestore.inflate(R.layout.alert_dialog_forgot_password, null));
+                restoreWindow.setView(inflaterRestore.inflate(R.layout.alert_dialog_forgot_password, null));
 
-                mRestoreAlertDialog = restoreWindows.create();
+                mRestoreAlertDialog = restoreWindow.create();
                 mRestoreAlertDialog.setOnShowListener(new DialogInterface.OnShowListener() {
                     @Override
                     public void onShow(DialogInterface dialog) {
@@ -312,21 +257,18 @@ public class LoginActivity extends AppCompatActivity implements
                                     textViewRestoreEmailError.setVisibility(View.VISIBLE);
                                 } else {
                                     // Отправляем email с паролем
-                                    mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener() {
+                                    mAuth.sendPasswordResetEmail(email).addOnCompleteListener(new OnCompleteListener<Void>() {
                                         @Override
                                         public void onComplete(@NonNull Task task) {
                                             if (task.isSuccessful()) {
                                                 mRestoreAlertDialog.dismiss();
-                                                Toast toast = Toast.makeText(LoginActivity.this, getString(R.string.forgotPassMessage) ,
-                                                        Toast.LENGTH_LONG);
-                                                toast.setGravity(Gravity.CENTER, 0, 0);
+                                                Toast toast = Toast.makeText(LoginActivity.this, getString(R.string.forgotPassMessage), Toast.LENGTH_LONG);
+                                                toast.setGravity(Gravity.BOTTOM, 0, 50);
                                                 toast.show();
                                             }
                                             else {
-                                                Toast toast = Toast.makeText(LoginActivity.this, task.getException().getMessage().toString() ,
-                                                        Toast.LENGTH_LONG);
-                                                toast.setGravity(Gravity.CENTER, 0, 0);
-                                                toast.show();
+                                                textViewRestoreEmailError.setText(task.getException().getMessage().toString());
+                                                textViewRestoreEmailError.setVisibility(View.VISIBLE);
                                             }
                                         }
                                     });
@@ -340,9 +282,47 @@ public class LoginActivity extends AppCompatActivity implements
 
                 mRestoreAlertDialog.show();
                 mRestoreAlertDialog.getButton(android.support.v7.app.AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-                break;
-        }
+            }
+        });
 
+
+        // Google login config
+        GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
+                .requestIdToken(getString(R.string.default_web_client_id))
+                .requestEmail()
+                .build();
+        mGoogleApiClient = new GoogleApiClient.Builder(this)
+                .enableAutoManage(this, this)
+                .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
+                .build();
+
+        mAuth = FirebaseAuth.getInstance();
+        mAuthListener = new FirebaseAuth.AuthStateListener() {
+            @Override
+            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                FirebaseUser user = firebaseAuth.getCurrentUser();
+                if (user != null) {
+                    Intent mainIntent = new Intent(LoginActivity.this,MainActivity.class);
+                    startActivity(mainIntent);
+                    finish();
+                    // User is signed in
+
+                } else {
+                    // User is signed out
+                }
+
+            }
+        };
+
+
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        // Check if user is signed in (non-null) and update UI accordingly.
+        FirebaseUser currentUser = mAuth.getCurrentUser();
+        updateUI(currentUser);
     }
 
     //GOOGLE
@@ -401,7 +381,6 @@ public class LoginActivity extends AppCompatActivity implements
 
                                                 for (DocumentSnapshot document : task.getResult()) {
                                                     String docID = document.getId();
-
                                                     if(docID.equals(userUID)) {
                                                         userExist = true;
                                                     }
@@ -494,9 +473,9 @@ public class LoginActivity extends AppCompatActivity implements
                             signInEmailPassword(email,password);
                         } else {
 
-                            TextView rulesErrorTextView = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.rulesErrorTextView);
-                            rulesErrorTextView.setVisibility(View.VISIBLE);
-                            rulesErrorTextView.setText(task.getException().getMessage().toString());
+                            TextView textViewRulesError = (TextView) ((AlertDialog) mRegAlertDialog).findViewById(R.id.textViewRulesError);
+                            textViewRulesError.setVisibility(View.VISIBLE);
+                            textViewRulesError.setText(task.getException().getMessage().toString());
                             hideProgressDialog();
                         }
 
@@ -512,16 +491,13 @@ public class LoginActivity extends AppCompatActivity implements
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-
                             FirebaseUser user = mAuth.getCurrentUser();
                             updateUI(user);
 
                             Intent intent = new Intent(LoginActivity.this,MainActivity.class);
                             startActivity(intent);
-
                         } else {
                             // If sign in fails, display a message to the user.
-
                             updateUI(null);
                             AlertDialog.Builder builder = new AlertDialog.Builder(LoginActivity.this);
                             builder.setTitle(getString(R.string.loginPassIncorrectTitle))
@@ -545,8 +521,8 @@ public class LoginActivity extends AppCompatActivity implements
 
 
     private void updateUI(FirebaseUser user) {
-        mLoginErrorTextView.setVisibility(View.GONE);
-        mPasswordErrorTextView.setVisibility(View.GONE);
+        textViewLoginError.setVisibility(View.GONE);
+        textViewLoginPasswordError.setVisibility(View.GONE);
         hideProgressDialog();
         if (user != null) {
             Intent mainIntent = new Intent(LoginActivity.this, MainActivity.class);

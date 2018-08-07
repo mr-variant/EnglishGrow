@@ -6,7 +6,7 @@
     android:orientation="vertical">
 
     <TextView
-        android:id="@+id/titleRegTextView"
+        android:id="@+id/textViewTitleSignUp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/bg_login_green"
@@ -19,7 +19,7 @@
         android:textStyle="bold" />
 
     <EditText
-        android:id="@+id/newEmailEditText"
+        android:id="@+id/editTextNewEmail"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="12dp"
@@ -29,7 +29,7 @@
         android:inputType="textEmailAddress" />
 
     <TextView
-        android:id="@+id/newEmailErrorTextView"
+        android:id="@+id/textViewNewEmailError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -38,7 +38,7 @@
         android:visibility="invisible" />
 
     <EditText
-        android:id="@+id/newPasswordEditText"
+        android:id="@+id/editTextNewPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_lock"
@@ -47,7 +47,7 @@
         android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/newPassErrorTextView"
+        android:id="@+id/textViewNewPassError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -56,7 +56,7 @@
         android:visibility="invisible" />
 
     <EditText
-        android:id="@+id/newConfirmPasswordEditText"
+        android:id="@+id/editTextNewConfirmPassword"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_lock"
@@ -65,7 +65,7 @@
         android:inputType="textPassword" />
 
     <TextView
-        android:id="@+id/newPassConfErrorTextView"
+        android:id="@+id/textViewNewPassConfError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -74,7 +74,7 @@
         android:visibility="invisible" />
 
     <EditText
-        android:id="@+id/newUserNameEditText"
+        android:id="@+id/editTextNewUserName"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:drawableLeft="@drawable/ic_person"
@@ -84,7 +84,7 @@
         android:singleLine="true" />
 
     <TextView
-        android:id="@+id/newUserNameErrorTextView"
+        android:id="@+id/textViewNewUserNameError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
@@ -93,13 +93,13 @@
         android:visibility="invisible" />
 
     <CheckBox
-        android:id="@+id/rulesCheckBox"
+        android:id="@+id/CheckBoxRulesNewUser"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:text="@string/switchRules" />
 
     <TextView
-        android:id="@+id/rulesErrorTextView"
+        android:id="@+id/textViewRulesError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginLeft="4dp"
