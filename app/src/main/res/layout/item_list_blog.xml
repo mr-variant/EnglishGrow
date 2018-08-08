@@ -46,6 +46,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
+                android:textColor="@color/colorScarlet"
+                android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toTopOf="parent" />
 

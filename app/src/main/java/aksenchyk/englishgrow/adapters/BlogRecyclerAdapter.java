@@ -46,10 +46,6 @@ import com.google.firebase.firestore.QuerySnapshot;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.sql.Time;
-import java.sql.Timestamp;
-import java.time.LocalDate;
-import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -60,6 +56,8 @@ import aksenchyk.englishgrow.LoginActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.BlogPost;
 import aksenchyk.englishgrow.models.User;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 import static java.util.concurrent.TimeUnit.DAYS;
@@ -97,22 +95,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
         final String blogPostID = blogList.get(position).BlogPostID;
-        //final String currentUserId = firebaseAuth.getCurrentUser().getUid();
-
-
-
         final String blogUserId = blogList.get(position).getUser_id();
-
-      /*  Log.d("!!!!!!",blog_user_id + " ---- " + currentUserId);
-        //!!!!! to-do
-        if(blog_user_id.equals(currentUserId)) {
-            holder.imageViewBlogMoreBtn.setVisibility(View.VISIBLE);
-
-        }*/
-
-
-
-
 
 
 
@@ -258,24 +241,6 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         });
 
 
-     /*   holder.imageViewBlogMoreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-               // Toast.makeText(context,blogList.get(position).getUser_id() + "  1  " + userList.get(position).getName() ,Toast.LENGTH_LONG).show();
-
-
-                firebaseFirestore.collection("Posts").document(blogPostID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                    @Override
-                    public void onSuccess(Void aVoid) {
-                        blogList.remove(position);
-                        userList.remove(position);
-
-                    }
-                });
-
-            }
-        }); */
-
 
         holder.imageViewBlogMoreBtn.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -313,6 +278,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                                         firebaseFirestore.collection("Posts").document(blogPostID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
                                             @Override
                                             public void onSuccess(Void aVoid) {
+
                                                 blogList.remove(position);
                                                 userList.remove(position);
 
@@ -340,12 +306,6 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
 
 
 
-
-
-
-
-
-
     @Override
     public int getItemCount() {
         return blogList.size();
@@ -354,36 +314,43 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
 
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        private View mView;
+        @BindView(R.id.textViewBlogDesc)
+        TextView textViewBlogDesc;
 
-        private TextView textViewBlogDesc;
-        private ImageView imageViewBlogPhoto;
-        private TextView textViewBlogPostedDate;
-        private TextView textViewBlogUsername;
-        private CircleImageView circleImageViewUserPhoto;
-        private ImageView imageViewBlogLikeBtn;
-        private TextView textViewBlogLikeCount;
-        private TextView textViewBlogCommentsCount;
-        private ImageView imageViewBlogShare;
-        private ImageView imageViewComments;
-        private ImageView imageViewBlogMoreBtn;
+        @BindView(R.id.imageViewBlogPhoto)
+        ImageView imageViewBlogPhoto;
+
+        @BindView(R.id.textViewBlogPostedDate)
+        TextView textViewBlogPostedDate;
+
+        @BindView(R.id.textViewBlogUsername)
+        TextView textViewBlogUsername;
+
+        @BindView(R.id.circleImageViewUserPhoto)
+        CircleImageView circleImageViewUserPhoto;
+
+        @BindView(R.id.imageViewBlogLikeBtn)
+        ImageView imageViewBlogLikeBtn;
+
+        @BindView(R.id.textViewBlogLikeCount)
+        TextView textViewBlogLikeCount;
+
+        @BindView(R.id.textViewBlogCommentsCount)
+        TextView textViewBlogCommentsCount;
+
+        @BindView(R.id.imageViewBlogShare)
+        ImageView imageViewBlogShare;
+
+        @BindView(R.id.imageViewComments)
+        ImageView imageViewComments;
+
+        @BindView(R.id.imageViewBlogMoreBtn)
+        ImageView imageViewBlogMoreBtn;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mView = itemView;
-
-            imageViewBlogLikeBtn = mView.findViewById(R.id.imageViewBlogLikeBtn);
-            imageViewBlogShare = mView.findViewById(R.id.imageViewBlogShare);
-            imageViewComments = mView.findViewById(R.id.imageViewComments);
-            imageViewBlogMoreBtn = mView.findViewById(R.id.imageViewBlogMoreBtn);
-            textViewBlogCommentsCount = mView.findViewById(R.id.textViewBlogCommentsCount);
-            textViewBlogLikeCount = mView.findViewById(R.id.textViewBlogLikeCount);
-            circleImageViewUserPhoto = mView.findViewById(R.id.circleImageViewUserPhoto);
-            textViewBlogUsername = mView.findViewById(R.id.textViewBlogUsername);
-            textViewBlogPostedDate = mView.findViewById(R.id.textViewBlogPostedDate);
-            imageViewBlogPhoto = mView.findViewById(R.id.imageViewBlogPhoto);
-            textViewBlogDesc = mView.findViewById(R.id.textViewBlogDesc);
-
+            ButterKnife.bind(this, itemView);
         }
 
         public void setDescText(String descText) {
@@ -412,6 +379,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewUserPhoto);
         }
 
+
         public void updateLikesCount(int count){
             textViewBlogLikeCount.setText(String.valueOf(count));
         }
@@ -420,11 +388,9 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             textViewBlogCommentsCount.setText(String.valueOf(count));
         }
 
-
         public String getDesc() {
             return textViewBlogDesc.getText().toString();
         }
-
 
         // Returns the URI path to the Bitmap displayed in specified ImageView
         public Uri getLocalBitmapUri(ImageView imageView) {

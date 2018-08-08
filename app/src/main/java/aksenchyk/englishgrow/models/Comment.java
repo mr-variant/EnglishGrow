@@ -9,8 +9,8 @@ public class Comment {
     private String user_id;
     private String message;
 
-    @ServerTimestamp
-    private Date timestamp;
+
+    private @ServerTimestamp Date timestamp;
 
 
     public Comment(){
@@ -37,6 +37,7 @@ public class Comment {
     public void setMessage(String message) {
         this.message = message;
     }
+
 
     public Date getTimestamp() {
         return timestamp;

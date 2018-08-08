@@ -11,8 +11,8 @@ public class BlogPost extends BlogPostID {
     private String image_url;
     private String image_thumb;
 
-    @ServerTimestamp
-    private Date timestamp;
+
+    private @ServerTimestamp Date timestamp;
 
     public BlogPost() {
 
@@ -58,9 +58,11 @@ public class BlogPost extends BlogPostID {
         this.image_thumb = image_thumb;
     }
 
+
     public Date getTimestamp() {
         return timestamp;
     }
+
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;

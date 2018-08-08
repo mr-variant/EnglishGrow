@@ -19,6 +19,8 @@ import java.util.List;
 
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.Comment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -78,21 +80,23 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.textViewCommentMessage)
+        TextView textViewCommentMessage;
 
-        private View mView;
-        private TextView textViewCommentMessage;
-        private TextView textViewCommentUsername;
-        private CircleImageView circleImageViewCommentUserPhoto;
+        @BindView(R.id.textViewCommentUsername)
+        TextView textViewCommentUsername;
+
+        @BindView(R.id.circleImageViewCommentUserPhoto)
+        CircleImageView circleImageViewCommentUserPhoto;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
-            mView = itemView;
+            ButterKnife.bind(this, itemView);
         }
 
 
         public void setUserData(String name, String image){
-            circleImageViewCommentUserPhoto = mView.findViewById(R.id.circleImageViewCommentUserPhoto);
-            textViewCommentUsername = mView.findViewById(R.id.textViewCommentUsername);
 
             textViewCommentUsername.setText(name);
 
@@ -104,7 +108,6 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
 
 
         public void setCommentMessage(String message){
-            textViewCommentMessage = mView.findViewById(R.id.textViewCommentMessage);
             textViewCommentMessage.setText(message);
         }
     }
