@@ -50,17 +50,25 @@ import aksenchyk.englishgrow.SetupActivity;
 import aksenchyk.englishgrow.adapters.BlogRecyclerAdapter;
 import aksenchyk.englishgrow.models.BlogPost;
 import aksenchyk.englishgrow.models.User;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class ChatFragment extends Fragment {
 
-    private FloatingActionButton fab_addPost;
-    private RecyclerView rv_blog_posts;
+
+    @BindView(R.id.floatingActionButtonAddNewPost)
+    FloatingActionButton floatingActionButtonAddNewPost;
+
+    @BindView(R.id.recyclerViewBlogPosts)
+    RecyclerView recyclerViewBlogPosts;
+
+
     private List<BlogPost> blogList;
     private List<User> userList;
-
     private BlogRecyclerAdapter blogRecyclerAdapter;
+
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
@@ -84,26 +92,24 @@ public class ChatFragment extends Fragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(getString(R.string.toolbar_blog));
 
-
+        ButterKnife.bind(this, rootView);
 
         firebaseAuth = FirebaseAuth.getInstance();
-
-        fab_addPost = (FloatingActionButton) rootView.findViewById(R.id.fab_addPost);
-        rv_blog_posts = (RecyclerView) rootView.findViewById(R.id.rv_blog_posts);
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
 
         blogList = new ArrayList<>();
         userList = new ArrayList<>();
 
         blogRecyclerAdapter = new BlogRecyclerAdapter(blogList, userList);
-        rv_blog_posts.setLayoutManager(new LinearLayoutManager(getActivity()));
-        rv_blog_posts.setAdapter(blogRecyclerAdapter);
+        recyclerViewBlogPosts.setLayoutManager(new LinearLayoutManager(getActivity()));
+        recyclerViewBlogPosts.setAdapter(blogRecyclerAdapter);
 
         animFabShow = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_show);
         animFabHide = AnimationUtils.loadAnimation(getActivity(), R.anim.fab_hide);
 
         if(firebaseAuth.getCurrentUser() != null) {
-            rv_blog_posts.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            recyclerViewBlogPosts.addOnScrollListener(new RecyclerView.OnScrollListener() {
                 @Override
                 public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
                     super.onScrolled(recyclerView, dx, dy);
@@ -115,11 +121,11 @@ public class ChatFragment extends Fragment {
                 }
             });
 
-            firebaseFirestore = FirebaseFirestore.getInstance();
+
 
             Query firstQuery = firebaseFirestore.collection("Posts").orderBy("timestamp", Query.Direction.DESCENDING).limit(3);
 
-            firstQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+            firstQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
 
@@ -178,11 +184,11 @@ public class ChatFragment extends Fragment {
             });
 
 
-            fab_addPost.setOnClickListener(new View.OnClickListener() {
+            floatingActionButtonAddNewPost.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
 
-                    fab_addPost.startAnimation(animFabHide);
+                    floatingActionButtonAddNewPost.startAnimation(animFabHide);
                     Intent newPostIntent = new Intent(getActivity(), NewPostActivity.class);
                     startActivity(newPostIntent);
 
@@ -198,7 +204,7 @@ public class ChatFragment extends Fragment {
     @Override
     public void onStart() {
         super.onStart();
-        fab_addPost.startAnimation(animFabShow);
+        floatingActionButtonAddNewPost.startAnimation(animFabShow);
     }
 
 
@@ -211,7 +217,7 @@ public class ChatFragment extends Fragment {
                     .startAfter(lastVisiblePost)
                     .limit(3);
 
-            nextQuery.addSnapshotListener(getActivity(), new EventListener<QuerySnapshot>() {
+            nextQuery.addSnapshotListener( new EventListener<QuerySnapshot>() {
                 @Override
                 public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
 
@@ -255,7 +261,7 @@ public class ChatFragment extends Fragment {
 
 
     public void setAnimFabShow() {
-        fab_addPost.startAnimation(animFabShow);
+        floatingActionButtonAddNewPost.startAnimation(animFabShow);
     }
 
 

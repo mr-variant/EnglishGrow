@@ -188,7 +188,6 @@ public class NewPostActivity extends AppCompatActivity {
 
                                         firebaseFirestore.collection("Posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
                                             @Override
-
                                             public void onComplete(@NonNull Task<DocumentReference> task) {
                                                 if(task.isSuccessful()){
 
@@ -202,11 +201,8 @@ public class NewPostActivity extends AppCompatActivity {
                                                 }
 
                                                 progressBarAddNewPost.setVisibility(View.INVISIBLE);
-
                                             }
-
                                         });
-
                                     }
 
                                 }).addOnFailureListener(new OnFailureListener() {

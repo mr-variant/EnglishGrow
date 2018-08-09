@@ -62,7 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
-public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
+public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder>  {
 
     private List<BlogPost> blogList;
     private List<User> userList;

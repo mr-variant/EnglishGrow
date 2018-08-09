@@ -58,7 +58,7 @@ public class BlogPost extends BlogPostID {
         this.image_thumb = image_thumb;
     }
 
-
+    @ServerTimestamp
     public Date getTimestamp() {
         return timestamp;
     }

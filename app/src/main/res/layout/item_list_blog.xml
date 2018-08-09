@@ -26,7 +26,7 @@
                 android:id="@+id/circleImageViewUserPhoto"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
                 android:src="@drawable/profile_placeholder"
                 app:layout_constraintStart_toStartOf="parent"
@@ -46,7 +46,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:textColor="@color/colorScarlet"
+                android:textColor="@color/colorAccent"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -58,32 +58,36 @@
                 android:layout_marginTop="8dp"
                 android:scaleType="centerCrop"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/circleImageViewUserPhoto"
+                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
                 app:srcCompat="@drawable/image_placeholder" />
 
             <TextView
                 android:id="@+id/textViewBlogDesc"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginEnd="16dp"
+                android:layout_marginStart="16dp"
                 android:layout_marginTop="8dp"
+                android:textColor="@android:color/black"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/imageViewBlogPhoto" />
+                app:layout_constraintTop_toBottomOf="@+id/circleImageViewUserPhoto" />
 
             <ImageView
                 android:id="@+id/imageViewBlogLikeBtn"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="54dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:scaleType="matrix"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewBlogPhoto"
                 app:srcCompat="@drawable/ic_favorite" />
 
             <TextView
@@ -91,22 +95,24 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageViewBlogLikeBtn"
-                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc" />
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewBlogLikeBtn"
+                app:layout_constraintStart_toStartOf="@+id/imageViewBlogLikeBtn"
+                app:layout_constraintTop_toTopOf="@+id/imageViewBlogLikeBtn" />
 
             <ImageView
                 android:id="@+id/imageViewComments"
-                android:layout_width="24dp"
-                android:layout_height="24dp"
+                android:layout_width="54dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:paddingTop="8dp"
+                android:scaleType="matrix"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textViewBlogLikeCount"
-                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
+                app:layout_constraintStart_toEndOf="@+id/imageViewBlogLikeBtn"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewBlogPhoto"
                 app:srcCompat="@drawable/ic_mode_comment" />
 
             <TextView
@@ -114,22 +120,23 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="30dp"
                 android:layout_marginTop="8dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/imageViewComments"
-                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc" />
+                app:layout_constraintBottom_toBottomOf="@+id/imageViewComments"
+                app:layout_constraintStart_toStartOf="@+id/imageViewComments"
+                app:layout_constraintTop_toTopOf="@+id/imageViewComments" />
 
             <ImageView
                 android:id="@+id/imageViewBlogShare"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="35dp"
+                android:layout_height="35dp"
                 android:layout_marginBottom="8dp"
-                android:layout_marginStart="50dp"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="8dp"
+                android:scaleType="center"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintStart_toEndOf="@+id/textViewBlogCommentsCount"
-                app:layout_constraintTop_toBottomOf="@+id/textViewBlogDesc"
+                app:layout_constraintStart_toEndOf="@+id/imageViewComments"
+                app:layout_constraintTop_toBottomOf="@+id/imageViewBlogPhoto"
                 app:srcCompat="@drawable/ic_share" />
 
             <ImageView

@@ -38,7 +38,7 @@ public class Comment {
         this.message = message;
     }
 
-
+    @ServerTimestamp
     public Date getTimestamp() {
         return timestamp;
     }
