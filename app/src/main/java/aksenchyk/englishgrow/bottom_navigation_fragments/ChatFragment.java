@@ -67,6 +67,7 @@ public class ChatFragment extends Fragment {
 
     private List<BlogPost> blogList;
     private List<User> userList;
+
     private BlogRecyclerAdapter blogRecyclerAdapter;
 
 
@@ -79,6 +80,7 @@ public class ChatFragment extends Fragment {
     private DocumentSnapshot lastVisiblePost;
     private Boolean isFirstPageFirstLoad = true;
 
+    private Query mQuery;
 
     public ChatFragment() {
         // Required empty public constructor
@@ -87,6 +89,9 @@ public class ChatFragment extends Fragment {
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
+
+        blogList = new ArrayList<>();
+        userList = new ArrayList<>();
 
         View rootView = inflater.inflate(R.layout.fragment_chat, container, false);
         setHasOptionsMenu(true);
@@ -97,9 +102,6 @@ public class ChatFragment extends Fragment {
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-
-        blogList = new ArrayList<>();
-        userList = new ArrayList<>();
 
         blogRecyclerAdapter = new BlogRecyclerAdapter(blogList, userList);
         recyclerViewBlogPosts.setLayoutManager(new LinearLayoutManager(getActivity()));

@@ -62,7 +62,7 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
-public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder>  {
+public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
 
     private List<BlogPost> blogList;
     private List<User> userList;
@@ -313,39 +313,22 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
 
 
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.textViewBlogDesc)
-        TextView textViewBlogDesc;
 
-        @BindView(R.id.imageViewBlogPhoto)
-        ImageView imageViewBlogPhoto;
 
-        @BindView(R.id.textViewBlogPostedDate)
-        TextView textViewBlogPostedDate;
 
-        @BindView(R.id.textViewBlogUsername)
-        TextView textViewBlogUsername;
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.textViewBlogDesc) TextView textViewBlogDesc;
+        @BindView(R.id.imageViewBlogPhoto) ImageView imageViewBlogPhoto;
+        @BindView(R.id.textViewBlogPostedDate) TextView textViewBlogPostedDate;
+        @BindView(R.id.textViewBlogUsername) TextView textViewBlogUsername;
+        @BindView(R.id.circleImageViewUserPhoto) CircleImageView circleImageViewUserPhoto;
+        @BindView(R.id.imageViewBlogLikeBtn) ImageView imageViewBlogLikeBtn;
+        @BindView(R.id.textViewBlogLikeCount) TextView textViewBlogLikeCount;
+        @BindView(R.id.textViewBlogCommentsCount) TextView textViewBlogCommentsCount;
+        @BindView(R.id.imageViewBlogShare) ImageView imageViewBlogShare;
+        @BindView(R.id.imageViewComments) ImageView imageViewComments;
+        @BindView(R.id.imageViewBlogMoreBtn) ImageView imageViewBlogMoreBtn;
 
-        @BindView(R.id.circleImageViewUserPhoto)
-        CircleImageView circleImageViewUserPhoto;
-
-        @BindView(R.id.imageViewBlogLikeBtn)
-        ImageView imageViewBlogLikeBtn;
-
-        @BindView(R.id.textViewBlogLikeCount)
-        TextView textViewBlogLikeCount;
-
-        @BindView(R.id.textViewBlogCommentsCount)
-        TextView textViewBlogCommentsCount;
-
-        @BindView(R.id.imageViewBlogShare)
-        ImageView imageViewBlogShare;
-
-        @BindView(R.id.imageViewComments)
-        ImageView imageViewComments;
-
-        @BindView(R.id.imageViewBlogMoreBtn)
-        ImageView imageViewBlogMoreBtn;
 
 
         public ViewHolder(View itemView) {
@@ -361,8 +344,8 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             RequestOptions requestOptions = new RequestOptions();
             requestOptions.placeholder(R.drawable.image_placeholder);
 
-            Glide.with(context).applyDefaultRequestOptions(requestOptions).load(downloadUri).thumbnail(
-                    Glide.with(context).load(thumbUri)
+            Glide.with(imageViewBlogPhoto.getContext()).applyDefaultRequestOptions(requestOptions).load(downloadUri).thumbnail(
+                    Glide.with(imageViewBlogPhoto.getContext()).load(thumbUri)
             ).into(imageViewBlogPhoto);
         }
 
@@ -376,7 +359,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.profile_placeholder);
 
-            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewUserPhoto);
+            Glide.with(circleImageViewUserPhoto.getContext()).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewUserPhoto);
         }
 
 
@@ -408,7 +391,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
                 // Use methods on Context to access package-specific directories on external storage.
                 // This way, you don't need to request external read/write permission.
                 // See https://youtu.be/5xVh-7ywKpE?t=25m25s
-                File file =  new File(context.getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
+                File file =  new File(imageView.getContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES), "share_image_" + System.currentTimeMillis() + ".png");
                 FileOutputStream out = new FileOutputStream(file);
                 bmp.compress(Bitmap.CompressFormat.PNG, 90, out);
                 out.close();

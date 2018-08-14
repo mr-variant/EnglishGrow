@@ -9,12 +9,10 @@ public class Comment {
     private String user_id;
     private String message;
 
-
     private @ServerTimestamp Date timestamp;
 
 
-    public Comment(){
-    }
+    public Comment() {  }
 
     public Comment(String message, String user_id, Date timestamp) {
         this.message = message;
@@ -38,7 +36,7 @@ public class Comment {
         this.message = message;
     }
 
-    @ServerTimestamp
+
     public Date getTimestamp() {
         return timestamp;
     }

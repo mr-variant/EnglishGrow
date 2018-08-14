@@ -43,6 +43,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
 
+import butterknife.BindView;
+import butterknife.ButterKnife;
+
 public class LoginActivity extends AppCompatActivity implements GoogleApiClient.OnConnectionFailedListener {
 
     //Firebase
@@ -51,7 +54,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
     //GOOGLE
     private GoogleApiClient mGoogleApiClient;
-    private SignInButton buttonSignInGoogle;
+
     private static final int RC_SIGN_IN = 9001;
 
     //Views
@@ -60,31 +63,25 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
     private AlertDialog mRegAlertDialog;
     private AlertDialog mRestoreAlertDialog;
 
-    private EditText editTextLoginEmail;
-    private EditText editTextLoginPassword;
+    @BindView(R.id.editTextLoginEmail) EditText editTextLoginEmail;
+    @BindView(R.id.editTextLoginPassword) EditText editTextLoginPassword;
 
-    private TextView textViewLoginError;
-    private TextView textViewLoginPasswordError;
-    private TextView textViewLoginForgetPassword;
+    @BindView(R.id.textViewLoginError) TextView textViewLoginError;
+    @BindView(R.id.textViewLoginPasswordError) TextView textViewLoginPasswordError;
+    @BindView(R.id.textViewLoginForgetPassword) TextView textViewLoginForgetPassword;
 
-    private Button buttonLogin;
-    private Button buttonSingUp;
-
+    @BindView(R.id.buttonLogin) Button buttonLogin;
+    @BindView(R.id.buttonSingUp) Button buttonSingUp;
+    @BindView(R.id.buttonSignInGoogle) SignInButton buttonSignInGoogle;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        //Views
-        buttonSignInGoogle = (SignInButton) findViewById (R.id.buttonSignInGoogle);
-        textViewLoginError = (TextView) findViewById(R.id.textViewLoginError);
-        textViewLoginPasswordError = (TextView) findViewById(R.id.textViewLoginPasswordError);
-        editTextLoginEmail = (EditText) findViewById(R.id.editTextLoginEmail);
-        editTextLoginPassword = (EditText) findViewById(R.id.editTextLoginPassword);
-        buttonLogin = (Button) findViewById(R.id.buttonLogin);
-        buttonSingUp = (Button) findViewById(R.id.buttonSingUp);
-        textViewLoginForgetPassword = (TextView) findViewById(R.id.textViewLoginForgetPassword);
+        ButterKnife.bind(this);
+
+
 
         buttonSignInGoogle.setOnClickListener (new View.OnClickListener() {
             @Override

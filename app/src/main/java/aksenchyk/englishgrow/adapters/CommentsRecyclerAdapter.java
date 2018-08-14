@@ -3,10 +3,13 @@ package aksenchyk.englishgrow.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
+import android.text.format.DateFormat;
+import android.text.format.DateUtils;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
@@ -15,6 +18,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 
+import java.util.Date;
 import java.util.List;
 
 import aksenchyk.englishgrow.R;
@@ -65,6 +69,37 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
             }
         });
 
+        try {
+            long millisecond = commentsList.get(position).getTimestamp().getTime();
+            //String dateString = DateFormat.format("dd MMM E HH:mm ", new Date(millisecond)).toString();
+            String dateString;
+
+            Date todayDate = new Date();
+            Date blogDate = new Date(millisecond);
+            long millisecondAgo = todayDate.getTime() - millisecond;
+
+
+            if(millisecondAgo < 60000) {
+                dateString = context.getString(R.string.one_minute_ago);
+            } else if(millisecondAgo < 3600000) {
+                dateString = millisecondAgo / 60000 + " " + context.getString(R.string.n_minute_ago);
+            } else if(millisecondAgo < 7200000) {
+                dateString = context.getString(R.string.one_hour_ago);
+            } else if(DateUtils.isToday(millisecond)) { //????
+                dateString = DateFormat.format("'"+ context.getString(R.string.today_at) +"' HH:mm",blogDate).toString();
+            } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.DAY_IN_MILLIS)) { //????
+                dateString = DateFormat.format("'"+ context.getString(R.string.yesterday_at) +"' HH:mm", blogDate).toString();
+            } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.YEAR_IN_MILLIS)) {
+                dateString = DateFormat.format("d MMMM '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
+            } else {
+                dateString = DateFormat.format("d MMM yyyy '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
+            }
+
+            holder.setTime(dateString);
+        } catch (Exception e) {
+            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+        }
+
 
         String commentMessage = commentsList.get(position).getMessage();
         holder.setCommentMessage(commentMessage);
@@ -79,16 +114,11 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
         }
     }
 
-    public class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.textViewCommentMessage)
-        TextView textViewCommentMessage;
-
-        @BindView(R.id.textViewCommentUsername)
-        TextView textViewCommentUsername;
-
-        @BindView(R.id.circleImageViewCommentUserPhoto)
-        CircleImageView circleImageViewCommentUserPhoto;
-
+    static class ViewHolder extends RecyclerView.ViewHolder {
+        @BindView(R.id.textViewCommentMessage) TextView textViewCommentMessage;
+        @BindView(R.id.textViewCommentUsername) TextView textViewCommentUsername;
+        @BindView(R.id.circleImageViewCommentUserPhoto) CircleImageView circleImageViewCommentUserPhoto;
+        @BindView(R.id.textViewCommentTime) TextView textViewCommentTime;
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -103,9 +133,12 @@ public class CommentsRecyclerAdapter extends RecyclerView.Adapter<CommentsRecycl
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.profile_placeholder);
 
-            Glide.with(context).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewCommentUserPhoto);
+            Glide.with(circleImageViewCommentUserPhoto.getContext()).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewCommentUserPhoto);
         }
 
+        public void setTime(String date) {
+            textViewCommentTime.setText(date);
+        }
 
         public void setCommentMessage(String message){
             textViewCommentMessage.setText(message);

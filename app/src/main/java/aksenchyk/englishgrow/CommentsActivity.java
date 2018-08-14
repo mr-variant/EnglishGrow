@@ -4,12 +4,14 @@ import android.graphics.PorterDuff;
 import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -30,14 +32,18 @@ import java.util.Map;
 
 import aksenchyk.englishgrow.adapters.CommentsRecyclerAdapter;
 import aksenchyk.englishgrow.models.Comment;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 
 public class CommentsActivity extends AppCompatActivity {
 
-    private Toolbar toolbarComments;
-    private EditText editTextAddComment;
-    private ImageView imageViewAddCommentBtn;
-    private RecyclerView recyclerViewComments;
+    @BindView(R.id.toolbarComments) Toolbar toolbarComments;
+    @BindView(R.id.editTextAddComment) EditText editTextAddComment;
+    @BindView(R.id.imageViewAddCommentBtn) ImageView imageViewAddCommentBtn;
+    @BindView(R.id.recyclerViewComments) RecyclerView recyclerViewComments;
+
+
 
     private String blogPostID;
     private String currentUserID;
@@ -54,11 +60,7 @@ public class CommentsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_comments);
 
-        toolbarComments = (Toolbar) findViewById(R.id.toolbarComments);
-        editTextAddComment = (EditText) findViewById(R.id.editTextAddComment);
-        imageViewAddCommentBtn = (ImageView) findViewById(R.id.imageViewAddCommentBtn);
-        recyclerViewComments = (RecyclerView) findViewById(R.id.recyclerViewComments);
-
+        ButterKnife.bind(this);
 
         firebaseAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
@@ -73,6 +75,8 @@ public class CommentsActivity extends AppCompatActivity {
         recyclerViewComments.setHasFixedSize(true);
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewComments.setAdapter(commentsRecyclerAdapter);
+
+        recyclerViewComments.addItemDecoration(new DividerItemDecoration(this, DividerItemDecoration.VERTICAL));
 
         blogPostID = getIntent().getStringExtra("blogPostID");
 

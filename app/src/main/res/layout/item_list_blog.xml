@@ -37,6 +37,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
+                android:textSize="12sp"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toBottomOf="@+id/textViewBlogUsername" />
 
@@ -47,6 +48,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:textColor="@color/colorAccent"
+                android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toEndOf="@+id/circleImageViewUserPhoto"
                 app:layout_constraintTop_toTopOf="parent" />

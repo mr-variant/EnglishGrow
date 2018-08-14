@@ -1,5 +1,6 @@
 package aksenchyk.englishgrow.models;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
@@ -14,9 +15,8 @@ public class BlogPost extends BlogPostID {
 
     private @ServerTimestamp Date timestamp;
 
-    public BlogPost() {
+    public BlogPost() {  }
 
-    }
 
     public BlogPost(String user_id, String desc, String image_url, String image_thumb, Date timestamp) {
         this.user_id = user_id;
@@ -58,11 +58,9 @@ public class BlogPost extends BlogPostID {
         this.image_thumb = image_thumb;
     }
 
-    @ServerTimestamp
     public Date getTimestamp() {
         return timestamp;
     }
-
 
     public void setTimestamp(Date timestamp) {
         this.timestamp = timestamp;
