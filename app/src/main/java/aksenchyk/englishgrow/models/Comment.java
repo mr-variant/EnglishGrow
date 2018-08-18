@@ -1,23 +1,23 @@
 package aksenchyk.englishgrow.models;
 
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.ServerTimestamp;
 
 import java.util.Date;
 
 public class Comment {
 
+    private @ServerTimestamp Date timestamp;
+
     private String user_id;
     private String message;
-
-    private @ServerTimestamp Date timestamp;
 
 
     public Comment() {  }
 
-    public Comment(String message, String user_id, Date timestamp) {
+    public Comment(FirebaseUser user, String message) {
+        this.user_id = user.getUid();
         this.message = message;
-        this.user_id = user_id;
-        this.timestamp = timestamp;
     }
 
     public String getUser_id() {

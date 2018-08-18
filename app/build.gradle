@@ -38,8 +38,9 @@ dependencies {
     annotationProcessor 'com.github.bumptech.glide:compiler:4.7.1'
     implementation 'id.zelory:compressor:2.1.0'
 
-    implementation 'com.google.firebase:firebase-auth:11.8.0'
+    //Firestore
     implementation 'com.google.firebase:firebase-firestore:11.8.0'
+    implementation 'com.google.firebase:firebase-auth:11.8.0'
     implementation 'com.google.android.gms:play-services-auth:11.8.0'
     implementation 'com.google.firebase:firebase-storage:11.8.0'
 
