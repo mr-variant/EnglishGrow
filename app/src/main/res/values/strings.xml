@@ -80,7 +80,17 @@
     <string name="in">в</string>
 
 
+    <string-array name="alertCommentCurrentUser">
+        <item>Копировать текст</item>
+        <item>Изменить</item>
+        <item>Удалить</item>
+    </string-array>
 
+    <string-array name="alertCommentAnotherUser">
+        <item>Копировать текст</item>
+    </string-array>
 
+    <string name="comment_copy">Комментарий скопирован в буфер</string>
+    <string name="comment_delete">Комментарий был удалён</string>
 
 </resources>

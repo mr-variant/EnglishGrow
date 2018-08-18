@@ -13,6 +13,7 @@ public class Comment {
     private String message;
 
 
+
     public Comment() {  }
 
     public Comment(FirebaseUser user, String message) {
