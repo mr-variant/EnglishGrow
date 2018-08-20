@@ -2,6 +2,7 @@ package aksenchyk.englishgrow;
 
 
 
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -12,6 +13,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
+import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -114,7 +116,9 @@ public class MainActivity extends AppCompatActivity {
         super.onStart();
 
         currentUser = mAuth.getInstance().getCurrentUser();
-        mMainNav.setSelectedItemId(R.id.navigation_chat);
+
+
+      //  mMainNav.setSelectedItemId(R.id.navigation_chat);
 
         if(currentUser == null) {
             Intent loginIntent = new Intent(MainActivity.this, LoginActivity.class);
@@ -142,15 +146,19 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.hide(grammarFragment);
         fragmentTransaction.hide(trainingFragment);
         fragmentTransaction.hide(dictionaryFragment);
-        fragmentTransaction.hide(chatFragment);
+        //fragmentTransaction.hide(chatFragment);
+        fragmentTransaction.hide(meFragment);
 
         fragmentTransaction.commit();
+
+        mMainNav.setSelectedItemId(R.id.navigation_chat);
     }
 
 
     private void replaceFragment(Fragment fragment, Fragment currentFragment){
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
 
         if(fragment == meFragment){
             fragmentTransaction.hide(grammarFragment);
@@ -189,6 +197,8 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.hide(meFragment);
             chatFragment.setAnimFabShow();
         }
+
+
 
         fragmentTransaction.show(fragment);
         fragmentTransaction.commit();

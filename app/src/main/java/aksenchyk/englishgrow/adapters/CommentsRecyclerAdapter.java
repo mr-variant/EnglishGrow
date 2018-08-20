@@ -5,6 +5,7 @@ import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
@@ -31,7 +32,9 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
+import aksenchyk.englishgrow.ChangeCommentActivity;
 import aksenchyk.englishgrow.CommentsActivity;
+import aksenchyk.englishgrow.NewPostActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.Comment;
 import butterknife.BindView;
@@ -43,12 +46,13 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAdapter.ViewHolder> {
 
     private static String currentUserId;
+    private String blogPostID;
 
-
-    public CommentsRecyclerAdapter(Query query) {
+    public CommentsRecyclerAdapter(Query query, String blogPostID) {
         super(query);
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         currentUserId = firebaseAuth.getCurrentUser().getUid();
+        this.blogPostID = blogPostID;
     }
 
 
@@ -63,7 +67,7 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
     public void onBindViewHolder(ViewHolder holder, int position) {
         //!!!
         String commentID = getSnapshot(position).getId();
-        holder.bind(getSnapshot(position).toObject(Comment.class), commentID);
+        holder.bind(getSnapshot(position).toObject(Comment.class), commentID, blogPostID);
     }
 
 
@@ -75,6 +79,7 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
         @BindView(R.id.textViewCommentTime) TextView textViewCommentTime;
 
         private Context context;
+
 
         public ViewHolder(View itemView) {
             super(itemView);
@@ -124,7 +129,7 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
         }
 
 
-        public void bind(final Comment comment, final String commentID) {
+        public void bind(final Comment comment, final String commentID, final String blogPostID) {
 
             final FirebaseFirestore firebaseFirestore = FirebaseFirestore.getInstance();
 
@@ -189,11 +194,15 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
                                     break;
 
                                 case 1: //change
-                                    Toast.makeText(context, "id " + commentID, Toast.LENGTH_SHORT).show();
+
+                                    Intent changeCommentIntent = new Intent(context, ChangeCommentActivity.class);
+                                    context.startActivity(changeCommentIntent);
+
                                     break;
 
                                 case  2: //delete
-                                    firebaseFirestore.collection("Posts").document(CommentsActivity.KEY_BLOG_ID).collection("Comment").document(commentID).delete()
+
+                                    firebaseFirestore.collection("Posts/" + blogPostID + "/Comment").document(commentID).delete()
                                         .addOnSuccessListener(new OnSuccessListener<Void>() {
                                         @Override
                                         public void onSuccess(Void aVoid) {

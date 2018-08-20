@@ -39,8 +39,9 @@
             android:screenOrientation="portrait" />
         <activity
             android:name=".NewPostActivity"
-            android:screenOrientation="portrait"></activity>
-        <activity android:name=".CommentsActivity"></activity>
+            android:screenOrientation="portrait" />
+        <activity android:name=".CommentsActivity" />
+        <activity android:name=".ChangeCommentActivity"></activity>
     </application>
 
 </manifest>

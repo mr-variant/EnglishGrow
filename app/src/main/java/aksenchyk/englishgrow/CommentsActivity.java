@@ -157,7 +157,7 @@ public class CommentsActivity extends AppCompatActivity
 
 
         // RecyclerView
-        mCommentsRecyclerAdapter = new CommentsRecyclerAdapter(commentsQuery) {
+        mCommentsRecyclerAdapter = new CommentsRecyclerAdapter(commentsQuery,blogPostID) {
             @Override
             protected void onDataChanged() {
                 if (getItemCount() == 0) {
