@@ -193,7 +193,6 @@ public class ChatFragment extends Fragment {
                     floatingActionButtonAddNewPost.startAnimation(animFabHide);
                     Intent newPostIntent = new Intent(getActivity(), NewPostActivity.class);
                     startActivity(newPostIntent);
-
                 }
             });
         }

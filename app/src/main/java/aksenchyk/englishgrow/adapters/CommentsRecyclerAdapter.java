@@ -1,12 +1,12 @@
 package aksenchyk.englishgrow.adapters;
 
+import android.app.Activity;
 import android.app.AlertDialog;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.res.Resources;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.text.format.DateFormat;
@@ -27,19 +27,13 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
-import java.sql.Timestamp;
-import java.util.Arrays;
 import java.util.Date;
-import java.util.List;
 
 import aksenchyk.englishgrow.ChangeCommentActivity;
-import aksenchyk.englishgrow.CommentsActivity;
-import aksenchyk.englishgrow.NewPostActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.models.Comment;
 import butterknife.BindView;
 import butterknife.ButterKnife;
-import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
@@ -145,7 +139,7 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
 
                         textViewCommentUsername.setText(userName);
                         RequestOptions placeholderOption = new RequestOptions();
-                        placeholderOption.placeholder(R.drawable.profile_placeholder);
+                        placeholderOption.placeholder(R.drawable.default_image);
                         Glide.with(circleImageViewCommentUserPhoto.getContext())
                                 .applyDefaultRequestOptions(placeholderOption)
                                 .load(userImage)
@@ -196,7 +190,10 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
                                 case 1: //change
 
                                     Intent changeCommentIntent = new Intent(context, ChangeCommentActivity.class);
+                                    changeCommentIntent.putExtra(ChangeCommentActivity.KEY_COMMENT_PATH, "Posts/" + blogPostID + "/Comment/");
+                                    changeCommentIntent.putExtra(ChangeCommentActivity.KEY_COMMENT_ID, commentID);
                                     context.startActivity(changeCommentIntent);
+                                    ((Activity)context).overridePendingTransition(R.anim.slide_in_up, R.anim.slide_out_up);
 
                                     break;
 

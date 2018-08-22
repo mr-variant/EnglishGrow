@@ -16,32 +16,43 @@
 
 
     <de.hdodenhof.circleimageview.CircleImageView
-        android:id="@+id/profileImageEditComment"
-        android:layout_width="256dp"
-        android:layout_height="256dp"
-        android:layout_marginTop="32dp"
+        android:id="@+id/profileImageChangeComment"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
+        android:layout_marginBottom="8dp"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="8dp"
         android:src="@drawable/default_image"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/editTextChangeComment"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarSetup" />
+        app:layout_constraintTop_toTopOf="parent" />
 
+
+    <TextView
+        android:id="@+id/textViewCommentChangeUsername"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:layout_marginTop="12dp"
+        android:text="Username"
+        android:textColor="@color/bg_login_green"
+        android:textStyle="bold"
+        app:layout_constraintStart_toEndOf="@+id/profileImageChangeComment"
+        app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
         android:id="@+id/textViewEditComment"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="8dp"
-        android:text="TextView"
-        app:layout_constraintBottom_toTopOf="@+id/editText"
-        app:layout_constraintEnd_toEndOf="@+id/toolbarChangeComment"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/toolbarChangeComment" />
+        android:layout_marginStart="10dp"
+        android:text="@string/comment_edit"
+        android:textColor="@android:color/white"
+        android:textSize="10sp"
+        app:layout_constraintStart_toEndOf="@+id/profileImageChangeComment"
+        app:layout_constraintTop_toBottomOf="@+id/textViewCommentChangeUsername" />
 
     <EditText
-        android:id="@+id/editText"
+        android:id="@+id/editTextChangeComment"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_marginEnd="8dp"
@@ -51,7 +62,6 @@
         android:ems="10"
         android:gravity="start"
         android:inputType="textMultiLine"
-        android:text="234"
         android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"

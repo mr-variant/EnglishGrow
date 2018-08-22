@@ -13,7 +13,7 @@
 
     <item
     android:id="@+id/navigation_training"
-    android:icon="@drawable/ic_seeding"
+    android:icon="@drawable/ic_pyramid"
     android:title="@string/menu_down_training" />
 
     <item
@@ -23,7 +23,7 @@
 
     <item
     android:id="@+id/navigation_chat"
-    android:icon="@drawable/ic_chat"
-    android:title="@string/menu_down_chat" />
+    android:icon="@drawable/ic_picture"
+    android:title="@string/menu_down_moments" />
 
 </menu>

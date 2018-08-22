@@ -357,7 +357,7 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
             textViewBlogUsername.setText(name);
 
             RequestOptions placeholderOption = new RequestOptions();
-            placeholderOption.placeholder(R.drawable.profile_placeholder);
+            placeholderOption.placeholder(R.drawable.default_image);
 
             Glide.with(circleImageViewUserPhoto.getContext()).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewUserPhoto);
         }

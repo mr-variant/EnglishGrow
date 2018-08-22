@@ -35,7 +35,7 @@
     <string name="menu_down_grammar">Грамматика</string>
     <string name="menu_down_training">Тренеровки</string>
     <string name="menu_down_dictionary">Словарь</string>
-    <string name="menu_down_chat">Блог</string>
+    <string name="menu_down_moments">Моменты</string>
 
     <string name="profile">Профиль</string>
 
@@ -92,7 +92,7 @@
 
     <string name="comment_copy">Комментарий скопирован в буфер</string>
     <string name="comment_delete">Комментарий был удалён</string>
-
-
+    <string name="comment_edit">Редактировать комментарий</string>
+    <string name="comment_edit_err">Введите ваш коммментарий</string>
 
 </resources>
