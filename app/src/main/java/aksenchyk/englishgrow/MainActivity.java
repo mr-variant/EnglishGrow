@@ -2,7 +2,6 @@ package aksenchyk.englishgrow;
 
 
 
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.content.Intent;
@@ -13,7 +12,6 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.FrameLayout;
-import android.widget.Toast;
 
 
 import com.google.firebase.auth.FirebaseAuth;
@@ -21,7 +19,7 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.firestore.FirebaseFirestore;
 
 
-import aksenchyk.englishgrow.bottom_navigation_fragments.ChatFragment;
+import aksenchyk.englishgrow.bottom_navigation_fragments.BlogFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.DictionaryFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.GrammarFragment;
 import aksenchyk.englishgrow.bottom_navigation_fragments.MeFragment;
@@ -42,12 +40,11 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Fragments
-    private MeFragment meFragment;
-    private GrammarFragment grammarFragment;
-    private TrainingFragment trainingFragment;
-    private DictionaryFragment dictionaryFragment;
-    private ChatFragment chatFragment;
-
+    private  MeFragment meFragment;
+    private  GrammarFragment grammarFragment;
+    private  TrainingFragment trainingFragment;
+    private  DictionaryFragment dictionaryFragment;
+    private  BlogFragment blogFragment;
 
 
     @Override
@@ -72,7 +69,7 @@ public class MainActivity extends AppCompatActivity {
             grammarFragment = new GrammarFragment();
             trainingFragment = new TrainingFragment();
             dictionaryFragment = new DictionaryFragment();
-            chatFragment = new ChatFragment();
+            blogFragment = new BlogFragment();
 
             initializeFragment();
 
@@ -96,7 +93,7 @@ public class MainActivity extends AppCompatActivity {
                             replaceFragment(dictionaryFragment, currentFragment);
                             return true;
                         case R.id.navigation_chat:
-                            replaceFragment(chatFragment, currentFragment);
+                            replaceFragment(blogFragment, currentFragment);
                             return true;
                         default:
                             return false;
@@ -140,13 +137,13 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.add(R.id.main_frame, grammarFragment);
         fragmentTransaction.add(R.id.main_frame, trainingFragment);
         fragmentTransaction.add(R.id.main_frame, dictionaryFragment);
-        fragmentTransaction.add(R.id.main_frame, chatFragment);
+        fragmentTransaction.add(R.id.main_frame, blogFragment);
 
 
         fragmentTransaction.hide(grammarFragment);
         fragmentTransaction.hide(trainingFragment);
         fragmentTransaction.hide(dictionaryFragment);
-        //fragmentTransaction.hide(chatFragment);
+        //fragmentTransaction.hide(blogFragment);
         fragmentTransaction.hide(meFragment);
 
         fragmentTransaction.commit();
@@ -164,7 +161,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.hide(grammarFragment);
             fragmentTransaction.hide(trainingFragment);
             fragmentTransaction.hide(dictionaryFragment);
-            fragmentTransaction.hide(chatFragment);
+            fragmentTransaction.hide(blogFragment);
         }
 
 
@@ -172,7 +169,7 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.hide(meFragment);
             fragmentTransaction.hide(trainingFragment);
             fragmentTransaction.hide(dictionaryFragment);
-            fragmentTransaction.hide(chatFragment);
+            fragmentTransaction.hide(blogFragment);
         }
 
 
@@ -180,22 +177,22 @@ public class MainActivity extends AppCompatActivity {
             fragmentTransaction.hide(grammarFragment);
             fragmentTransaction.hide(meFragment);
             fragmentTransaction.hide(dictionaryFragment);
-            fragmentTransaction.hide(chatFragment);
+            fragmentTransaction.hide(blogFragment);
         }
 
         if(fragment == dictionaryFragment){
             fragmentTransaction.hide(grammarFragment);
             fragmentTransaction.hide(trainingFragment);
             fragmentTransaction.hide(meFragment);
-            fragmentTransaction.hide(chatFragment);
+            fragmentTransaction.hide(blogFragment);
         }
 
-        if(fragment == chatFragment){
+        if(fragment == blogFragment){
             fragmentTransaction.hide(grammarFragment);
             fragmentTransaction.hide(trainingFragment);
             fragmentTransaction.hide(dictionaryFragment);
             fragmentTransaction.hide(meFragment);
-            chatFragment.setAnimFabShow();
+            blogFragment.setAnimFabShow();
         }
 
 

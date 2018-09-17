@@ -55,7 +55,7 @@ import butterknife.ButterKnife;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
-public class ChatFragment extends Fragment {
+public class BlogFragment extends Fragment {
 
 
     @BindView(R.id.floatingActionButtonAddNewPost)
@@ -82,7 +82,7 @@ public class ChatFragment extends Fragment {
 
     private Query mQuery;
 
-    public ChatFragment() {
+    public BlogFragment() {
         // Required empty public constructor
     }
 

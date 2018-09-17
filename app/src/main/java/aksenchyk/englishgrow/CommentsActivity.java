@@ -152,7 +152,7 @@ public class CommentsActivity extends AppCompatActivity
         // Get ratings
         Query commentsQuery = mBlogRef
                 .collection("Comment")
-                .orderBy("timestamp", Query.Direction.ASCENDING)
+                .orderBy("timestamp", Query.Direction.DESCENDING)
                 .limit(50);
 
 
@@ -170,12 +170,43 @@ public class CommentsActivity extends AppCompatActivity
             }
         };
 
+
         DividerItemDecoration dividerItemDecoration = new DividerItemDecoration(CommentsActivity.this, LinearLayoutManager.VERTICAL);
         recyclerViewComments.addItemDecoration(dividerItemDecoration);
 
         recyclerViewComments.setLayoutManager(new LinearLayoutManager(this));
         recyclerViewComments.setAdapter(mCommentsRecyclerAdapter);
 
+
+        recyclerViewComments.addOnScrollListener(new RecyclerView.OnScrollListener() {
+            @Override
+            public void onScrolled(RecyclerView recyclerView, int dx, int dy) {
+                super.onScrolled(recyclerView, dx, dy);
+
+                Boolean reachedBottom = !recyclerView.canScrollVertically(1);
+                if (reachedBottom) {
+
+
+
+                  /*  DocumentSnapshot lastVisiblePost = mCommentsRecyclerAdapter.getLastVisiblePost();
+                    Query nextQuery = mBlogRef.collection("Comment")
+                            .orderBy("timestamp", Query.Direction.ASCENDING)
+                            .startAfter(lastVisiblePost)
+                            .limit(5);
+
+                   mCommentsRecyclerAdapter.nextQuery(nextQuery);*/
+
+                   // mCommentsRecyclerAdapter.nextQuery(mFirestore,5);
+
+                    /*
+                    Query commentsQuery = mBlogRef
+                            .collection("Comment")
+                            .orderBy("timestamp", Query.Direction.ASCENDING)
+                            .limit(3);
+                    mCommentsRecyclerAdapter.setQuery(commentsQuery);*/
+                }
+            }
+        });
 
 
     }

@@ -15,18 +15,28 @@
  */
 package aksenchyk.englishgrow.adapters;
 
+import android.support.annotation.NonNull;
+import android.support.annotation.Nullable;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.widget.Toast;
 
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
 import com.google.firebase.firestore.DocumentChange;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.ListenerRegistration;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.util.ArrayList;
+
+import aksenchyk.englishgrow.CommentsActivity;
+import aksenchyk.englishgrow.models.BlogPost;
+import aksenchyk.englishgrow.models.User;
 
 /**
  * RecyclerView adapter for displaying the results of a Firestore {@link Query}.
@@ -46,6 +56,7 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     private Query mQuery;
     private ListenerRegistration mRegistration;
+
 
     private ArrayList<DocumentSnapshot> mSnapshots = new ArrayList<>();
 
@@ -144,6 +155,13 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
         return mSnapshots.size();
     }
 
+    public DocumentSnapshot getLastVisiblePost() {
+        int size = getItemCount();
+        DocumentSnapshot lastVisiblePost = mSnapshots.get(size - 1); // -1 ??? // static?
+        return lastVisiblePost;
+    }
+
+
     protected DocumentSnapshot getSnapshot(int index) {
         return mSnapshots.get(index);
     }
@@ -152,7 +170,39 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     protected void onDataChanged() {}
 
+    public void nextQuery(Query nextQuery) { //only query
 
+
+        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
+                // Handle errors
+                if (e != null) {
+                    Log.w(TAG, "onEvent:error", e);
+                    return;
+                }
+
+                // Dispatch the event
+                for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
+                    // Snapshot of the changed document
+                    DocumentSnapshot snapshot = change.getDocument();
+
+                    switch (change.getType()) {
+                        case ADDED:
+                            Log.d("!!+","---OKKKKKKK- ");
+                            mSnapshots.add(change.getDocument());
+                            notifyDataSetChanged();
+                            break;
+                    }
+
+                }
+
+                onDataChanged();
+            }
+        });
+
+
+    }
 
 
 }

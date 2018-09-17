@@ -22,7 +22,7 @@
     android:title="@string/menu_down_dictionary" />
 
     <item
-    android:id="@+id/navigation_chat"
+    android:id="@+id/navigation_blog"
     android:icon="@drawable/ic_picture"
     android:title="@string/menu_down_moments" />
 

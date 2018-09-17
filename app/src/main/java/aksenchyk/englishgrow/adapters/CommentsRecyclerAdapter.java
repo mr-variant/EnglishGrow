@@ -50,6 +50,10 @@ public class CommentsRecyclerAdapter extends FirestoreAdapter<CommentsRecyclerAd
     }
 
 
+
+
+
+
     @Override
     public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         return new ViewHolder(LayoutInflater.from(parent.getContext())
