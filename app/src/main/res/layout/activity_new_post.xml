@@ -16,20 +16,11 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
-    <ProgressBar
-        android:id="@+id/progressBarAddNewPost"
-        style="?android:attr/progressBarStyleHorizontal"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:visibility="invisible"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/imageViewNewPost" />
-
     <ImageView
         android:id="@+id/imageViewNewPost"
         android:layout_width="0dp"
         android:layout_height="200dp"
+        android:layout_marginTop="32dp"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_image"
         app:layout_constraintEnd_toEndOf="parent"

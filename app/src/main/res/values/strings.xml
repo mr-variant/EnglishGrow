@@ -55,7 +55,7 @@
     <string name="alert_dialog_logout_msg">Вы уверены что хотите выйти?</string>
     <string name="connection_bad">Нет соединения с интернетом</string>
     <string name="toolbar_blog">Общение</string>
-    <string name="toolbar_new_post">Добавить новое сообщение</string>
+    <string name="toolbar_new_post">Добавить новый момент</string>
     <string name="editText_NewPost_hint">Добавьте ваше сообщение...</string>
     <string name="btn_addNewPost">Опубликовать</string>
     <string name="new_post_successful">Сообщение было добавлено</string>
@@ -78,6 +78,11 @@
     <string name="today_at">сегодня в</string>
     <string name="yesterday_at">вчера в</string>
     <string name="in">в</string>
+
+    <string name="sending">Добавление...</string>
+
+    <string name="err_img_uri">Выберите изображение для вашего момента</string>
+    <string name="err_moment_text">Вы забыли ввести сообщение ;)</string>
 
 
     <string-array name="alertCommentCurrentUser">

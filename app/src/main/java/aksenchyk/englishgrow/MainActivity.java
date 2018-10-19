@@ -92,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
                         case R.id.navigation_dictionary:
                             replaceFragment(dictionaryFragment, currentFragment);
                             return true;
-                        case R.id.navigation_chat:
+                        case R.id.navigation_blog:
                             replaceFragment(blogFragment, currentFragment);
                             return true;
                         default:
@@ -148,7 +148,7 @@ public class MainActivity extends AppCompatActivity {
 
         fragmentTransaction.commit();
 
-        mMainNav.setSelectedItemId(R.id.navigation_chat);
+        mMainNav.setSelectedItemId(R.id.navigation_blog);
     }
 
 

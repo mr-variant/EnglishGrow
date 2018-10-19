@@ -170,39 +170,5 @@ public abstract class FirestoreAdapter<VH extends RecyclerView.ViewHolder>
 
     protected void onDataChanged() {}
 
-    public void nextQuery(Query nextQuery) { //only query
-
-
-        nextQuery.addSnapshotListener(new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(@Nullable QuerySnapshot documentSnapshots, @Nullable FirebaseFirestoreException e) {
-                // Handle errors
-                if (e != null) {
-                    Log.w(TAG, "onEvent:error", e);
-                    return;
-                }
-
-                // Dispatch the event
-                for (DocumentChange change : documentSnapshots.getDocumentChanges()) {
-                    // Snapshot of the changed document
-                    DocumentSnapshot snapshot = change.getDocument();
-
-                    switch (change.getType()) {
-                        case ADDED:
-                            Log.d("!!+","---OKKKKKKK- ");
-                            mSnapshots.add(change.getDocument());
-                            notifyDataSetChanged();
-                            break;
-                    }
-
-                }
-
-                onDataChanged();
-            }
-        });
-
-
-    }
-
 
 }

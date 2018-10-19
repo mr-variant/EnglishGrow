@@ -1,5 +1,6 @@
 package aksenchyk.englishgrow;
 
+import android.app.ProgressDialog;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.PorterDuff;
@@ -46,7 +47,7 @@ public class NewPostActivity extends AppCompatActivity {
     private ImageView imageViewNewPost;
     private EditText editTextDescriptionNewPost;
     private Button buttonAddNewPost;
-    private ProgressBar progressBarAddNewPost;
+
 
 
     private FirebaseAuth firebaseAuth;
@@ -58,6 +59,7 @@ public class NewPostActivity extends AppCompatActivity {
 
     private Bitmap compressedImageFile;
 
+    ProgressDialog mProgressDialog;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -75,8 +77,12 @@ public class NewPostActivity extends AppCompatActivity {
         imageViewNewPost = (ImageView) findViewById(R.id.imageViewNewPost);
         editTextDescriptionNewPost = (EditText) findViewById(R.id.editTextDescriptionNewPost);
         buttonAddNewPost = (Button) findViewById(R.id.buttonAddNewPost);
-        progressBarAddNewPost = (ProgressBar) findViewById(R.id.progressBarAddNewPost);
 
+
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getString(R.string.sending));
+        mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
 
 
 
@@ -112,9 +118,14 @@ public class NewPostActivity extends AppCompatActivity {
                 final String desc = editTextDescriptionNewPost.getText().toString();
 
 
-                if(!TextUtils.isEmpty(desc) && postImageURI != null) {
 
-                    progressBarAddNewPost.setVisibility(View.VISIBLE);
+
+
+                if(TextUtils.isEmpty(desc)) {
+                    Toast.makeText(NewPostActivity.this, getString(R.string.err_moment_text), Toast.LENGTH_LONG).show();
+                } else if(!TextUtils.isEmpty(desc) && postImageURI != null) {
+
+                    mProgressDialog.show();
 
                     final String randomName = UUID.randomUUID().toString();
 
@@ -200,7 +211,7 @@ public class NewPostActivity extends AppCompatActivity {
 
                                                 }
 
-                                                progressBarAddNewPost.setVisibility(View.INVISIBLE);
+                                                mProgressDialog.hide();
                                             }
                                         });
                                     }
@@ -217,9 +228,7 @@ public class NewPostActivity extends AppCompatActivity {
                                 });
 
                             } else {
-
-                                progressBarAddNewPost.setVisibility(View.INVISIBLE);
-
+                                mProgressDialog.hide();
                             }
 
                         }

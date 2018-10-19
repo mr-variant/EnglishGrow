@@ -41,6 +41,7 @@ import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
+import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
 
 import java.io.File;
@@ -62,27 +63,30 @@ import de.hdodenhof.circleimageview.CircleImageView;
 
 import static java.util.concurrent.TimeUnit.DAYS;
 
-public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapter.ViewHolder> {
+public class BlogRecyclerAdapter extends FirestoreAdapter<BlogRecyclerAdapter.ViewHolder> {
+    /*
+        public interface OnBlogSelectedListener {
+            void onBlogSelected(DocumentSnapshot blog);
+        }
 
-    private List<BlogPost> blogList;
-    private List<User> userList;
+        private OnBlogSelectedListener mListener;
+    */
+    public BlogRecyclerAdapter(Query query/*, OnBlogSelectedListener listener*/) {
+        super(query);
+        // mListener = listener;
+    }
+
+
+
     private Context context;
 
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
     private String currentUserId;
 
-    public BlogRecyclerAdapter(List<BlogPost> blogList, List<User> userList) {
-        this.blogList = blogList;
-        this.userList = userList;
 
-        firebaseFirestore = FirebaseFirestore.getInstance();
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseAuth.getCurrentUser().getUid();
-        currentUserId = firebaseAuth.getCurrentUser().getUid();
-    }
 
-    @NonNull
+
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_list_blog, parent,false);
@@ -94,222 +98,15 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
 
-        final String blogPostID = blogList.get(position).BlogPostID;
-        final String blogUserId = blogList.get(position).getUser_id();
 
 
 
 
-        String userName = userList.get(position).getName();
-        String userImage = userList.get(position).getImage();
-
-        holder.setUserData(userName, userImage);
-
-
-
-        String desc_data = blogList.get(position).getDesc();
-        holder.setDescText(desc_data);
-
-
-        String image_url = blogList.get(position).getImage_url();
-        String thumbUri = blogList.get(position).getImage_thumb();
-        holder.setBlogImage(image_url, thumbUri);
-
-
-        try {
-            long millisecond = blogList.get(position).getTimestamp().getTime();
-            //String dateString = DateFormat.format("dd MMM E HH:mm ", new Date(millisecond)).toString();
-            String dateString;
-
-            Date todayDate = new Date();
-            Date blogDate = new Date(millisecond);
-            long millisecondAgo = todayDate.getTime() - millisecond;
-
-
-            if(millisecondAgo < 60000) {
-                dateString = context.getString(R.string.one_minute_ago);
-            } else if(millisecondAgo < 3600000) {
-                dateString = millisecondAgo / 60000 + " " + context.getString(R.string.n_minute_ago);
-            } else if(millisecondAgo < 7200000) {
-                dateString = context.getString(R.string.one_hour_ago);
-            } else if(DateUtils.isToday(millisecond)) { //????
-                dateString = DateFormat.format("'"+ context.getString(R.string.today_at) +"' HH:mm",blogDate).toString();
-            } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.DAY_IN_MILLIS)) { //????
-                dateString = DateFormat.format("'"+ context.getString(R.string.yesterday_at) +"' HH:mm", blogDate).toString();
-            } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.YEAR_IN_MILLIS)) {
-                dateString = DateFormat.format("d MMMM '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
-            } else {
-                dateString = DateFormat.format("d MMM yyyy '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
-            }
-
-            holder.setTime(dateString);
-        } catch (Exception e) {
-            Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
-        }
-
-
-        //Get Likes Count
-        firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").addSnapshotListener( new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if(documentSnapshots.isEmpty()){
-                    holder.updateLikesCount(0);
-                } else {
-                    int count = documentSnapshots.size();
-                    holder.updateLikesCount(count);
-                }
-            }
-        });
-
-
-        //Get Likes
-        firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
-            @Override
-            public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
-                if(documentSnapshot.exists()){
-                    holder.imageViewBlogLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
-                } else {
-                    holder.imageViewBlogLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_favorite));
-                }
-            }
-        });
-
-
-        //Get Comment Count
-        firebaseFirestore.collection("Posts/" + blogPostID + "/Comment").addSnapshotListener( new EventListener<QuerySnapshot>() {
-            @Override
-            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
-                if(documentSnapshots.isEmpty()){
-                    holder.updateCommentsCount(0);
-                } else {
-                    int count = documentSnapshots.size();
-                    holder.updateCommentsCount(count);
-                }
-            }
-        });
-
-
-        holder.imageViewBlogLikeBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                    @Override
-                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                        if(task.getResult().exists()){
-                            firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).delete();
-                        } else {
-                            Map<String, Object> likesMap = new HashMap<>();
-                            likesMap.put("timestamp", FieldValue.serverTimestamp());
-                            firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).set(likesMap);
-                        }
-                    }
-                });
-            }
-        });
-
-
-        holder.imageViewBlogShare.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // Get access to the URI for the bitmap
-                Uri bmpUri = holder.getLocalBitmapUri(holder.imageViewBlogPhoto);
-                if (bmpUri != null) {
-                    // Construct a ShareIntent with link to image
-                    Intent shareIntent = new Intent();
-                    shareIntent.setAction(Intent.ACTION_SEND);
-                    shareIntent.putExtra(Intent.EXTRA_TEXT,holder.getDesc());
-                    shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
-                    shareIntent.setType("*/*");
-                    // Launch sharing dialog for image
-                    context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_blog_post)));
-                } else {
-                    // ...sharing failed, handle error
-                    Toast.makeText(context,context.getText(R.string.error_share),Toast.LENGTH_LONG).show();
-                }
-            }
-        });
-
-
-        holder.imageViewComments.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intentComments = new Intent(context, CommentsActivity.class);
-                intentComments.putExtra(CommentsActivity.KEY_BLOG_ID, blogPostID);
-                context.startActivity(intentComments);
-
-            }
-        });
-
-
-
-        holder.imageViewBlogMoreBtn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                PopupMenu popupMenu = new PopupMenu(context, v);
-                //popupMenu.inflate(R.menu.popupmenu);
-
-                if(blogUserId.equals(currentUserId)) {
-                    popupMenu.getMenu().add(1, R.id.menuBlogDelete, 2, context.getString(R.string.popup_blog_delete));
-                } else {
-                    popupMenu.getMenu().add(1, R.id.menuBlogReport, 1, context.getString(R.string.popup_blog_report));
-                }
-
-                popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-                            @Override
-                            public boolean onMenuItemClick(MenuItem item) {
-                                switch (item.getItemId()) {
-                                    case R.id.menuBlogReport:
-                                        firebaseFirestore.collection("Posts/" + blogPostID + "/Reports").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                                            @Override
-                                            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                                                if(task.getResult().exists()){
-                                                   Toast.makeText(context, context.getString(R.string.popup_blog_report_msg), Toast.LENGTH_LONG).show();
-                                                } else {
-                                                    Map<String, Object> reportsMap = new HashMap<>();
-                                                    reportsMap.put("timestamp", FieldValue.serverTimestamp());
-                                                    firebaseFirestore.collection("Posts/" + blogPostID + "/Reports").document(currentUserId).set(reportsMap);
-                                                }
-                                            }
-                                        });
-                                        return true;
-
-                                    case R.id.menuBlogDelete:
-
-                                        firebaseFirestore.collection("Posts").document(blogPostID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                            @Override
-                                            public void onSuccess(Void aVoid) {
-
-                                                blogList.remove(position);
-                                                userList.remove(position);
-
-                                            }
-                                        });
-
-                                        return true;
-
-                                    default:
-                                        return false;
-                                }
-                            }
-                        });
-
-
-                popupMenu.show();
-
-
-
-            }
-        });
-
+        holder.bind(getSnapshot(position)/*, mListener*/, context);
     }
 
 
 
-
-    @Override
-    public int getItemCount() {
-        return blogList.size();
-    }
 
 
 
@@ -329,12 +126,255 @@ public class BlogRecyclerAdapter extends RecyclerView.Adapter<BlogRecyclerAdapte
         @BindView(R.id.imageViewComments) ImageView imageViewComments;
         @BindView(R.id.imageViewBlogMoreBtn) ImageView imageViewBlogMoreBtn;
 
-
+        private FirebaseFirestore firebaseFirestore;
+        private FirebaseAuth firebaseAuth;
 
         public ViewHolder(View itemView) {
             super(itemView);
+            firebaseFirestore = FirebaseFirestore.getInstance();
+            firebaseAuth = FirebaseAuth.getInstance();
             ButterKnife.bind(this, itemView);
         }
+
+        public void bind(final DocumentSnapshot snapshot,
+                /*final OnBlogSelectedListener listener,*/
+                         final Context context) {
+
+
+            BlogPost blogPost = snapshot.toObject(BlogPost.class);
+
+           // final String blogPostID = blogPost.BlogPostID;
+
+            final String blogPostID = snapshot.getId();
+            final String blogUserId = blogPost.getUser_id();
+            final String currentUserId = firebaseAuth.getCurrentUser().getUid();
+
+
+            //Log.d("--->#"," " );
+//!!!!
+            firebaseFirestore.collection("Users").document(blogUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                @Override
+                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                    if(task.isSuccessful()) {
+                        User user = task.getResult().toObject(User.class);
+                        String userName = user.getName();
+                        String userImage = user.getImage();
+
+                        setUserData(userName, userImage);
+
+                    }
+                }
+            });
+
+
+
+/*
+            String userName = userList.get(position).getName();
+            String userImage = userList.get(position).getImage();
+
+            setUserData(userName, userImage);
+*/
+
+
+            String desc_data = blogPost.getDesc();
+            setDescText(desc_data);
+
+
+            String image_url = blogPost.getImage_url();
+            String thumbUri = blogPost.getImage_thumb();
+            setBlogImage(image_url, thumbUri);
+
+
+            try {
+                long millisecond = blogPost.getTimestamp().getTime();
+                //String dateString = DateFormat.format("dd MMM E HH:mm ", new Date(millisecond)).toString();
+                String dateString;
+
+                Date todayDate = new Date();
+                Date blogDate = new Date(millisecond);
+                long millisecondAgo = todayDate.getTime() - millisecond;
+
+
+                if(millisecondAgo < 60000) {
+                    dateString = context.getString(R.string.one_minute_ago);
+                } else if(millisecondAgo < 3600000) {
+                    dateString = millisecondAgo / 60000 + " " + context.getString(R.string.n_minute_ago);
+                } else if(millisecondAgo < 7200000) {
+                    dateString = context.getString(R.string.one_hour_ago);
+                } else if(DateUtils.isToday(millisecond)) { //????
+                    dateString = DateFormat.format("'"+ context.getString(R.string.today_at) +"' HH:mm",blogDate).toString();
+                } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.DAY_IN_MILLIS)) { //????
+                    dateString = DateFormat.format("'"+ context.getString(R.string.yesterday_at) +"' HH:mm", blogDate).toString();
+                } else if(DateUtils.isToday(blogDate.getTime() + DateUtils.YEAR_IN_MILLIS)) {
+                    dateString = DateFormat.format("d MMMM '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
+                } else {
+                    dateString = DateFormat.format("d MMM yyyy '"+ context.getString(R.string.in) +"' HH:mm", blogDate).toString();
+                }
+
+                setTime(dateString);
+            } catch (Exception e) {
+                Toast.makeText(context, "Exception : " + e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+
+
+            //Get Likes Count
+            firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").addSnapshotListener( new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if(documentSnapshots.isEmpty()){
+                        updateLikesCount(0);
+                    } else {
+                        int count = documentSnapshots.size();
+                        updateLikesCount(count);
+                    }
+                }
+            });
+
+
+            //Get Likes
+            firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+                @Override
+                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                    if(documentSnapshot.exists()){
+                        imageViewBlogLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_favorite_red));
+                    } else {
+                        imageViewBlogLikeBtn.setImageDrawable(context.getDrawable(R.drawable.ic_favorite));
+                    }
+                }
+            });
+
+
+            //Get Comment Count
+            firebaseFirestore.collection("Posts/" + blogPostID + "/Comment").addSnapshotListener( new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if(documentSnapshots.isEmpty()){
+                        updateCommentsCount(0);
+                    } else {
+                        int count = documentSnapshots.size();
+                        updateCommentsCount(count);
+                    }
+                }
+            });
+
+
+            imageViewBlogLikeBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            if(task.getResult().exists()){
+                                firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).delete();
+                            } else {
+                                Map<String, Object> likesMap = new HashMap<>();
+                                likesMap.put("timestamp", FieldValue.serverTimestamp());
+                                firebaseFirestore.collection("Posts/" + blogPostID + "/Likes").document(currentUserId).set(likesMap);
+                            }
+                        }
+                    });
+                }
+            });
+
+
+            imageViewBlogShare.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    // Get access to the URI for the bitmap
+                    Uri bmpUri = getLocalBitmapUri(imageViewBlogPhoto);
+                    if (bmpUri != null) {
+                        // Construct a ShareIntent with link to image
+                        Intent shareIntent = new Intent();
+                        shareIntent.setAction(Intent.ACTION_SEND);
+                        shareIntent.putExtra(Intent.EXTRA_TEXT, getDesc());
+                        shareIntent.putExtra(Intent.EXTRA_STREAM, bmpUri);
+                        shareIntent.setType("*/*");
+                        // Launch sharing dialog for image
+                        context.startActivity(Intent.createChooser(shareIntent, context.getString(R.string.share_blog_post)));
+                    } else {
+                        // ...sharing failed, handle error
+                        Toast.makeText(context,context.getText(R.string.error_share),Toast.LENGTH_LONG).show();
+                    }
+                }
+            });
+
+
+            imageViewComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    Intent intentComments = new Intent(context, CommentsActivity.class);
+                    intentComments.putExtra(CommentsActivity.KEY_BLOG_ID, blogPostID);
+                    context.startActivity(intentComments);
+
+                }
+            });
+
+
+
+            imageViewBlogMoreBtn.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    PopupMenu popupMenu = new PopupMenu(context, v);
+                    //popupMenu.inflate(R.menu.popupmenu);
+
+                    if(blogUserId.equals(currentUserId)) {
+                        popupMenu.getMenu().add(1, R.id.menuBlogDelete, 2, context.getString(R.string.popup_blog_delete));
+                    } else {
+                        popupMenu.getMenu().add(1, R.id.menuBlogReport, 1, context.getString(R.string.popup_blog_report));
+                    }
+
+                    popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+                        @Override
+                        public boolean onMenuItemClick(MenuItem item) {
+                            switch (item.getItemId()) {
+                                case R.id.menuBlogReport:
+                                    firebaseFirestore.collection("Posts/" + blogPostID + "/Reports").document(blogUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+                                        @Override
+                                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                                            if(task.getResult().exists()){
+                                                Toast.makeText(context, context.getString(R.string.popup_blog_report_msg), Toast.LENGTH_LONG).show();
+                                            } else {
+                                                Map<String, Object> reportsMap = new HashMap<>();
+                                                reportsMap.put("timestamp", FieldValue.serverTimestamp());
+                                                firebaseFirestore.collection("Posts/" + blogPostID + "/Reports").document(blogUserId).set(reportsMap);
+                                            }
+                                        }
+                                    });
+                                    return true;
+
+                                case R.id.menuBlogDelete:
+
+                                    firebaseFirestore.collection("Posts").document(blogPostID).delete().addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void aVoid) {
+
+                                            //TODO
+                                            // blogList.remove(position);
+                                            //   userList.remove(position);
+
+                                        }
+                                    });
+
+                                    return true;
+
+                                default:
+                                    return false;
+                            }
+                        }
+                    });
+
+
+                    popupMenu.show();
+
+
+
+                }
+            });
+
+
+        }
+
+
 
         public void setDescText(String descText) {
             textViewBlogDesc.setText(descText);
