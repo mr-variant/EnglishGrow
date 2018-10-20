@@ -381,12 +381,19 @@ public class BlogRecyclerAdapter extends FirestoreAdapter<BlogRecyclerAdapter.Vi
         }
 
         public void setBlogImage(String downloadUri, String thumbUri){
-            RequestOptions requestOptions = new RequestOptions();
-            requestOptions.placeholder(R.drawable.image_placeholder);
 
-            Glide.with(imageViewBlogPhoto.getContext()).applyDefaultRequestOptions(requestOptions).load(downloadUri).thumbnail(
-                    Glide.with(imageViewBlogPhoto.getContext()).load(thumbUri)
-            ).into(imageViewBlogPhoto);
+                imageViewBlogPhoto.setVisibility(View.VISIBLE);
+
+                RequestOptions requestOptions = new RequestOptions();
+                requestOptions.placeholder(R.drawable.image_placeholder);
+                Glide.with(imageViewBlogPhoto.getContext()).applyDefaultRequestOptions(requestOptions).load(downloadUri).thumbnail(
+                        Glide.with(imageViewBlogPhoto.getContext()).load(thumbUri)
+                ).into(imageViewBlogPhoto);
+
+
+                if(downloadUri.equals("not_img")) {
+                    imageViewBlogPhoto.setVisibility(View.GONE);
+                }
         }
 
         public void setTime(String date) {

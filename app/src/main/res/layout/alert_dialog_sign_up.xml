@@ -32,9 +32,9 @@
         android:id="@+id/textViewNewEmailError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/colorScarlet"
-        android:textSize="8sp"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/amber600"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
     <EditText
@@ -50,9 +50,9 @@
         android:id="@+id/textViewNewPassError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/colorScarlet"
-        android:textSize="8sp"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/amber600"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
     <EditText
@@ -68,9 +68,9 @@
         android:id="@+id/textViewNewPassConfError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/colorScarlet"
-        android:textSize="8sp"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/amber600"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
     <EditText
@@ -87,9 +87,9 @@
         android:id="@+id/textViewNewUserNameError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/colorScarlet"
-        android:textSize="8sp"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/amber600"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
     <CheckBox
@@ -102,9 +102,9 @@
         android:id="@+id/textViewRulesError"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="4dp"
-        android:textColor="@color/colorScarlet"
-        android:textSize="8sp"
+        android:layout_marginLeft="6dp"
+        android:textColor="@color/amber600"
+        android:textSize="12sp"
         android:visibility="invisible" />
 
 </LinearLayout>

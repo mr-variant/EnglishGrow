@@ -123,6 +123,35 @@ public class NewPostActivity extends AppCompatActivity {
 
                 if(TextUtils.isEmpty(desc)) {
                     Toast.makeText(NewPostActivity.this, getString(R.string.err_moment_text), Toast.LENGTH_LONG).show();
+                } else if (postImageURI == null) {
+                    mProgressDialog.show();
+                    Map<String, Object> postMap = new HashMap<>();
+                    postMap.put("image_url", "not_img");
+                    postMap.put("image_thumb", "not_img");
+                    postMap.put("desc", desc);
+                    postMap.put("user_id", userID);
+                    postMap.put("timestamp", FieldValue.serverTimestamp());
+
+
+                    firebaseFirestore.collection("Posts").add(postMap).addOnCompleteListener(new OnCompleteListener<DocumentReference>() {
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentReference> task) {
+                            if(task.isSuccessful()){
+
+                                Toast.makeText(NewPostActivity.this, "Post was added", Toast.LENGTH_LONG).show();
+                                Intent mainIntent = new Intent(NewPostActivity.this, MainActivity.class);
+                                startActivity(mainIntent);
+                                finish();
+                            } else {
+
+
+                            }
+
+                            mProgressDialog.hide();
+                        }
+                    });
+
+
                 } else if(!TextUtils.isEmpty(desc) && postImageURI != null) {
 
                     mProgressDialog.show();
