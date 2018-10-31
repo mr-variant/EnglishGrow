@@ -3,7 +3,7 @@
 
     <color name="colorPrimaryDark">#2e2f31</color>
     <color name="colorAccent">#4caf50</color>
-    <color name="colorPrimary">#43A047</color>
+    <color name="colorPrimary">#43a047</color>
 
 
 
@@ -13,6 +13,12 @@
 
     <color name="bg_login_green">#1d6742</color>
 
+
+
+    <color name="green300">#81C784</color>
+    <color name="green400">#66BB6A</color>
+    <color name="green500">#4CAF50</color>
+    <color name="green600">#43A047</color>
 
 
     <color name="colorScarlet">#ff2400</color>

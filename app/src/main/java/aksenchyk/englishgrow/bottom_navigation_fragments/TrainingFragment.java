@@ -16,6 +16,10 @@ public class TrainingFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static TrainingFragment newInstance() {
+        return new TrainingFragment();
+    }
+
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

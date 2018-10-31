@@ -152,7 +152,7 @@ public class CommentsActivity extends AppCompatActivity
         // Get ratings
         Query commentsQuery = mBlogRef
                 .collection("Comment")
-                .orderBy("timestamp", Query.Direction.DESCENDING)
+                .orderBy("timestamp", Query.Direction.ASCENDING)
                 .limit(50);
 
 
@@ -227,6 +227,8 @@ public class CommentsActivity extends AppCompatActivity
                     if(task.isSuccessful()) {
                         hideKeyboard();
                         editTextAddComment.setText("");
+                        //recyclerview.scrollToPosition(position)
+                        recyclerViewComments.scrollToPosition(recyclerViewComments.getAdapter().getItemCount() - 1);
                     } else {
                         Toast.makeText(CommentsActivity.this, getText(R.string.error_post_comment) + task.getException().getMessage(), Toast.LENGTH_LONG).show();
                     }

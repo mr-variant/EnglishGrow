@@ -40,11 +40,12 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Fragments
-    private  MeFragment meFragment;
+   /* private  MeFragment meFragment;
     private  GrammarFragment grammarFragment;
     private  TrainingFragment trainingFragment;
     private  DictionaryFragment dictionaryFragment;
     private  BlogFragment blogFragment;
+*/
 
 
     @Override
@@ -63,47 +64,60 @@ public class MainActivity extends AppCompatActivity {
         mAuth = FirebaseAuth.getInstance();
         firebaseFirestore = FirebaseFirestore.getInstance();
 
-        if(mAuth.getCurrentUser() != null) {
 
-            meFragment = new MeFragment();
-            grammarFragment = new GrammarFragment();
-            trainingFragment = new TrainingFragment();
-            dictionaryFragment = new DictionaryFragment();
-            blogFragment = new BlogFragment();
 
-            initializeFragment();
+        /*Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
 
-            mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
-                @Override
-                public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        if(currentFragment == null) {
 
-                    Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
+        }*/
 
-                    switch (item.getItemId()) {
-                        case R.id.navigation_user:
-                            replaceFragment(meFragment, currentFragment);
-                            return true;
-                        case R.id.navigation_grammar:
-                            replaceFragment(grammarFragment, currentFragment);
-                            return true;
-                        case R.id.navigation_training:
-                            replaceFragment(trainingFragment, currentFragment);
-                            return true;
-                        case R.id.navigation_dictionary:
-                            replaceFragment(dictionaryFragment, currentFragment);
-                            return true;
-                        case R.id.navigation_blog:
-                            replaceFragment(blogFragment, currentFragment);
-                            return true;
-                        default:
-                            return false;
-                    }
 
+
+        /*meFragment = new MeFragment();
+        grammarFragment = new GrammarFragment();
+        trainingFragment = new TrainingFragment();
+        dictionaryFragment = new DictionaryFragment();
+        blogFragment = new BlogFragment();
+*/
+        //initializeFragment();
+
+        mMainNav.setOnNavigationItemSelectedListener(new BottomNavigationView.OnNavigationItemSelectedListener() {
+            @Override
+            public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+
+                Fragment currentFragment = getSupportFragmentManager().findFragmentById(R.id.main_frame);
+
+                switch (item.getItemId()) {
+                    case R.id.navigation_user:
+                        //replaceFragment(meFragment, currentFragment);
+                        loadFragment(MeFragment.newInstance());
+                        return true;
+                    case R.id.navigation_grammar:
+                        //replaceFragment(grammarFragment, currentFragment);
+                        loadFragment(GrammarFragment.newInstance());
+                        return true;
+                    case R.id.navigation_training:
+                        //replaceFragment(trainingFragment, currentFragment);
+                        loadFragment(TrainingFragment.newInstance());
+                        return true;
+                    case R.id.navigation_dictionary:
+                        //replaceFragment(dictionaryFragment, currentFragment);
+                        loadFragment(DictionaryFragment.newInstance());
+                        return true;
+                    case R.id.navigation_blog:
+                        //replaceFragment(blogFragment, currentFragment);
+                        loadFragment(BlogFragment.newInstance());
+                        return true;
+                    default:
+                        return false;
                 }
-            });
+
+            }
+        });
 
 
-        }
+        mMainNav.setSelectedItemId(R.id.navigation_blog);
 
     }
 
@@ -126,12 +140,18 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
+    private void loadFragment(Fragment fragment) {
+        FragmentTransaction ft = getSupportFragmentManager().beginTransaction();
+        ft.replace(R.id.main_frame, fragment);
+        ft.commit();
+    }
 
-
-
+/*
     private void initializeFragment(){
 
         FragmentTransaction fragmentTransaction = getSupportFragmentManager().beginTransaction();
+
+
 
         fragmentTransaction.add(R.id.main_frame, meFragment);
         fragmentTransaction.add(R.id.main_frame, grammarFragment);
@@ -201,7 +221,7 @@ public class MainActivity extends AppCompatActivity {
         fragmentTransaction.commit();
 
     }
-
+*/
 
 
 

@@ -80,6 +80,10 @@ public class BlogFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static BlogFragment newInstance() {
+        return new BlogFragment();
+    }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {

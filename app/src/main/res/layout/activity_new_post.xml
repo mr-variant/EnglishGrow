@@ -16,47 +16,49 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
+<!--
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginBottom="4dp"
+        android:background="@color/colorPrimary"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewNewPost"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+-->
     <ImageView
         android:id="@+id/imageViewNewPost"
         android:layout_width="0dp"
         android:layout_height="200dp"
-        android:layout_marginTop="32dp"
+        android:background="@drawable/bg_login"
         android:scaleType="fitCenter"
         android:src="@drawable/ic_image"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbarAddNewPost" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <EditText
         android:id="@+id/editTextDescriptionNewPost"
         android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
-        android:layout_marginStart="8dp"
-        android:layout_marginTop="10dp"
-        android:ems="10"
-        android:hint="@string/editText_NewPost_hint"
-        android:inputType="textMultiLine"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/imageViewNewPost" />
-
-    <Button
-        android:id="@+id/buttonAddNewPost"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_marginEnd="8dp"
+        android:layout_height="0dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:backgroundTint="@color/colorPrimary"
-        android:padding="15dp"
-        android:text="@string/btn_addNewPost"
-        android:textAllCaps="false"
-        android:textColor="@android:color/white"
-        android:textSize="18sp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        android:background="@android:color/transparent"
+        android:ems="10"
+        android:gravity="top"
+        android:hint="@string/editText_NewPost_hint"
+        android:inputType="textMultiLine"
+        android:maxLines="60"
+        app:layout_constraintBottom_toTopOf="@+id/imageViewNewPost"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/editTextDescriptionNewPost" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbarAddNewPost"
+        app:layout_constraintVertical_bias="0.0" />
 
 
 </android.support.constraint.ConstraintLayout>

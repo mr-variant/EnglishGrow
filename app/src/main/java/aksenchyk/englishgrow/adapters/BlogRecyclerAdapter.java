@@ -43,6 +43,7 @@ import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.firestore.Query;
 import com.google.firebase.firestore.QuerySnapshot;
+import com.ms.square.android.expandabletextview.ExpandableTextView;
 
 import java.io.File;
 import java.io.FileOutputStream;
@@ -114,7 +115,9 @@ public class BlogRecyclerAdapter extends FirestoreAdapter<BlogRecyclerAdapter.Vi
 
 
     static class ViewHolder extends RecyclerView.ViewHolder {
-        @BindView(R.id.textViewBlogDesc) TextView textViewBlogDesc;
+        @BindView(R.id.textViewBlogDesc)
+        ExpandableTextView textViewBlogDesc;
+
         @BindView(R.id.imageViewBlogPhoto) ImageView imageViewBlogPhoto;
         @BindView(R.id.textViewBlogPostedDate) TextView textViewBlogPostedDate;
         @BindView(R.id.textViewBlogUsername) TextView textViewBlogUsername;
@@ -350,7 +353,7 @@ public class BlogRecyclerAdapter extends FirestoreAdapter<BlogRecyclerAdapter.Vi
 
                                             //TODO
                                             // blogList.remove(position);
-                                            //   userList.remove(position);
+                                            // userList.remove(position);
 
                                         }
                                     });
@@ -402,10 +405,9 @@ public class BlogRecyclerAdapter extends FirestoreAdapter<BlogRecyclerAdapter.Vi
 
         public void setUserData(String name, String image){
             textViewBlogUsername.setText(name);
-
+            //circleImageViewUserPhoto.setImageDrawable();
             RequestOptions placeholderOption = new RequestOptions();
             placeholderOption.placeholder(R.drawable.default_image);
-
             Glide.with(circleImageViewUserPhoto.getContext()).applyDefaultRequestOptions(placeholderOption).load(image).into(circleImageViewUserPhoto);
         }
 

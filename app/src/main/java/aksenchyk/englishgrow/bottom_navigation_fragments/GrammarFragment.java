@@ -16,6 +16,9 @@ public class GrammarFragment extends Fragment {
         // Required empty public constructor
     }
 
+    public static GrammarFragment newInstance() {
+        return new GrammarFragment();
+    }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,

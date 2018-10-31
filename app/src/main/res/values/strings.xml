@@ -46,7 +46,7 @@
     <string name="button_logout">Выйти из аккаунта</string>
 
     <string name="permission_denied">Доступ запрещен</string>
-    <string name="title_setup">Изменить профиль</string>
+    <string name="title_setup">Настройки профиля</string>
     <string name="textedit_name_hint">Ваше имя...</string>
     <string name="error">Ошибка: </string>
 
@@ -78,6 +78,8 @@
     <string name="today_at">сегодня в</string>
     <string name="yesterday_at">вчера в</string>
     <string name="in">в</string>
+
+    <string name="tv_username">Имя пользователя</string>
 
     <string name="sending">Добавление...</string>
 

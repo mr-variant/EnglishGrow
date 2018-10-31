@@ -61,7 +61,7 @@ public class MeFragment extends Fragment {
 
     private CircleImageView profileImage;
     private TextView textViewUserName;
-    private Button buttonLogOut;
+
 
     private Uri mainImageURI = null;
     private String userID;
@@ -70,6 +70,10 @@ public class MeFragment extends Fragment {
         // Required empty public constructor
     }
 
+
+    public static MeFragment newInstance() {
+        return new MeFragment();
+    }
 
 
     @Override
@@ -85,55 +89,11 @@ public class MeFragment extends Fragment {
         setHasOptionsMenu(true);
         getActivity().setTitle(getString(R.string.profile));
 
-        buttonLogOut = (Button) rootView.findViewById(R.id.buttonLogOut);
+
         textViewUserName = (TextView) rootView.findViewById(R.id.textViewUserName);
         profileImage = (CircleImageView) rootView.findViewById(R.id.profileImage);
 
-        buttonLogOut.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
 
-                AlertDialog.Builder builder = new AlertDialog.Builder(getActivity());
-
-                //Получаем вид с файла prompt.xml, который применим для диалогового окна:
-                LayoutInflater layoutInflater = LayoutInflater.from(getActivity());
-                View promptsView = layoutInflater.inflate(R.layout.alert_dialog_logout, null);
-
-
-                //Настраиваем prompt.xml для нашего AlertDialog:
-                builder.setView(promptsView);
-
-
-                builder.setNegativeButton(R.string.alert_dialog_logout_close,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        dialog.cancel();
-                                    }
-                                })
-                        .setPositiveButton(R.string.alert_dialog_logout_exit,
-                                new DialogInterface.OnClickListener() {
-                                    public void onClick(DialogInterface dialog, int id) {
-                                        FirebaseAuth auth =  FirebaseAuth.getInstance();
-                                        auth.signOut();
-                                        Intent loginIntent = new Intent(getActivity(), LoginActivity.class);
-                                        startActivity(loginIntent);
-                                        getActivity().finish();
-                                    }
-                                });
-
-
-
-
-                AlertDialog alert = builder.create();
-                alert.show();
-
-
-                alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.BLACK);
-                alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
-
-
-            }
-        });
 
 
 
@@ -202,8 +162,6 @@ public class MeFragment extends Fragment {
                 } else {
                     Toast.makeText(getActivity(),getString(R.string.connection_bad), Toast.LENGTH_LONG).show();
                 }
-
-
 
             default:
                 return super.onOptionsItemSelected(item);
