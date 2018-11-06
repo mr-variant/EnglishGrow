@@ -102,4 +102,25 @@
     <string name="comment_edit">Редактировать комментарий</string>
     <string name="comment_edit_err">Введите ваш коммментарий</string>
 
+    <string name="userLvl">Уровень</string>
+    <string name="userLvlNeed">Осталось</string>
+    <string name="userLvlPoints">очков</string>
+    <string name="userDayExp">Дневной план</string>
+    <string name="myDictionary">Мой словарь</string>
+    <string name="vocabularyCount">В вашем словаре %d слов</string>
+
+    <string name="vocabularyCountAgain">%d плохо</string>
+    <string name="vocabularyCountGood">%d хорошо</string>
+    <string name="vocabularyCountEasy">%d легко</string>
+    <string name="vocabularyCountHard">%d отлично</string>
+
+
+    <string name="vocabularyActivityTitle">Мой словарь</string>
+    <string name="addNewWordsTitle">Добавить новое слово</string>
+    <string name="addNewWordsSearch">Введите английское слово</string>
+
+    <string name="wordNotFound">Это слово не найдено в словаре</string>
+    <string name="otherWords">Другие варианты перевода</string>
+
+
 </resources>

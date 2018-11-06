@@ -442,7 +442,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                             //Add new user in DB
                             FirebaseFirestore firestore = FirebaseFirestore.getInstance();
-                            String userID = user.getUid().toString();
+                            String userID = user.getUid();
 
                             Map<String, Object> userMap = new HashMap<>();
 

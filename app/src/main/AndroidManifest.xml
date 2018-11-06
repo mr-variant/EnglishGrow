@@ -41,7 +41,9 @@
             android:name=".NewPostActivity"
             android:screenOrientation="portrait" />
         <activity android:name=".CommentsActivity" />
-        <activity android:name=".ChangeCommentActivity"></activity>
+        <activity android:name=".ChangeCommentActivity" />
+        <activity android:name=".VocabularyActivity" />
+        <activity android:name=".AddNewWordsActivity"></activity>
     </application>
 
 </manifest>

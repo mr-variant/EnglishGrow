@@ -117,11 +117,12 @@ public class CommentsActivity extends AppCompatActivity
                     imageViewAddCommentBtn.setVisibility(View.INVISIBLE);
                 }
 
-                if(msgLength == 1 && !(imageViewAddCommentBtn.isClickable()) ) {
+                if(msgLength > 0 && !(imageViewAddCommentBtn.isClickable()) ) {
                     imageViewAddCommentBtn.startAnimation(animBtnNewCommentShow);
                     imageViewAddCommentBtn.setClickable(true);
                     imageViewAddCommentBtn.setVisibility(View.VISIBLE);
                 }
+
             }
 
             @Override

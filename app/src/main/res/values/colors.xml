@@ -15,9 +15,9 @@
 
 
 
-    <color name="green300">#81C784</color>
+    <color name="green300">#81c784</color>
     <color name="green400">#66BB6A</color>
-    <color name="green500">#4CAF50</color>
+
     <color name="green600">#43A047</color>
 
 
@@ -26,7 +26,13 @@
 
     <color name="amber600">#ffb300</color>
 
+    <color name="green100">#c8e6c9</color>
 
+    <color name="orange100">#C8E6C9</color>
 
+    <color name="green500">#4caf50</color>
+    <color name="light_green400">#9CCC65</color>
+    <color name="lime300">#dce775</color>
+    <color name="deep_orange500">#FF5722</color>
 
 </resources>

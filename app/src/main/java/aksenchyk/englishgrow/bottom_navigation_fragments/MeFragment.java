@@ -5,12 +5,14 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.content.res.ColorStateList;
 import android.graphics.Color;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.support.design.widget.FloatingActionButton;
 import android.support.v4.app.Fragment;
 import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
@@ -24,6 +26,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -47,20 +50,37 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.util.HashMap;
+import java.util.Map;
 
 import aksenchyk.englishgrow.LoginActivity;
+import aksenchyk.englishgrow.MainActivity;
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.SetupActivity;
+import aksenchyk.englishgrow.VocabularyActivity;
+import aksenchyk.englishgrow.models.User;
+import butterknife.BindView;
+import butterknife.ButterKnife;
+import butterknife.OnClick;
 import de.hdodenhof.circleimageview.CircleImageView;
 
 
 public class MeFragment extends Fragment {
 
+    @BindView(R.id.profileImage) CircleImageView profileImage;
+    @BindView(R.id.textViewUserName) TextView textViewUserName;
+    @BindView(R.id.textViewUserLvl) TextView textViewUserLvl;
+    @BindView(R.id.textViewNeedPoints) TextView textViewNeedPoints;
+    @BindView(R.id.textViewDayUserExp) TextView textViewDayUserExp;
+    @BindView(R.id.progressBarLevel) ProgressBar progressBarLevel;
+    @BindView(R.id.progressBarDayUserExp) ProgressBar progressBarDayUserExp;
+    @BindView(R.id.textViewUserVocabulary) TextView textViewUserVocabulary;
+
+
     private FirebaseFirestore firebaseFirestore;
     private FirebaseAuth firebaseAuth;
 
-    private CircleImageView profileImage;
-    private TextView textViewUserName;
+
 
 
     private Uri mainImageURI = null;
@@ -80,56 +100,76 @@ public class MeFragment extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
 
-        firebaseAuth = FirebaseAuth.getInstance();
-        firebaseFirestore = FirebaseFirestore.getInstance();
-
-
 
         View rootView = inflater.inflate(R.layout.fragment_me, container, false);
         setHasOptionsMenu(true);
         getActivity().setTitle(getString(R.string.profile));
 
+        ButterKnife.bind(this, rootView);
 
-        textViewUserName = (TextView) rootView.findViewById(R.id.textViewUserName);
-        profileImage = (CircleImageView) rootView.findViewById(R.id.profileImage);
+        firebaseAuth = FirebaseAuth.getInstance();
+        firebaseFirestore = FirebaseFirestore.getInstance();
 
+        progressBarDayUserExp.setProgressTintList(ColorStateList.valueOf(getResources().getColor(R.color.amber600)));
 
 
 
 
         if(firebaseAuth.getCurrentUser() != null) {
 
-
             userID = firebaseAuth.getCurrentUser().getUid();
 
-        /*   firebaseFirestore.collection("Users").document(userID).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+
+            firebaseFirestore.collection("Users").document(userID).addSnapshotListener(new EventListener<DocumentSnapshot>() {
                 @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    if (task.isSuccessful()) {
+                public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
+                    if(documentSnapshot.exists()){
 
-                        if (task.getResult().exists()) {
+                        String userImage = documentSnapshot.get("image").toString();
+                        String userName = documentSnapshot.get("name").toString();
+                        int experience = documentSnapshot.getLong("experience").intValue();
+                        int dayExperience = documentSnapshot.getLong("satiation").intValue();
 
-                            String name = task.getResult().getString("name");
-                            String image = task.getResult().getString("image");
 
-                            mainImageURI = Uri.parse(image);
+                        final int expToNewLvl = 500;
+                        int userLvl =  experience / expToNewLvl;
+                        int needExp = expToNewLvl - (experience % expToNewLvl);
+                        int needExpPercent =  experience % expToNewLvl * 100 / expToNewLvl;
 
-                            textViewUserName.setText(name);
-                            RequestOptions placeholderRequest = new RequestOptions();
 
-                            placeholderRequest.placeholder(R.drawable.default_image);
 
-                            Glide.with(getActivity()).setDefaultRequestOptions(placeholderRequest).load(image).into(profileImage);
-                            Toast.makeText(getActivity(), "(FIRESTORE Retrieve ) :!!! ", Toast.LENGTH_LONG).show();
-                        }
+
+                        RequestOptions placeholderOption = new RequestOptions();
+                        placeholderOption.placeholder(R.drawable.default_image);
+                        Glide.with(profileImage.getContext()).applyDefaultRequestOptions(placeholderOption).load(userImage).into(profileImage);
+
+                        textViewUserName.setText(userName);
+                        textViewUserLvl.setText(getString(R.string.userLvl) + " " +  userLvl);
+                        textViewNeedPoints.setText(getString(R.string.userLvlNeed) + " " +  needExp + " " + getString(R.string.userLvlPoints));
+                        textViewDayUserExp.setText(dayExperience + "%");
+
+                        progressBarLevel.setProgress(needExpPercent);
+                        progressBarDayUserExp.setProgress(dayExperience);
+
                     } else {
-                        String error = task.getException().getMessage();
-                        Toast.makeText(getActivity(), "(FIRESTORE Retrieve Error) : " + error, Toast.LENGTH_LONG).show();
+                        Toast.makeText(getActivity(), "(FIRESTORE Retrieve Error) : " + e, Toast.LENGTH_LONG).show();
                     }
-
-                    //  progressBarSetup.setVisibility(View.INVISIBLE);
                 }
-            }); */
+            });
+
+
+            firebaseFirestore.collection("Users").document(userID).collection("Vocabulary").addSnapshotListener( new EventListener<QuerySnapshot>() {
+                @Override
+                public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                    if(documentSnapshots.isEmpty()){
+                        textViewUserVocabulary.setText(getString(R.string.vocabularyCount, 0));
+
+                    } else {
+                        int count = documentSnapshots.size();
+                        textViewUserVocabulary.setText(getString(R.string.vocabularyCount, count));
+                    }
+                }
+            });
 
 
 
@@ -155,14 +195,12 @@ public class MeFragment extends Fragment {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case R.id.action_me_setup :
-
                 if(isOnline()) {
                     Intent setupIntent = new Intent(getActivity(), SetupActivity.class);
                     startActivity(setupIntent);
                 } else {
                     Toast.makeText(getActivity(),getString(R.string.connection_bad), Toast.LENGTH_LONG).show();
                 }
-
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -170,12 +208,11 @@ public class MeFragment extends Fragment {
 
 
 
+
     public boolean isOnline() {
-        ConnectivityManager cm =
-                (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
+        ConnectivityManager cm = (ConnectivityManager) getActivity().getSystemService(Context.CONNECTIVITY_SERVICE);
         NetworkInfo netInfo = cm.getActiveNetworkInfo();
         return netInfo != null && netInfo.isConnectedOrConnecting();
     }
-
 
 }

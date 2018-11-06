@@ -11,7 +11,8 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:background="@drawable/bg_green">
 
 
         <de.hdodenhof.circleimageview.CircleImageView
@@ -33,9 +34,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:text="TextView"
-            android:textColor="@android:color/black"
-            android:textSize="18sp"
+            android:text="Username"
+            android:textColor="@color/bg_login_green"
+            android:textSize="30sp"
+            android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/profileImage" />
@@ -43,7 +45,7 @@
         <ProgressBar
             android:id="@+id/progressBarLevel"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="200dp"
+            android:layout_width="250dp"
             android:layout_height="42dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
@@ -54,10 +56,10 @@
             app:layout_constraintTop_toBottomOf="@+id/textViewUserName" />
 
         <ProgressBar
-            android:id="@+id/progressBar3"
+            android:id="@+id/progressBarDayUserExp"
             style="?android:attr/progressBarStyleHorizontal"
-            android:layout_width="200dp"
-            android:layout_height="40dp"
+            android:layout_width="250dp"
+            android:layout_height="42dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
@@ -69,22 +71,77 @@
         <ImageView
             android:id="@+id/imageView"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_pyramid"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_sprout"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBarLevel"
             app:layout_constraintEnd_toStartOf="@+id/progressBarLevel"
             app:layout_constraintTop_toTopOf="@+id/progressBarLevel" />
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_marginEnd="8dp"
+            android:src="@drawable/ic_bonfire"
+            app:layout_constraintBottom_toBottomOf="@+id/progressBarDayUserExp"
+            app:layout_constraintEnd_toStartOf="@+id/progressBarDayUserExp"
+            app:layout_constraintTop_toTopOf="@+id/progressBarDayUserExp" />
+
+        <TextView
+            android:id="@+id/textViewUserVocabulary"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:layout_marginEnd="16dp"
-            android:src="@drawable/ic_galaxy"
-            app:layout_constraintEnd_toStartOf="@+id/progressBar3"
-            app:layout_constraintTop_toTopOf="@+id/progressBar3" />
+            android:layout_marginEnd="8dp"
+            android:text="Ваш словарный запас 100 слов"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/progressBarDayUserExp" />
+
+        <TextView
+            android:id="@+id/textViewUserLvl"
+            android:layout_width="wrap_content"
+            android:layout_height="19dp"
+            android:layout_marginStart="4dp"
+            android:text="Уровень 34"
+            android:textColor="@color/colorAccent"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/progressBarLevel"
+            app:layout_constraintTop_toTopOf="@+id/progressBarLevel" />
+
+        <TextView
+            android:id="@+id/textViewNeedPoints"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="4dp"
+            android:text="Еще нужно 100 очков"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/progressBarLevel"
+            app:layout_constraintTop_toTopOf="@+id/progressBarLevel" />
+
+        <TextView
+            android:id="@+id/textView3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="4dp"
+            android:text="@string/userDayExp"
+            android:textAllCaps="false"
+            android:textColor="@color/amber600"
+            android:textSize="14sp"
+            app:layout_constraintStart_toStartOf="@+id/progressBarDayUserExp"
+            app:layout_constraintTop_toTopOf="@+id/progressBarDayUserExp" />
+
+        <TextView
+            android:id="@+id/textViewDayUserExp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:text="0%"
+            android:textSize="12sp"
+            app:layout_constraintEnd_toEndOf="@+id/progressBarDayUserExp"
+            app:layout_constraintTop_toTopOf="@+id/progressBarDayUserExp" />
 
     </android.support.constraint.ConstraintLayout>
 

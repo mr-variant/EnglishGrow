@@ -73,7 +73,6 @@ public class SetupActivity extends AppCompatActivity {
     private String userID;
 
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -158,7 +157,6 @@ public class SetupActivity extends AppCompatActivity {
 
         AlertDialog alert = builder.create();
         alert.show();
-
 
         alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(Color.LTGRAY);
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(Color.RED);
@@ -258,6 +256,5 @@ public class SetupActivity extends AppCompatActivity {
             }
         }
     }
-
 
 }
