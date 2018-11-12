@@ -77,6 +77,68 @@ public class DictionaryFragment extends Fragment {
         });
 
 
+        firebaseFirestore.collection("Users").document(userID).collection("Vocabulary")
+                .whereEqualTo("status","again")
+                .addSnapshotListener( new EventListener<QuerySnapshot>() {
+            @Override
+            public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                if(documentSnapshots.isEmpty()){
+                    textViewCountAgain.setText(getString(R.string.vocabularyCountAgain, 0));
+
+                } else {
+                    int count = documentSnapshots.size();
+                    textViewCountAgain.setText(getString(R.string.vocabularyCountAgain, count));
+                }
+            }
+        });
+
+
+        firebaseFirestore.collection("Users").document(userID).collection("Vocabulary")
+                .whereEqualTo("status","good")
+                .addSnapshotListener( new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        if(documentSnapshots.isEmpty()){
+                            textViewCountGood.setText(getString(R.string.vocabularyCountGood, 0));
+
+                        } else {
+                            int count = documentSnapshots.size();
+                            textViewCountGood.setText(getString(R.string.vocabularyCountGood, count));
+                        }
+                    }
+                });
+
+
+        firebaseFirestore.collection("Users").document(userID).collection("Vocabulary")
+                .whereEqualTo("status","easy")
+                .addSnapshotListener( new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        if(documentSnapshots.isEmpty()){
+                            textViewCountEasy.setText(getString(R.string.vocabularyCountEasy, 0));
+
+                        } else {
+                            int count = documentSnapshots.size();
+                            textViewCountEasy.setText(getString(R.string.vocabularyCountEasy, count));
+                        }
+                    }
+                });
+
+
+        firebaseFirestore.collection("Users").document(userID).collection("Vocabulary")
+                .whereEqualTo("status","hard")
+                .addSnapshotListener( new EventListener<QuerySnapshot>() {
+                    @Override
+                    public void onEvent(QuerySnapshot documentSnapshots, FirebaseFirestoreException e) {
+                        if(documentSnapshots.isEmpty()){
+                            textViewCountHard.setText(getString(R.string.vocabularyCountHard, 0));
+
+                        } else {
+                            int count = documentSnapshots.size();
+                            textViewCountHard.setText(getString(R.string.vocabularyCountHard, count));
+                        }
+                    }
+                });
 
 
         return rootView;

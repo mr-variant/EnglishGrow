@@ -38,7 +38,8 @@
         android:drawableLeft="@drawable/ic_search_green"
         android:ems="10"
         android:hint="@string/addNewWordsSearch"
-        android:inputType="textPersonName"
+        android:inputType="text"
+        android:imeOptions="actionSearch"
         android:padding="5dp"
         android:textColor="@color/colorPrimaryDark"
         app:layout_constraintEnd_toEndOf="parent"
@@ -57,14 +58,14 @@
         app:srcCompat="@drawable/ic_clear" />
 
     <android.support.v7.widget.CardView
-        android:id="@+id/cardView2"
+        android:id="@+id/cardViewNewWordNotFound"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="8dp"
         android:layout_marginTop="32dp"
         android:layout_marginEnd="8dp"
         android:paddingBottom="5dp"
-        android:visibility="invisible"
+        android:visibility="visible"
         app:cardBackgroundColor="@color/colorAccent"
         app:cardCornerRadius="12dp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -94,7 +95,7 @@
         app:srcCompat="@drawable/default_word_img" />
 
     <TextView
-        android:id="@+id/textView6"
+        android:id="@+id/textViewAtherWords"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
@@ -109,24 +110,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/imageViewNewWordImg" />
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/rvAtherTransl"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/textView6" />
-
     <TextView
         android:id="@+id/textViewNewWord"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="32dp"
         android:text="fwefew efw"
         android:textColor="@color/bg_login_green"
-        android:textSize="18sp"
+        android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintStart_toEndOf="@+id/imageViewNewWordImg"
         app:layout_constraintTop_toBottomOf="@+id/view" />
@@ -157,12 +149,31 @@
 
     <ImageView
         android:id="@+id/imageViewAddNewWord"
-        android:layout_width=" 50dp"
-        android:layout_height=" 50dp"
+        android:layout_width="40dp"
+        android:layout_height="40dp"
         android:layout_marginEnd="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/textView6"
+        app:layout_constraintBottom_toTopOf="@+id/textViewAtherWords"
         app:layout_constraintEnd_toEndOf="parent"
         app:srcCompat="@drawable/ic_add_green" />
+
+    <ListView
+        android:id="@+id/lvAtherTransl"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/textViewAtherWords" />
+
+    <ImageView
+        android:id="@+id/imageViewSpeech"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginBottom="4dp"
+        app:layout_constraintBottom_toTopOf="@+id/textViewAtherWords"
+        app:layout_constraintEnd_toStartOf="@+id/imageViewAddNewWord"
+        app:srcCompat="@drawable/ic_speak" />
 
 
 </android.support.constraint.ConstraintLayout>

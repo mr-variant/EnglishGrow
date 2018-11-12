@@ -116,11 +116,13 @@
 
 
     <string name="vocabularyActivityTitle">Мой словарь</string>
+    <string name="titleWordSet">Наборы слов</string>
+
     <string name="addNewWordsTitle">Добавить новое слово</string>
     <string name="addNewWordsSearch">Введите английское слово</string>
 
     <string name="wordNotFound">Это слово не найдено в словаре</string>
     <string name="otherWords">Другие варианты перевода</string>
-
+    <string name="speechErr">Установите в настройках телефона синтезатор речи!</string>
 
 </resources>

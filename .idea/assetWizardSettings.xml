@@ -18,7 +18,7 @@
                                 <PersistentState>
                                   <option name="values">
                                     <map>
-                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/content/ic_add_black_24dp.xml" />
+                                      <entry key="url" value="jar:file:/C:/Program%20Files/Android/Android%20Studio/plugins/android/lib/android.jar!/images/material_design_icons/navigation/ic_check_black_24dp.xml" />
                                     </map>
                                   </option>
                                 </PersistentState>
@@ -28,9 +28,10 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="color" value="aeffbf" />
-                            <entry key="outputName" value="ic_add_green" />
-                            <entry key="sourceFile" value="C:\Users\Vadim\Desktop\sprout.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="color" value="ffeb3b" />
+                            <entry key="outputName" value="ic_book" />
+                            <entry key="sourceFile" value="C:\Users\Vadim\Desktop\book.svg" />
                           </map>
                         </option>
                       </PersistentState>
