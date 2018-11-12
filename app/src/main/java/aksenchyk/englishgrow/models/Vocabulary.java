@@ -18,6 +18,11 @@ public class Vocabulary {
     private  Date dateRepeat;
     private String status;
 
+    public static final String FIELD_STATUS_AGAIN = "again";
+    public static final String FIELD_STATUS_GOOD = "good";
+    public static final String FIELD_STATUS_EASY = "easy";
+    public static final String FIELD_STATUS_HARD = "hard";
+
 
     public Vocabulary() { }
 

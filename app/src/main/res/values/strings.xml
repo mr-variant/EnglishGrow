@@ -109,10 +109,10 @@
     <string name="myDictionary">Мой словарь</string>
     <string name="vocabularyCount">В вашем словаре %d слов</string>
 
-    <string name="vocabularyCountAgain">%d плохо</string>
-    <string name="vocabularyCountGood">%d хорошо</string>
-    <string name="vocabularyCountEasy">%d легко</string>
-    <string name="vocabularyCountHard">%d отлично</string>
+    <string name="vocabularyCountAgain">%d плохо знаю</string>
+    <string name="vocabularyCountGood">%d хорошо знаю</string>
+    <string name="vocabularyCountEasy">%d легко знаю</string>
+    <string name="vocabularyCountHard">%d отлично знаю</string>
 
 
     <string name="vocabularyActivityTitle">Мой словарь</string>
@@ -124,5 +124,6 @@
     <string name="wordNotFound">Это слово не найдено в словаре</string>
     <string name="otherWords">Другие варианты перевода</string>
     <string name="speechErr">Установите в настройках телефона синтезатор речи!</string>
+
 
 </resources>
