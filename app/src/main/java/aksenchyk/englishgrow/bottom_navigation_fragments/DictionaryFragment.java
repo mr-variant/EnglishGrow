@@ -18,6 +18,7 @@ import com.google.firebase.firestore.QuerySnapshot;
 
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.VocabularyActivity;
+import aksenchyk.englishgrow.WordSetActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -150,6 +151,13 @@ public class DictionaryFragment extends Fragment {
         Intent intentVocabularyActivity = new Intent(getActivity(), VocabularyActivity.class);
         startActivity(intentVocabularyActivity);
     }
+
+    @OnClick(R.id.cardViewWordSet)
+    void onCardViewWordSetClick(View view) {
+        Intent intentWordSetActivity = new Intent(getActivity(), WordSetActivity.class);
+        startActivity(intentWordSetActivity);
+    }
+
 
 
 

@@ -227,9 +227,9 @@ public class SetupActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
                         if(task.isSuccessful()) {
-                            Uri downloadURI = task.getResult().getDownloadUrl();
+                            String downloadURI = task.getResult().toString()/*.getDownloadUrl()*/;
                             Map<String,Object> userMap = new HashMap<>();
-                            userMap.put("image", downloadURI.toString());
+                            userMap.put("image", downloadURI/*.toString()*/);
 
                             //update
                             firebaseFirestore.collection("Users").document(userID).update(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {

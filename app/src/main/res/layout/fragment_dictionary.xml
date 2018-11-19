@@ -82,6 +82,7 @@
                     android:layout_marginStart="16dp"
                     android:layout_marginTop="16dp"
                     android:layout_marginEnd="16dp"
+                    android:text="Загрузка..."
                     android:textColor="@color/colorPrimaryDark"
                     android:textSize="18sp"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -93,6 +94,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:text="Загрузка..."
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView5"
                     app:layout_constraintStart_toEndOf="@+id/imageView5"
@@ -103,6 +105,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:text="Загрузка..."
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView7"
                     app:layout_constraintStart_toEndOf="@+id/imageView7"
@@ -123,6 +126,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
+                    android:text="Загрузка..."
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView6"
                     app:layout_constraintStart_toEndOf="@+id/imageView6"
@@ -134,6 +138,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
                     android:minWidth="140dp"
+                    android:text="Загрузка..."
                     android:textColor="@color/colorPrimaryDark"
                     app:layout_constraintBottom_toBottomOf="@+id/imageView8"
                     app:layout_constraintStart_toEndOf="@+id/imageView8"
@@ -174,6 +179,7 @@
         </android.support.v7.widget.CardView>
 
         <android.support.v7.widget.CardView
+            android:id="@+id/cardViewWordSet"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
@@ -183,7 +189,7 @@
             app:layout_constraintTop_toBottomOf="@+id/cardView3">
 
             <ImageView
-                android:id="@+id/imageView9"
+                android:id="@+id/imageViewWordSet"
                 android:layout_width="165dp"
                 android:layout_height="165dp"
                 android:padding="9dp"

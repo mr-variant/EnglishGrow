@@ -218,7 +218,7 @@ public class NewPostActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
 
-                        final String downloadUri = task.getResult().getDownloadUrl().toString();
+                        final String downloadUri = task.getResult()/*.getDownloadUrl()*/.toString();
 
                         if(task.isSuccessful()){
 
@@ -248,7 +248,7 @@ public class NewPostActivity extends AppCompatActivity {
                                 @Override
                                 public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                                    String downloadthumbUri = taskSnapshot.getDownloadUrl().toString();
+                                    String downloadthumbUri = taskSnapshot/*.getDownloadUrl()*/.toString();
 
                                     Map<String, Object> postMap = new HashMap<>();
                                     postMap.put("image_url", downloadUri);

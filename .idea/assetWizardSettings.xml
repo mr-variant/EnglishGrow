@@ -28,8 +28,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="ic_delete" />
-                            <entry key="sourceFile" value="C:\Users\Vadim\Desktop\book.svg" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_groceries" />
+                            <entry key="sourceFile" value="C:\Users\Vadim\Desktop\groceries.svg" />
                           </map>
                         </option>
                       </PersistentState>

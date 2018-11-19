@@ -124,6 +124,7 @@
     <string name="wordNotFound">Это слово не найдено в словаре</string>
     <string name="otherWords">Другие варианты перевода</string>
     <string name="speechErr">Установите в настройках телефона синтезатор речи!</string>
+    <string name="searchRU">Найти русское слово... </string>
 
 
 </resources>

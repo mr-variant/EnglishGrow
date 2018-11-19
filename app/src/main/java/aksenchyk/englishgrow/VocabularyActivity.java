@@ -1,5 +1,7 @@
 package aksenchyk.englishgrow;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.PorterDuff;
 import android.speech.tts.TextToSpeech;
@@ -10,12 +12,18 @@ import android.support.v7.widget.DividerItemDecoration;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.inputmethod.EditorInfo;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.SearchView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -163,6 +171,55 @@ public class VocabularyActivity extends AppCompatActivity implements
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         getMenuInflater().inflate(R.menu.vocabulary, menu);
+
+        /*SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        SearchView search = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();*/
+
+        final SearchView searchView = (SearchView) menu.findItem(R.id.app_bar_search).getActionView();
+        int searchViewPlateId = searchView.getContext().getResources().getIdentifier("android:id/search_src_text", null, null);
+        EditText searchPlateEditText = (EditText) searchView.findViewById(searchViewPlateId);
+        searchPlateEditText.setHint(getText(R.string.searchRU));
+        searchPlateEditText.setOnEditorActionListener(new TextView.OnEditorActionListener() {
+            @Override
+            public boolean onEditorAction(TextView v, int actionId, KeyEvent event) {
+
+                if (actionId == EditorInfo.IME_ACTION_SEARCH) {
+                    String searchText = v.getText().toString();
+                    if(!TextUtils.isEmpty(searchText)){
+                        //Text entered
+
+
+                        mQuery = mFirestore.collection("Users").document(userID).collection("Vocabulary").whereEqualTo("translation",searchText)
+                                .orderBy("timestamp", Query.Direction.DESCENDING);
+
+                        mAdapter.setQuery(mQuery);
+                    }
+                    else {
+                        //no string
+                    }
+                }
+                return true;
+            }
+
+        });
+
+        searchView.setOnCloseListener(new SearchView.OnCloseListener() {
+            @Override
+            public boolean onClose() {
+
+                mQuery = mFirestore.collection("Users").document(userID).collection("Vocabulary")
+                        .orderBy("timestamp", Query.Direction.DESCENDING);
+
+                mAdapter.setQuery(mQuery);
+                return false;
+            }
+        });
+
+
+
+
+        //search.
+
         return true;
     }
 
