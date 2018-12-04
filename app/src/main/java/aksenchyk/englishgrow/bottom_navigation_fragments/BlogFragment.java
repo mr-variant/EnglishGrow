@@ -59,18 +59,11 @@ import de.hdodenhof.circleimageview.CircleImageView;
 public class BlogFragment extends Fragment {
 
 
-    @BindView(R.id.floatingActionButtonAddNewPost)
-    FloatingActionButton floatingActionButtonAddNewPost;
-
-    @BindView(R.id.recyclerViewBlogPosts)
-    RecyclerView recyclerViewBlogPosts;
-
-
+    @BindView(R.id.floatingActionButtonAddNewPost)  FloatingActionButton floatingActionButtonAddNewPost;
+    @BindView(R.id.recyclerViewBlogPosts) RecyclerView recyclerViewBlogPosts;
 
     private Animation animFabShow;
     private Animation animFabHide;
-
-
 
     private FirebaseFirestore mFirestore;
     private Query mQuery;
@@ -169,24 +162,6 @@ public class BlogFragment extends Fragment {
 
 
 
-
-   /*  @Override
-    public void onCreateOptionsMenu(Menu menu, MenuInflater inflater) {
-        inflater.inflate(R.menu.me, menu);
-        super.onCreateOptionsMenu(menu, inflater);
-    }
-
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case R.id.action_me_setup :
-
-
-            default:
-                return super.onOptionsItemSelected(item);
-        }
-    }*/
 
 
 

@@ -45,7 +45,7 @@ import butterknife.OnClick;
 
 public class VocabularyActivity extends AppCompatActivity implements
         TextToSpeech.OnInitListener,
-        VocabularyRecyclerAdapter.OnVocabularySelectedListener{
+        VocabularyRecyclerAdapter.OnVocabularySelectedListener {
 
     @BindView(R.id.toolbarVocabulary) Toolbar toolbarVocabulary;
     @BindView(R.id.rvVocabulary) RecyclerView rvVocabulary;

@@ -1,20 +1,26 @@
 package aksenchyk.englishgrow.models;
 
+import com.google.firebase.firestore.ServerTimestamp;
+
+import java.util.Date;
+
 public class User {
     private int experience;
     private String image;
     private String name;
-    private int satiation;
+    private int dayExp;
+    private @ServerTimestamp Date dayExpData;
 
 
     public User() {
     }
 
-    public User(int experience, String image, String name, int satiation) {
+    public User(int experience, String image, String name, int dayExp, Date dayExpData) {
         this.experience = experience;
         this.image = image;
         this.name = name;
-        this.satiation = satiation;
+        this.dayExp = dayExp;
+        this.dayExpData = dayExpData;
     }
 
 
@@ -42,11 +48,19 @@ public class User {
         this.name = name;
     }
 
-    public int getSatiation() {
-        return satiation;
+    public int getDayExp() {
+        return dayExp;
     }
 
-    public void setSatiation(int satiation) {
-        this.satiation = satiation;
+    public void setDayExp(int dayExp) {
+        this.dayExp = dayExp;
+    }
+
+    public Date getDayExpData() {
+        return dayExpData;
+    }
+
+    public void setDayExpData(Date dayExpData) {
+        this.dayExpData = dayExpData;
     }
 }

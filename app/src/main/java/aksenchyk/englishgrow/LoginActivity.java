@@ -39,6 +39,7 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.QuerySnapshot;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.regex.Pattern;
@@ -282,7 +283,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
             }
         });
 
-/*
+
         // Google login config
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id))
@@ -292,7 +293,7 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                 .enableAutoManage(this, this)
                 .addApi(Auth.GOOGLE_SIGN_IN_API, gso)
                 .build();
-*/
+
         mAuth = FirebaseAuth.getInstance();
         mAuthListener = new FirebaseAuth.AuthStateListener() {
             @Override
@@ -393,6 +394,8 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
                                                     userMap.put("name", userName);
                                                     userMap.put("image", userImageURL);
                                                     userMap.put("experience", 0);
+                                                    userMap.put("dayExp", 0);
+                                                    userMap.put("dayExpData", new Date());
                                                     userMap.put("satiation", 0);
 
 
@@ -448,7 +451,9 @@ public class LoginActivity extends AppCompatActivity implements GoogleApiClient.
 
                             userMap.put("name", newUserName);
                             userMap.put("image", "https://firebasestorage.googleapis.com/v0/b/englishgrow-36226.appspot.com/o/profile_images%2Fdefault_profile.png?alt=media&token=1a8ee012-2666-4ca6-b5a5-c64b1f1c297b");
+                            userMap.put("dayExp", 0);
                             userMap.put("experience", 0);
+                            userMap.put("dayExpData", new Date());
                             userMap.put("satiation", 0);
 
 

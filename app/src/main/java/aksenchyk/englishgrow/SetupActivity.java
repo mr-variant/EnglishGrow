@@ -29,6 +29,7 @@ import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.RequestOptions;
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.FirebaseApp;
@@ -166,7 +167,6 @@ public class SetupActivity extends AppCompatActivity {
     @OnClick(R.id.profileImageSetup)
     void onProfileImageSetupClick(View view) {
         if(ContextCompat.checkSelfPermission(SetupActivity.this, android.Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-
             Toast.makeText(SetupActivity.this, getString(R.string.permission_denied),Toast.LENGTH_LONG).show();
             ActivityCompat.requestPermissions(SetupActivity.this, new String[] { android.Manifest.permission.READ_EXTERNAL_STORAGE },1);
         } else {
@@ -222,14 +222,23 @@ public class SetupActivity extends AppCompatActivity {
 
                 progressBarSetup.setVisibility(View.VISIBLE);
 
-                StorageReference imagePath = storageReference.child("profile_images").child(userID + ".jpg");
-                imagePath.putFile(mainImageURI).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+                final StorageReference imagePath = storageReference.child("profile_images").child(userID + ".jpg");
+
+                imagePath.putFile(mainImageURI).continueWithTask(new Continuation<UploadTask.TaskSnapshot, Task<Uri>>() {
                     @Override
-                    public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                        if(task.isSuccessful()) {
-                            String downloadURI = task.getResult().toString()/*.getDownloadUrl()*/;
+                    public Task<Uri> then(@NonNull Task<UploadTask.TaskSnapshot> task) throws Exception {
+                        if (!task.isSuccessful()) {
+                            throw task.getException();
+                        }
+                        return imagePath.getDownloadUrl();
+                    }
+                }).addOnCompleteListener(new OnCompleteListener<Uri>() {
+                    @Override
+                    public void onComplete(@NonNull Task<Uri> task) {
+                        if (task.isSuccessful()) {
+                            Uri downloadUri = task.getResult();
                             Map<String,Object> userMap = new HashMap<>();
-                            userMap.put("image", downloadURI/*.toString()*/);
+                            userMap.put("image", downloadUri.toString());
 
                             //update
                             firebaseFirestore.collection("Users").document(userID).update(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
@@ -246,11 +255,16 @@ public class SetupActivity extends AppCompatActivity {
                             });
                         } else {
                             String error = task.getException().getMessage();
-                            Toast.makeText(SetupActivity.this, getString(R.string.error), Toast.LENGTH_LONG).show();
+                            Toast.makeText(SetupActivity.this, getString(R.string.error) + error, Toast.LENGTH_LONG).show();
                         }
                         progressBarSetup.setVisibility(View.INVISIBLE);
                     }
                 });
+
+
+
+
+
             } else if (resultCode == CropImage.CROP_IMAGE_ACTIVITY_RESULT_ERROR_CODE) {
                 Exception error = result.getError();
             }

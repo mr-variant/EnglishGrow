@@ -26,13 +26,11 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".LoginActivity"
             android:screenOrientation="portrait"
             android:theme="@style/AuthorizationTheme" />
         <activity
-
             android:name="com.theartofdev.edmodo.cropper.CropImageActivity"
             android:theme="@style/Base.Theme.AppCompat" /> <!-- optional (needed if default theme has no action bar) -->
 
@@ -47,10 +45,9 @@
         <activity android:name=".VocabularyActivity" />
         <activity android:name=".AddNewWordsActivity" />
         <activity android:name=".WordInfoActivity" />
-
-        <activity android:name=".WordSetActivity"></activity>
-        <activity android:name=".WordsListActivity"></activity>
-
+        <activity android:name=".WordSetActivity" />
+        <activity android:name=".WordsListActivity" />
+        <activity android:name=".GrammarActivity"></activity>
     </application>
 
 </manifest>

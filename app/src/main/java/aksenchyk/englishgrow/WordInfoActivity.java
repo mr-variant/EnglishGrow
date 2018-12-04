@@ -51,10 +51,11 @@ public class WordInfoActivity extends AppCompatActivity implements
     @BindView(R.id.textViewExempleW) TextView textViewExempleW;
 
     private TextToSpeech mTTS;
+
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mFirebaseAuth;
-
     private String userID;
+
     private String vocabularyId;
     private Boolean wordStatus = true;
 
@@ -74,7 +75,6 @@ public class WordInfoActivity extends AppCompatActivity implements
 
         mFirestore = FirebaseFirestore.getInstance();
         mFirebaseAuth = FirebaseAuth.getInstance();
-
         userID = mFirebaseAuth.getCurrentUser().getUid();
 
         // Get restaurant ID from extras

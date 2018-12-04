@@ -50,9 +50,15 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
+import aksenchyk.englishgrow.ChangeCommentActivity;
 import aksenchyk.englishgrow.LoginActivity;
 import aksenchyk.englishgrow.MainActivity;
 import aksenchyk.englishgrow.R;
@@ -128,14 +134,43 @@ public class MeFragment extends Fragment {
                         String userImage = documentSnapshot.get("image").toString();
                         String userName = documentSnapshot.get("name").toString();
                         int experience = documentSnapshot.getLong("experience").intValue();
-                        int dayExperience = documentSnapshot.getLong("satiation").intValue();
-
+                        int dayExperience = documentSnapshot.getLong("dayExp").intValue();
+                        Date dayExpData = documentSnapshot.getDate("dayExpData");
 
                         final int expToNewLvl = 500;
                         int userLvl =  experience / expToNewLvl;
                         int needExp = expToNewLvl - (experience % expToNewLvl);
                         int needExpPercent =  experience % expToNewLvl * 100 / expToNewLvl;
 
+                        DateFormat formatter = new SimpleDateFormat("dd/MM/yyyy");
+
+
+                        Date today = new Date();
+                        try {
+                            today = formatter.parse(formatter.format(today));
+                        } catch (ParseException e1) {
+                            e1.printStackTrace();
+                        }
+
+
+                        if(dayExpData.before(today)) {
+
+                            Map<String,Object> userMap = new HashMap<>();
+                            userMap.put("dayExpData", today);
+                            userMap.put("dayExp", 0);
+                            //update
+                            firebaseFirestore.collection("Users").document(userID).update(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
+                                @Override
+                                public void onComplete(@NonNull Task<Void> task) {
+                                    if(task.isSuccessful()){
+
+                                    } else {
+                                        String error = task.getException().getMessage();
+                                        Toast.makeText(getActivity(), getString(R.string.error) + error, Toast.LENGTH_LONG).show();
+                                    }
+                                }
+                            });
+                        }
 
 
 
@@ -149,6 +184,8 @@ public class MeFragment extends Fragment {
                         textViewDayUserExp.setText(dayExperience + "%");
 
                         progressBarLevel.setProgress(needExpPercent);
+
+
                         progressBarDayUserExp.setProgress(dayExperience);
 
                     } else {

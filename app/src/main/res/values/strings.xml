@@ -126,5 +126,9 @@
     <string name="speechErr">Установите в настройках телефона синтезатор речи!</string>
     <string name="searchRU">Найти русское слово... </string>
 
+    <string name="grammaAreIsAm">am/is/are </string>
+    <string name="nextSent"><![CDATA[Следуещее >]]></string>
+    <string name="rezult_grammar">Результат</string>
+    <string name="rezult_grammar_exp">Вы заработали %d опыта.</string>
 
 </resources>
