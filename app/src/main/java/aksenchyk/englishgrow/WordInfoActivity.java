@@ -105,6 +105,9 @@ public class WordInfoActivity extends AppCompatActivity implements
 
                     vocabulary = task.getResult().toObject(Vocabulary.class);
 
+                    vocabulary.setTrainingTranslationWord(false);
+                    vocabulary.setTrainingWordTranslation(false);
+
                     /*
                     String example = task.getResult().get("example").toString();
                     String imageUrl = task.getResult().get("image").toString();

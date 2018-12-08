@@ -47,7 +47,9 @@
         <activity android:name=".WordInfoActivity" />
         <activity android:name=".WordSetActivity" />
         <activity android:name=".WordsListActivity" />
-        <activity android:name=".GrammarActivity"></activity>
+        <activity android:name=".GrammarActivity" />
+        <activity android:name=".AddTrainingActivity" />
+        <activity android:name=".TrainingActivity"></activity>
     </application>
 
 </manifest>

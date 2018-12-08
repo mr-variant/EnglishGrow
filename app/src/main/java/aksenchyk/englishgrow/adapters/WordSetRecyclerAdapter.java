@@ -20,6 +20,8 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.Query;
 
+import java.util.Date;
+
 import aksenchyk.englishgrow.R;
 import aksenchyk.englishgrow.WordInfoActivity;
 import aksenchyk.englishgrow.models.Dictionary;
@@ -77,6 +79,9 @@ public class WordSetRecyclerAdapter extends FirestoreAdapter<WordSetRecyclerAdap
 
             final Vocabulary vocabulary = snapshot.toObject(Vocabulary.class);
             vocabulary.setStatus(Vocabulary.FIELD_STATUS_AGAIN);
+            vocabulary.setDateRepeat(new Date());
+            vocabulary.setTrainingTranslationWord(false);
+            vocabulary.setTrainingWordTranslation(false);
 
             textViewWordSet.setText(wordId);
             textViewTranscriptWordSet.setText(snapshot.get("transcription").toString());

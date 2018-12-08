@@ -130,5 +130,15 @@
     <string name="nextSent"><![CDATA[Следуещее >]]></string>
     <string name="rezult_grammar">Результат</string>
     <string name="rezult_grammar_exp">Вы заработали %d опыта.</string>
+    <string name="add_train">Составить тренировку</string>
+    <string name="wordTrnsl">Слово-перевод</string>
+    <string name="translWord">Перевод-слово</string>
+
+    <string name="again">Плохо знаю</string>
+    <string name="good">Хорошо знаю</string>
+    <string name="easy">Легко знаю</string>
+    <string name="hard">Отлично знаю</string>
+    <string name="notWords">Нет новых слов</string>
+
 
 </resources>

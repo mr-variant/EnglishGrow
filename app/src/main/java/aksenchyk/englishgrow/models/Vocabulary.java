@@ -18,6 +18,10 @@ public class Vocabulary {
     private  Date dateRepeat;
     private String status;
 
+    private boolean trainingWordTranslation;
+    private boolean trainingTranslationWord;
+
+
     public static final String FIELD_STATUS_AGAIN = "again";
     public static final String FIELD_STATUS_GOOD = "good";
     public static final String FIELD_STATUS_EASY = "easy";
@@ -26,7 +30,8 @@ public class Vocabulary {
 
     public Vocabulary() { }
 
-    public Vocabulary(String example, String image, String transcription, String translation, ArrayList<String> other_translations, ArrayList<String> set_words, Date dateRepeat, String status) {
+
+    public Vocabulary(String example, String image, String transcription, String translation, ArrayList<String> other_translations, ArrayList<String> set_words,  Date dateRepeat, String status, boolean trainingWordTranslation, boolean trainingTranslationWord) {
         this.example = example;
         this.image = image;
         this.transcription = transcription;
@@ -35,6 +40,8 @@ public class Vocabulary {
         this.set_words = set_words;
         this.dateRepeat = dateRepeat;
         this.status = status;
+        this.trainingWordTranslation = trainingWordTranslation;
+        this.trainingTranslationWord = trainingTranslationWord;
     }
 
 
@@ -108,5 +115,21 @@ public class Vocabulary {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public boolean isTrainingWordTranslation() {
+        return trainingWordTranslation;
+    }
+
+    public void setTrainingWordTranslation(boolean trainingWordTranslation) {
+        this.trainingWordTranslation = trainingWordTranslation;
+    }
+
+    public boolean isTrainingTranslationWord() {
+        return trainingTranslationWord;
+    }
+
+    public void setTrainingTranslationWord(boolean trainingTranslationWord) {
+        this.trainingTranslationWord = trainingTranslationWord;
     }
 }

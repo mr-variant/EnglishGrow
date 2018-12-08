@@ -295,7 +295,7 @@ public class AddNewWordsActivity extends AppCompatActivity implements
 
         Vocabulary vocabulary = new Vocabulary(example,imageUrl,transcription, translation,
                 other_translations, set_words,
-                new Date(), "again");
+                new Date(), "again", false, false);
 
 
 
