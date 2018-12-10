@@ -34,7 +34,9 @@ import java.util.Map;
 import aksenchyk.englishgrow.AddTrainingActivity;
 import aksenchyk.englishgrow.GrammarActivity;
 import aksenchyk.englishgrow.R;
+import aksenchyk.englishgrow.TrainingActivity;
 import aksenchyk.englishgrow.VocabularyActivity;
+import aksenchyk.englishgrow.WordsListActivity;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -90,15 +92,19 @@ public class TrainingFragment extends Fragment {
 
     @OnClick(R.id.cvWordTransl)
     void onCvWordTranslClick(View view) {
+        Intent intent = new Intent(getActivity(), TrainingActivity.class);
+        intent.putExtra(TrainingActivity.KEY_TRAIN_CATEGORY,"trainingWordTranslation");
 
+        startActivity(intent);
     }
 
     @OnClick(R.id.cvTranslWord)
     void onCvTranslWordClick(View view) {
+        Intent intent = new Intent(getActivity(), TrainingActivity.class);
+        intent.putExtra(TrainingActivity.KEY_TRAIN_CATEGORY,"trainingTranslationWord");
 
+        startActivity(intent);
     }
-
-
 
 
 

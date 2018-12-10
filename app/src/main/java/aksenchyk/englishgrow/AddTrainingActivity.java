@@ -66,13 +66,13 @@ public class AddTrainingActivity extends AppCompatActivity implements
 
 
     private Iterator iteratorVocabulary;
-
     private String currentWord;
     private Vocabulary currentVocabulary;
+    HashMap<String, Vocabulary> vocabulary = new HashMap<String, Vocabulary>();
 
     private TextToSpeech mTTS;
 
-    HashMap<String, Vocabulary> vocabulary = new HashMap<String, Vocabulary>();
+
 
 
 
@@ -107,8 +107,6 @@ public class AddTrainingActivity extends AppCompatActivity implements
 
 
         mFirestore.collection("Users").document(userID).collection("Vocabulary").whereLessThan("dateRepeat",new Date())
-              /*  .whereEqualTo("trainingWordTranslation",false)
-                .whereEqualTo("trainingTranslationWord",false)*/
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
                     @Override
@@ -292,6 +290,9 @@ public class AddTrainingActivity extends AppCompatActivity implements
 
 
 
+
+
+
     @OnClick(R.id.cardViewTrainHard)
     void onCardVievrainHardClick(View view) {
 
@@ -396,5 +397,8 @@ public class AddTrainingActivity extends AppCompatActivity implements
         }
 
     }
+
+
+
 
 }

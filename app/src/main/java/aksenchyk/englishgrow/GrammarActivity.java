@@ -93,7 +93,9 @@ public class GrammarActivity extends AppCompatActivity {
     private String sentanse;
     private int currentWord;
     private int exp;
+    private int prevExpDay;
     private int prevExp;
+
     private GrammarUnit currentGrammarUnit = new GrammarUnit();
 
     private String prevText;
@@ -128,7 +130,8 @@ public class GrammarActivity extends AppCompatActivity {
             @Override
             public void onEvent(DocumentSnapshot documentSnapshot, FirebaseFirestoreException e) {
                 if(documentSnapshot.exists()){
-                    prevExp = documentSnapshot.getLong("dayExp").intValue();
+                    prevExpDay = documentSnapshot.getLong("dayExp").intValue();
+                    prevExp = documentSnapshot.getLong("experience").intValue();
                 } else {
                     Toast.makeText(GrammarActivity.this, "(FIRESTORE Retrieve Error) : " + e, Toast.LENGTH_LONG).show();
                 }
@@ -397,9 +400,10 @@ public class GrammarActivity extends AppCompatActivity {
                         public void onClick(View view) {
                             Map<String,Object> userMap = new HashMap<>();
                             int experience = prevExp + exp;
-
-                            userMap.put("dayExp", experience);
                             userMap.put("experience", experience);
+                            experience = prevExpDay  + exp;
+                            userMap.put("dayExp", experience);
+
                             //update
                             mFirestore.collection("Users").document(userID).update(userMap).addOnCompleteListener(new OnCompleteListener<Void>() {
                                 @Override

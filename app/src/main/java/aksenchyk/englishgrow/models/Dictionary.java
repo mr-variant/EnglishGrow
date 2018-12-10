@@ -14,7 +14,8 @@ public class Dictionary {
 
     public Dictionary() { }
 
-    public Dictionary(String example, String image, String transcription, String translation, ArrayList other_translations, ArrayList set_words) {
+
+    public Dictionary(String example, String image, String transcription, String translation, ArrayList<String> other_translations, ArrayList<String> set_words) {
         this.example = example;
         this.image = image;
         this.transcription = transcription;
@@ -22,7 +23,6 @@ public class Dictionary {
         this.other_translations = other_translations;
         this.set_words = set_words;
     }
-
 
     public String getExample() {
         return example;
@@ -56,19 +56,19 @@ public class Dictionary {
         this.translation = translation;
     }
 
-    public ArrayList getOther_translations() {
+    public ArrayList<String> getOther_translations() {
         return other_translations;
     }
 
-    public void setOther_translations(ArrayList other_translations) {
+    public void setOther_translations(ArrayList<String> other_translations) {
         this.other_translations = other_translations;
     }
 
-    public ArrayList getSet_words() {
+    public ArrayList<String> getSet_words() {
         return set_words;
     }
 
-    public void setSet_words(ArrayList set_words) {
+    public void setSet_words(ArrayList<String> set_words) {
         this.set_words = set_words;
     }
 }
