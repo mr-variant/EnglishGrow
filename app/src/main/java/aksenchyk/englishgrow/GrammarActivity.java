@@ -75,8 +75,11 @@ public class GrammarActivity extends AppCompatActivity {
 
 
     public static final String KEY_GRAMMAR_UNIT = "key_grammar_unit";
+    public static final String KEY_GRAMMAR_NAME = "key_grammar_name";
 
     private String grammarId;
+    private String grammarName;
+
 
     private FirebaseFirestore mFirestore;
     private FirebaseAuth mFirebaseAuth;
@@ -142,13 +145,14 @@ public class GrammarActivity extends AppCompatActivity {
 
         // Get restaurant ID from extras
         grammarId = getIntent().getExtras().getString(KEY_GRAMMAR_UNIT);
-        if (grammarId == null) {
+        grammarName = getIntent().getExtras().getString(KEY_GRAMMAR_NAME);
+        if (grammarId == null || grammarName == null) {
             throw new IllegalArgumentException("Must pass extra " + KEY_GRAMMAR_UNIT);
         }
 
         setSupportActionBar(toolbarGrammar);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.menu_down_grammar));
+        getSupportActionBar().setTitle(grammarName);
         toolbarGrammar.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
         toolbarGrammar.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

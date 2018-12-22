@@ -179,7 +179,7 @@ public class TrainingActivity extends AppCompatActivity implements
         setSupportActionBar(toolbarAddTrain);
 
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setTitle(getString(R.string.add_train));
+        getSupportActionBar().setTitle("Тренировка");
         toolbarAddTrain.getNavigationIcon().setColorFilter(getResources().getColor(R.color.colorWhite), PorterDuff.Mode.SRC_ATOP);
         toolbarAddTrain.setNavigationOnClickListener(new View.OnClickListener() {
             @Override

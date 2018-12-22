@@ -20,6 +20,7 @@ import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.google.android.gms.tasks.Continuation;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -218,7 +219,7 @@ public class NewPostActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull final Task<UploadTask.TaskSnapshot> task) {
 
-                        final String downloadUri = task.getResult()/*.getDownloadUrl()*/.toString();
+                        final String downloadUri = task.getResult().toString();
 
                         if(task.isSuccessful()){
 
@@ -239,6 +240,7 @@ public class NewPostActivity extends AppCompatActivity {
                             compressedImageFile.compress(Bitmap.CompressFormat.JPEG, 100, baos);
 
                             byte[] thumbData = baos.toByteArray();
+
 
                             UploadTask uploadTask = storageReference.child("post_images/thumbs")
                                     .child(randomName + ".jpg").putBytes(thumbData);
@@ -287,6 +289,9 @@ public class NewPostActivity extends AppCompatActivity {
                                 }
 
                             });
+
+
+
 
                         } else {
                             mProgressDialog.hide();

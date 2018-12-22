@@ -114,7 +114,7 @@ public class GrammarFragment extends Fragment implements
     public void onGrammaSelected(DocumentSnapshot unit) {
         Intent intent = new Intent(getActivity(), GrammarActivity.class);
         intent.putExtra(GrammarActivity.KEY_GRAMMAR_UNIT, unit.getId());
-
+        intent.putExtra(GrammarActivity.KEY_GRAMMAR_NAME, unit.get("unit").toString());
         startActivity(intent);
 
     }

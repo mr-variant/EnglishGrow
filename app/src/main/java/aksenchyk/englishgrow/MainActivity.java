@@ -40,12 +40,13 @@ public class MainActivity extends AppCompatActivity {
 
 
     //Fragments
-   /* private  MeFragment meFragment;
+   /*
+    private  MeFragment meFragment;
     private  GrammarFragment grammarFragment;
     private  TrainingFragment trainingFragment;
     private  DictionaryFragment dictionaryFragment;
     private  BlogFragment blogFragment;
-*/
+    */
 
 
     @Override

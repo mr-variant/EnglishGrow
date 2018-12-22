@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main_graph"
+    app:startDestination="@id/mainActivity">
+
+    <fragment
+        android:id="@+id/trainingFragment"
+        android:name="aksenchyk.englishgrow.bottom_navigation_fragments.TrainingFragment"
+        android:label="fragment_training"
+        tools:layout="@layout/fragment_training" />
+    <fragment
+        android:id="@+id/blogFragment"
+        android:name="aksenchyk.englishgrow.bottom_navigation_fragments.BlogFragment"
+        android:label="fragment_chat"
+        tools:layout="@layout/fragment_chat" />
+    <fragment
+        android:id="@+id/meFragment"
+        android:name="aksenchyk.englishgrow.bottom_navigation_fragments.MeFragment"
+        android:label="fragment_me"
+        tools:layout="@layout/fragment_me" ></fragment>
+    <fragment
+        android:id="@+id/dictionaryFragment"
+        android:name="aksenchyk.englishgrow.bottom_navigation_fragments.DictionaryFragment"
+        android:label="fragment_dictionary"
+        tools:layout="@layout/fragment_dictionary" />
+    <fragment
+        android:id="@+id/grammarFragment"
+        android:name="aksenchyk.englishgrow.bottom_navigation_fragments.GrammarFragment"
+        android:label="fragment_grammar"
+        tools:layout="@layout/fragment_grammar" />
+    <activity
+        android:id="@+id/mainActivity"
+        android:name="aksenchyk.englishgrow.MainActivity"
+        android:label="activity_main"
+        tools:layout="@layout/activity_main" />
+    <activity
+        android:id="@+id/loginActivity"
+        android:name="aksenchyk.englishgrow.LoginActivity"
+        android:label="activity_login"
+        tools:layout="@layout/activity_login" />
+
+    <activity
+        android:id="@+id/activity_setup"
+        android:name="aksenchyk.englishgrow.MainActivity"
+        android:label="activity_setup"
+        tools:layout="@layout/activity_setup" />
+
+    <activity
+        android:id="@+id/activity_grammar"
+        android:name="aksenchyk.englishgrow.MainActivity"
+        android:label="activity_grammar"
+        tools:layout="@layout/activity_grammar" />
+    <activity
+        android:id="@+id/commentsActivity"
+        android:name="aksenchyk.englishgrow.CommentsActivity"
+        android:label="activity_comments"
+        tools:layout="@layout/activity_comments" />
+    <activity
+        android:id="@+id/changeCommentActivity"
+        android:name="aksenchyk.englishgrow.ChangeCommentActivity"
+        android:label="activity_change_comment"
+        tools:layout="@layout/activity_change_comment" />
+    <activity
+        android:id="@+id/newPostActivity"
+        android:name="aksenchyk.englishgrow.NewPostActivity"
+        android:label="activity_new_post"
+        tools:layout="@layout/activity_new_post" />
+    <activity
+        android:id="@+id/wordSetActivity"
+        android:name="aksenchyk.englishgrow.WordSetActivity"
+        android:label="activity_word_set"
+        tools:layout="@layout/activity_word_set" />
+    <activity
+        android:id="@+id/wordsListActivity"
+        android:name="aksenchyk.englishgrow.WordsListActivity"
+        android:label="WordsListActivity" />
+    <activity
+        android:id="@+id/addTrainingActivity"
+        android:name="aksenchyk.englishgrow.AddTrainingActivity"
+        android:label="activity_add_training"
+        tools:layout="@layout/activity_add_training" />
+    <activity
+        android:id="@+id/trainingActivity"
+        android:name="aksenchyk.englishgrow.TrainingActivity"
+        android:label="activity_training"
+        tools:layout="@layout/activity_training" />
+    <activity
+        android:id="@+id/addNewWordsActivity"
+        android:name="aksenchyk.englishgrow.AddNewWordsActivity"
+        android:label="activity_add_new_words"
+        tools:layout="@layout/activity_add_new_words" />
+    <activity
+        android:id="@+id/vocabularyActivity"
+        android:name="aksenchyk.englishgrow.VocabularyActivity"
+        android:label="activity_vocabulary"
+        tools:layout="@layout/activity_vocabulary" />
+    <activity
+        android:id="@+id/wordInfoActivity"
+        android:name="aksenchyk.englishgrow.WordInfoActivity"
+        android:label="WordInfoActivity" />
+
+</navigation>
